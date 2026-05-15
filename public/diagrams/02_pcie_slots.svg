@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" width="100%">
+    <rect width="800" height="320" fill="#FAFAFA" rx="6" />
+    <text x="400" y="32" font-family="'Segoe UI', Arial, sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">PCIe Slot Sizes — Length Increases with Bandwidth</text>
+    
+      <rect x="60" y="60" width="35" height="18" fill="#222" rx="2" />
+      <rect x="64" y="63" width="27" height="12" fill="#000" rx="1" />
+    <text x="107" y="74" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#1F3864">PCIe x1</text><text x="195" y="74" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#444">1 lane — Sound cards, NICs</text>
+      <rect x="60" y="110" width="90" height="18" fill="#222" rx="2" />
+      <rect x="64" y="113" width="82" height="12" fill="#000" rx="1" />
+    <text x="162" y="124" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#1F3864">PCIe x4</text><text x="250" y="124" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#444">4 lanes — NVMe adapters, capture cards</text>
+      <rect x="60" y="160" width="170" height="18" fill="#222" rx="2" />
+      <rect x="64" y="163" width="162" height="12" fill="#000" rx="1" />
+    <text x="242" y="174" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#1F3864">PCIe x8</text><text x="330" y="174" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#444">8 lanes — Higher-end add-in cards</text>
+      <rect x="60" y="210" width="320" height="18" fill="#1F3864" rx="2" />
+      <rect x="64" y="213" width="312" height="12" fill="#0E1E3D" rx="1" />
+    <text x="392" y="224" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#1F3864">PCIe x16</text><text x="480" y="224" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#444">16 lanes — GPUs (graphics cards)</text>
+    <text x="400" y="305" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#666" text-anchor="middle" font-style="italic">All PCIe slots have identical pin pitch — they only differ in length</text>
+  </svg>

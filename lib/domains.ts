@@ -1,0 +1,56 @@
+import type { Domain, WeaknessTag } from "./types";
+
+export const DOMAINS: Record<Domain, { name: string; color: string; weight: number }> = {
+  "1.0-mobile": { name: "Mobile Devices", color: "var(--color-domain-mobile)", weight: 15 },
+  "2.0-networking": { name: "Networking", color: "var(--color-domain-networking)", weight: 20 },
+  "3.0-hardware": { name: "Hardware", color: "var(--color-domain-hardware)", weight: 25 },
+  "4.0-virtualization-cloud": { name: "Virtualization & Cloud", color: "var(--color-domain-virtualization)", weight: 11 },
+  "5.0-troubleshooting": { name: "Hardware & Network Troubleshooting", color: "var(--color-domain-troubleshooting)", weight: 29 },
+};
+
+// Gilly's weakness rankings from BOTH practice exams
+// Higher priority = more urgent to study
+export const WEAKNESS_PRIORITIES: Record<WeaknessTag, { label: string; priority: number; note?: string }> = {
+  "jitter-vs-latency":      { label: "Jitter vs Latency", priority: 10, note: "Missed on BOTH exams — top priority" },
+  "fiber-connectors":       { label: "Fiber Connectors (ST/SC/LC)", priority: 10, note: "Missed on BOTH exams (different ways)" },
+  "imaging-process":        { label: "Laser Printer Imaging Sequence", priority: 9 },
+  "printer-components":     { label: "Printer Components", priority: 9 },
+  "memory-types":           { label: "Memory Types (DIMM/SODIMM/ECC/Virtual)", priority: 9 },
+  "motherboard-id":         { label: "Motherboard Component ID", priority: 9 },
+  "cabling-faults":         { label: "Cable Faults (crosstalk, split pair)", priority: 8 },
+  "raid-2-drives":          { label: "RAID Selection", priority: 8 },
+  "ports":                  { label: "Common Ports", priority: 8 },
+  "cache-hierarchy":        { label: "CPU Cache (L1/L2/L3)", priority: 7 },
+  "form-factors":           { label: "Motherboard Form Factors", priority: 7 },
+  "wiring-standards":       { label: "T-568A/B Wiring", priority: 7 },
+  "wireless-standards":     { label: "802.11 Standards", priority: 7 },
+  "wireless-channels":      { label: "Wireless Channels (1, 6, 11)", priority: 6 },
+  "expansion-bus":          { label: "Expansion Bus (PCIe/PCI/AGP)", priority: 6 },
+  "display-tech":           { label: "Display Tech (OLED/LCD/LED)", priority: 6 },
+  "laptop-display":         { label: "Laptop Display Components", priority: 6 },
+  "port-flapping":          { label: "Port Flapping Causes", priority: 6 },
+  "boot-errors":            { label: "Boot Errors (MBR/OS not found)", priority: 6 },
+  "ap-troubleshooting":     { label: "AP Troubleshooting", priority: 5 },
+  "multitenancy":           { label: "Cloud Multitenancy", priority: 5 },
+  "printer-sharing":        { label: "Printer Sharing Methods", priority: 5 },
+  "mobile-pbq":             { label: "Mobile PBQs", priority: 3 },
+  // --- New granular weak-area entries ---
+  "crosstalk":              { label: "Crosstalk (NEXT/FEXT)", priority: 8, note: "Caused by untwisted pairs near each other" },
+  "split-pair":             { label: "Split Pair Cable Fault", priority: 8, note: "Passes continuity but fails wire-map" },
+  "attenuation":            { label: "Signal Attenuation / 100m Rule", priority: 7 },
+  "emi-shielding":          { label: "EMI Shielding (STP vs UTP)", priority: 7 },
+  "cat-ratings":            { label: "Cat Cable Ratings & Distances", priority: 8 },
+  "ddr-compat":             { label: "DDR Compatibility / Notch Positions", priority: 9 },
+  "ddr-generations":        { label: "DDR Generations (DDR1-5 specs)", priority: 8 },
+  "ecc-servers":            { label: "ECC / RDIMM for Servers", priority: 8 },
+  "virtual-memory":         { label: "Virtual Memory / Pagefile", priority: 8 },
+  "memory-form-factors":    { label: "DIMM vs SODIMM vs LPDDR", priority: 9 },
+  "dual-channel":           { label: "Dual-Channel Memory Mode", priority: 7 },
+  "cache-access-times":     { label: "Cache Access Speed Hierarchy", priority: 7 },
+  "m2-slots":               { label: "M.2 Form Factor Naming (2280 etc)", priority: 8 },
+  "power-8pin":             { label: "8-pin EPS CPU Power Connector", priority: 8 },
+  "power-24pin":            { label: "24-pin ATX Motherboard Power", priority: 7 },
+  "smf-mmf":                { label: "Single-Mode vs Multi-Mode Fiber", priority: 9 },
+  "t568a-568b-crossover":   { label: "T-568A/B Crossover Wiring", priority: 8 },
+  "twisted-pair-theory":    { label: "Twisted Pair Crosstalk Cancellation", priority: 6 },
+};

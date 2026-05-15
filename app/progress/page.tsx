@@ -1,0 +1,269 @@
+"use client";
+import { useStudyStore } from "@/lib/store";
+import {
+  computeDomainStats,
+  computeWeaknessStats,
+  computeReadinessScore,
+} from "@/lib/analytics";
+import { DOMAINS, WEAKNESS_PRIORITIES } from "@/lib/domains";
+import { allQuestions } from "@/data/questions";
+import { cn, formatRelativeTime } from "@/lib/utils";
+import { Calendar, TrendingUp, TrendingDown, Award, AlertTriangle } from "lucide-react";
+import Link from "next/link";
+
+export default function ProgressPage() {
+  const stats = useStudyStore((s) => s.questionStats);
+  const sessions = useStudyStore((s) => s.sessions);
+  const targetDate = useStudyStore((s) => s.targetExamDate);
+  const setTargetDate = useStudyStore((s) => s.setTargetDate);
+  const resetProgress = useStudyStore((s) => s.resetProgress);
+
+  const domainStats = computeDomainStats(stats);
+  const weaknessStats = computeWeaknessStats(stats);
+  const readiness = computeReadinessScore(stats);
+
+  const totalAttempted = Object.values(stats).reduce((s, x) => s + x.attempts, 0);
+  const totalCorrect = Object.values(stats).reduce((s, x) => s + x.correct, 0);
+  const overallAccuracy = totalAttempted === 0 ? 0 : Math.round((totalCorrect / totalAttempted) * 100);
+
+  const exam1Missed = allQuestions.filter((q) => q.source === "exam1-missed");
+  const exam2Missed = allQuestions.filter((q) => q.source === "exam2-missed");
+  const exam1Mastered = exam1Missed.filter((q) => {
+    const s = stats[q.id];
+    return s && s.attempts > 0 && s.correct / s.attempts >= 0.7;
+  }).length;
+  const exam2Mastered = exam2Missed.filter((q) => {
+    const s = stats[q.id];
+    return s && s.attempts > 0 && s.correct / s.attempts >= 0.7;
+  }).length;
+
+  return (
+    <div className="space-y-6">
+      <header className="pt-2">
+        <p className="font-mono text-xs uppercase tracking-wider text-slate-500">
+          Progress
+        </p>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+          Where you stand
+        </h1>
+      </header>
+
+      {/* Readiness summary */}
+      <div className="rounded-3xl border border-slate-200 bg-white p-6">
+        <div className="flex items-center gap-2">
+          <Award className="h-5 w-5 text-brand-700" />
+          <p className="font-semibold text-slate-900">A+ Core 1 readiness</p>
+        </div>
+        <p className="mt-3 font-mono text-5xl font-bold tabular-nums text-slate-900">
+          {readiness.estimatedScore}%
+        </p>
+        <p className="mt-1 text-sm text-slate-600">{readiness.message}</p>
+      </div>
+
+      {/* Exam-missed recovery */}
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold text-slate-900">Practice exam recovery</h2>
+        <p className="text-sm text-slate-600">
+          Track how many of your originally-missed questions you&apos;ve now mastered.
+        </p>
+
+        <div className="grid grid-cols-2 gap-3">
+          <RecoveryCard
+            label="Exam 1"
+            mastered={exam1Mastered}
+            total={exam1Missed.length}
+          />
+          <RecoveryCard
+            label="Exam 2"
+            mastered={exam2Mastered}
+            total={exam2Missed.length}
+          />
+        </div>
+      </section>
+
+      {/* Weakness leaderboard */}
+      {weaknessStats.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">By topic</h2>
+            <span className="font-mono text-xs text-slate-500">
+              sorted by accuracy
+            </span>
+          </div>
+          <div className="space-y-2">
+            {weaknessStats.slice(0, 12).map((w) => {
+              const label = WEAKNESS_PRIORITIES[w.tag]?.label ?? w.tag;
+              const note = WEAKNESS_PRIORITIES[w.tag]?.note;
+              return (
+                <Link
+                  key={w.tag}
+                  href={`/quiz/session?weakness=${w.tag}`}
+                  className="block rounded-xl border border-slate-200 bg-white p-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-slate-900">{label}</p>
+                    <div className="flex items-center gap-2">
+                      {w.accuracyPct >= 80 ? (
+                        <TrendingUp className="h-4 w-4 text-emerald-600" />
+                      ) : w.accuracyPct < 50 ? (
+                        <TrendingDown className="h-4 w-4 text-red-600" />
+                      ) : null}
+                      <span
+                        className={cn(
+                          "font-mono text-sm font-semibold tabular-nums",
+                          w.accuracyPct >= 80 ? "text-emerald-600" :
+                          w.accuracyPct >= 60 ? "text-amber-600" :
+                          "text-red-600"
+                        )}
+                      >
+                        {w.accuracyPct}%
+                      </span>
+                    </div>
+                  </div>
+                  {note && w.accuracyPct < 70 && (
+                    <p className="mt-1 flex items-center gap-1 text-xs text-red-600">
+                      <AlertTriangle className="h-3 w-3" />
+                      {note}
+                    </p>
+                  )}
+                  <div className="mt-2 flex items-center gap-2">
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                      <div
+                        className={cn(
+                          "h-full rounded-full",
+                          w.accuracyPct >= 80 ? "bg-emerald-500" :
+                          w.accuracyPct >= 60 ? "bg-amber-500" :
+                          "bg-red-500"
+                        )}
+                        style={{ width: `${w.accuracyPct}%` }}
+                      />
+                    </div>
+                    <span className="font-mono text-[10px] text-slate-500">
+                      {w.correct}/{w.attempted}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* By domain */}
+      {domainStats.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-slate-900">By domain</h2>
+          <div className="space-y-2">
+            {domainStats.map((d) => (
+              <div
+                key={d.domain}
+                className="rounded-xl border border-slate-200 bg-white p-3"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-900">
+                    {DOMAINS[d.domain].name}
+                  </p>
+                  <span className="font-mono text-sm font-semibold tabular-nums text-slate-900">
+                    {d.accuracyPct}%
+                  </span>
+                </div>
+                <p className="mt-0.5 font-mono text-xs text-slate-500">
+                  {d.questionsCorrect}/{d.questionsAttempted} • last:{" "}
+                  {d.lastStudied ? formatRelativeTime(d.lastStudied) : "never"}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Recent sessions */}
+      {sessions.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-slate-900">Recent sessions</h2>
+          <div className="space-y-2">
+            {sessions.slice(-5).reverse().map((s) => (
+              <div key={s.id} className="rounded-xl border border-slate-200 bg-white p-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-900">
+                    {s.questionIds.length} questions · {s.mode}
+                  </p>
+                  <span className={cn(
+                    "rounded-full px-2 py-0.5 font-mono text-xs font-medium",
+                    s.scorePct >= 80 ? "bg-emerald-100 text-emerald-700" :
+                    s.scorePct >= 60 ? "bg-amber-100 text-amber-700" :
+                    "bg-red-100 text-red-700"
+                  )}>
+                    {s.scorePct}%
+                  </span>
+                </div>
+                <p className="mt-0.5 font-mono text-xs text-slate-500">
+                  {formatRelativeTime(s.finishedAt)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Settings */}
+      <section className="space-y-3 pt-4">
+        <h2 className="text-lg font-semibold text-slate-900">Settings</h2>
+        <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+          <div>
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+              <Calendar className="h-4 w-4" />
+              Target exam date
+            </label>
+            <input
+              type="date"
+              value={targetDate ?? ""}
+              onChange={(e) => setTargetDate(e.target.value || null)}
+              className="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 font-mono text-sm"
+            />
+          </div>
+          <button
+            onClick={() => {
+              if (confirm("Reset all progress? This cannot be undone.")) {
+                resetProgress();
+              }
+            }}
+            className="w-full rounded-lg border border-red-200 bg-red-50 py-2.5 font-medium text-red-700"
+          >
+            Reset all progress
+          </button>
+        </div>
+        <p className="text-center font-mono text-xs text-slate-400">
+          Overall accuracy: {overallAccuracy}% · {totalAttempted} total attempts
+        </p>
+      </section>
+    </div>
+  );
+}
+
+function RecoveryCard({
+  label,
+  mastered,
+  total,
+}: {
+  label: string;
+  mastered: number;
+  total: number;
+}) {
+  const pct = total === 0 ? 0 : Math.round((mastered / total) * 100);
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+      <p className="font-mono text-xs uppercase tracking-wider text-slate-500">{label}</p>
+      <p className="mt-1 font-mono text-3xl font-bold tabular-nums text-slate-900">
+        {mastered}<span className="text-base text-slate-400">/{total}</span>
+      </p>
+      <p className="mt-1 text-xs text-slate-600">{pct}% mastered</p>
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+        <div
+          className="h-full bg-brand-700 transition-all"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
