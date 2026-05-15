@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, BookOpen, BarChart3, Brain } from "lucide-react";
+import { Home, Layers, BookOpen, BarChart3, Brain, PlayCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { href: "/", label: "Home", icon: Home },
   { href: "/quiz", label: "Quiz", icon: Brain },
   { href: "/flashcards", label: "Cards", icon: Layers },
+  { href: "/videos", label: "Videos", icon: PlayCircle },
   { href: "/reference", label: "Read", icon: BookOpen },
   { href: "/progress", label: "Stats", icon: BarChart3 },
 ];
