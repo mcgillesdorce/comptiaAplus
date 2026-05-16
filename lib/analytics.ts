@@ -68,7 +68,7 @@ export function pickWeakQuestions(
   while (selected.length < count && weightedPool.length > 0) {
     const totalPriority = weightedPool.reduce((sum, entry) => sum + entry.priority, 0);
     let threshold = Math.random() * totalPriority;
-    let selectedIndex = weightedPool.length - 1;
+    let selectedIndex = 0;
 
     for (let i = 0; i < weightedPool.length; i++) {
       threshold -= weightedPool[i].priority;

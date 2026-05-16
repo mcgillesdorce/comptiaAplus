@@ -116,7 +116,7 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
         }}
         onRetry={() => {
           const retryParams = new URLSearchParams(window.location.search);
-          retryParams.set("retry", crypto.randomUUID());
+          retryParams.set("retry", String(Date.now()));
           router.push(`${window.location.pathname}?${retryParams.toString()}`);
         }}
       />
