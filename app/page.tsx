@@ -1,220 +1,162 @@
-"use client";
 import Link from "next/link";
-import { useStudyStore } from "@/lib/store";
 import {
-  computeReadinessScore,
-  computeWeaknessStats,
-  daysUntilExam,
-} from "@/lib/analytics";
-import { WEAKNESS_PRIORITIES } from "@/lib/domains";
-import { Flame, Target, Zap, AlertCircle, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+  BookOpen,
+  Brain,
+  ChevronRight,
+  Lock,
+  PlayCircle,
+  TrendingUp,
+  Layers,
+} from "lucide-react";
+import { CERT_BUNDLES, type CertBundle } from "@/data/certs";
+
+const HOW_IT_WORKS = [
+  {
+    step: "01",
+    icon: Brain,
+    title: "Take adaptive quizzes",
+    body: "210+ questions that learn from your answers and re-prioritise the topics you keep getting wrong.",
+  },
+  {
+    step: "02",
+    icon: PlayCircle,
+    title: "Watch targeted videos",
+    body: "Professor Messer's full 63-video course, surfaced by your weakest areas so you study smarter.",
+  },
+  {
+    step: "03",
+    icon: Layers,
+    title: "Review with flashcards",
+    body: "Drill key concepts with quick-fire cards whenever you have a spare five minutes.",
+  },
+  {
+    step: "04",
+    icon: TrendingUp,
+    title: "Track your progress",
+    body: "Weakness analytics show exactly which topics still need work so you never study blind.",
+  },
+];
 
 export default function HomePage() {
-  const stats = useStudyStore((s) => s.questionStats);
-  const streakDays = useStudyStore((s) => s.streakDays);
-  const sessions = useStudyStore((s) => s.sessions);
-  const targetDate = useStudyStore((s) => s.targetExamDate);
-
-  const readiness = computeReadinessScore(stats);
-  const weaknessStats = computeWeaknessStats(stats);
-  const daysLeft = daysUntilExam(targetDate);
-  const totalAttempted = Object.values(stats).reduce((sum, s) => sum + s.attempts, 0);
-
-  // Get top 3 weakness tags Gilly has actually struggled with
-  const topWeaknesses = weaknessStats
-    .filter((w) => w.attempted > 0 && w.accuracyPct < 70)
-    .slice(0, 3);
-
   return (
-    <div className="space-y-6">
-      {/* Greeting */}
-      <header className="pt-2">
-        <p className="font-mono text-xs uppercase tracking-wider text-slate-500">
-          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+    <div className="space-y-10 pb-4">
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <header className="pt-2 space-y-2">
+        <p className="font-mono text-xs uppercase tracking-widest text-brand-600 dark:text-brand-400">
+          StudyStack
         </p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-          Hi Gilly. Ready to grind?
+        <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
+          Ace your CompTIA cert.
         </h1>
+        <p className="text-base text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm">
+          An adaptive study app that finds your weak spots and targets them — so every minute you study actually counts.
+        </p>
       </header>
 
-      {/* Readiness Card */}
-      <div className={cn(
-        "rounded-3xl border p-6 shadow-sm",
-        readiness.status === "not-ready" && "border-red-200 bg-red-50",
-        readiness.status === "borderline" && "border-amber-200 bg-amber-50",
-        readiness.status === "ready" && "border-emerald-200 bg-emerald-50",
-        readiness.status === "confident" && "border-blue-200 bg-blue-50",
-      )}>
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-wider text-slate-600">
-              A+ Core 1 Readiness
-            </p>
-            <p className="mt-2 text-5xl font-bold tracking-tight text-slate-900">
-              {readiness.estimatedScore}%
-            </p>
-            <p className="mt-1 text-sm text-slate-600">{readiness.message}</p>
-          </div>
-          <Target className="h-8 w-8 text-slate-400" />
-        </div>
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/60">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-700 transition-all duration-700"
-            style={{ width: `${readiness.estimatedScore}%` }}
-          />
-        </div>
-        <div className="mt-2 flex justify-between font-mono text-xs text-slate-500">
-          <span>0</span>
-          <span className="font-semibold">Pass: 72%</span>
-          <span>100</span>
-        </div>
-      </div>
-
-      {/* Quick Stats Row */}
-      <div className="grid grid-cols-3 gap-3">
-        <StatCard
-          icon={Flame}
-          label="Streak"
-          value={`${streakDays}d`}
-          color="text-orange-500"
-        />
-        <StatCard
-          icon={Zap}
-          label="Attempted"
-          value={`${totalAttempted}`}
-          color="text-blue-500"
-        />
-        <StatCard
-          icon={Target}
-          label={daysLeft !== null ? "Until exam" : "Sessions"}
-          value={daysLeft !== null ? `${daysLeft}d` : `${sessions.length}`}
-          color="text-emerald-500"
-        />
-      </div>
-
-      {/* Top Weaknesses */}
-      {topWeaknesses.length > 0 ? (
-        <section className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Your weak spots right now
-            </h2>
-            <span className="font-mono text-xs text-slate-500">
-              {topWeaknesses.length} active
-            </span>
-          </div>
-          <div className="space-y-2">
-            {topWeaknesses.map((w) => (
-              <Link
-                key={w.tag}
-                href={`/quiz/session?weakness=${w.tag}`}
-                className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 transition-all hover:border-brand-300 hover:shadow-sm active:scale-[0.99]"
-              >
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-slate-900">
-                    {WEAKNESS_PRIORITIES[w.tag]?.label ?? w.tag}
-                  </p>
-                  {WEAKNESS_PRIORITIES[w.tag]?.note && (
-                    <p className="mt-0.5 truncate text-xs text-red-600">
-                      {WEAKNESS_PRIORITIES[w.tag].note}
-                    </p>
-                  )}
-                  <div className="mt-2 flex items-center gap-2">
-                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
-                      <div
-                        className={cn(
-                          "h-full rounded-full",
-                          w.accuracyPct < 40 ? "bg-red-500" :
-                          w.accuracyPct < 70 ? "bg-amber-500" :
-                          "bg-emerald-500"
-                        )}
-                        style={{ width: `${w.accuracyPct}%` }}
-                      />
-                    </div>
-                    <span className="font-mono text-xs tabular-nums text-slate-600">
-                      {w.accuracyPct}% • {w.correct}/{w.attempted}
-                    </span>
-                  </div>
+      {/* ── How it works ──────────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+          How it works
+        </h2>
+        <div className="space-y-3">
+          {HOW_IT_WORKS.map(({ step, icon: Icon, title, body }) => (
+            <div
+              key={step}
+              className="flex gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 p-4"
+            >
+              <div className="flex-shrink-0 flex flex-col items-center gap-1">
+                <span className="font-mono text-[10px] font-bold text-brand-600 dark:text-brand-400">
+                  {step}
+                </span>
+                <div className="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-2">
+                  <Icon className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                 </div>
-                <ChevronRight className="ml-3 h-5 w-5 flex-shrink-0 text-slate-400" />
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : (
-        <div className="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6 text-center">
-          <AlertCircle className="mx-auto h-8 w-8 text-slate-400" />
-          <p className="mt-2 text-sm font-medium text-slate-900">
-            No data yet — take a quiz to surface your weak areas
-          </p>
+              </div>
+              <div className="min-w-0">
+                <p className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
+                  {title}
+                </p>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {body}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
+      </section>
 
-      {/* Main Actions */}
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-slate-900">Study now</h2>
-        <Link
-          href="/quiz/session?mode=weak"
-          className="flex items-center justify-between rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-5 text-white shadow-md transition-all active:scale-[0.99]"
-        >
-          <div>
-            <p className="font-mono text-xs uppercase tracking-wider text-brand-300">
-              Recommended
-            </p>
-            <p className="mt-1 text-xl font-bold">Smart Quiz</p>
-            <p className="mt-1 text-sm text-brand-100">
-              10 questions weighted to your weak areas
-            </p>
-          </div>
-          <ChevronRight className="h-6 w-6" />
-        </Link>
-
+      {/* ── Cert catalog ──────────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+          Study bundles
+        </h2>
         <div className="grid grid-cols-2 gap-3">
-          <Link
-            href="/flashcards"
-            className="rounded-2xl border border-slate-200 bg-white p-4 transition-all active:scale-[0.99] hover:border-brand-300"
-          >
-            <p className="text-xs font-mono uppercase tracking-wider text-slate-500">
-              Quick review
-            </p>
-            <p className="mt-1 font-semibold text-slate-900">Flashcards</p>
-          </Link>
-          <Link
-            href="/quiz"
-            className="rounded-2xl border border-slate-200 bg-white p-4 transition-all active:scale-[0.99] hover:border-brand-300"
-          >
-            <p className="text-xs font-mono uppercase tracking-wider text-slate-500">
-              Custom
-            </p>
-            <p className="mt-1 font-semibold text-slate-900">Build a quiz</p>
-          </Link>
+          {CERT_BUNDLES.map((cert) => (
+            <CertCard key={cert.id} cert={cert} />
+          ))}
         </div>
       </section>
     </div>
   );
 }
 
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  color,
-}: {
-  icon: typeof Flame;
-  label: string;
-  value: string;
-  color: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-3 text-center">
-      <Icon className={cn("mx-auto h-5 w-5", color)} />
-      <p className="mt-1 font-mono text-2xl font-bold tabular-nums text-slate-900">
-        {value}
-      </p>
-      <p className="font-mono text-[10px] uppercase tracking-wider text-slate-500">
-        {label}
-      </p>
+function CertCard({ cert }: { cert: CertBundle }) {
+  const inner = (
+    <div
+      className={`relative flex flex-col h-full rounded-2xl overflow-hidden border transition-all active:scale-[0.98] ${
+        cert.active
+          ? "border-transparent shadow-md hover:shadow-lg"
+          : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 opacity-70"
+      }`}
+    >
+      {/* Gradient header */}
+      <div
+        className={`bg-gradient-to-br ${cert.gradient} px-4 pt-4 pb-6 ${
+          cert.active ? "" : "opacity-40"
+        }`}
+      >
+        <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-white/70">
+          {cert.code}
+        </p>
+        <p className="mt-0.5 text-base font-bold text-white leading-tight">
+          {cert.name}
+        </p>
+      </div>
+
+      {/* Body */}
+      <div className="flex-1 px-4 pt-3 pb-4 bg-white dark:bg-slate-800 -mt-3 rounded-t-2xl">
+        {cert.active ? (
+          <>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">
+              {cert.description}
+            </p>
+            <div className="mt-3 flex items-center gap-3 font-mono text-[10px] text-slate-400">
+              {cert.questionCount && <span>{cert.questionCount} Qs</span>}
+              {cert.videoCount && <span>{cert.videoCount} videos</span>}
+            </div>
+            <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400">
+              Study now <ChevronRight className="h-3.5 w-3.5" />
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              {cert.description}
+            </p>
+            <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+              <Lock className="h-3 w-3" /> Coming soon
+            </div>
+          </>
+        )}
+      </div>
     </div>
+  );
+
+  if (!cert.active) return <div>{inner}</div>;
+
+  return (
+    <Link href={cert.href} className="flex flex-col">
+      {inner}
+    </Link>
   );
 }

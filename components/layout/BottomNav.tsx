@@ -5,7 +5,7 @@ import { Home, Layers, BookOpen, BarChart3, Brain, PlayCircle } from "lucide-rea
 import { cn } from "@/lib/utils";
 
 const tabs = [
-  { href: "/", label: "Home", icon: Home },
+  { href: "/certs/a-plus-1201", label: "Home", icon: Home },
   { href: "/quiz", label: "Quiz", icon: Brain },
   { href: "/flashcards", label: "Cards", icon: Layers },
   { href: "/videos", label: "Videos", icon: PlayCircle },

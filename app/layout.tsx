@@ -8,12 +8,12 @@ const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-disp
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "Gilly's A+ Study",
-  description: "Personalized CompTIA A+ Core 1 study app",
+  title: "StudyStack — CompTIA Cert Prep",
+  description: "Adaptive CompTIA study app with smart quizzes, weakness tracking, and Professor Messer videos.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "A+ Study",
+    title: "StudyStack",
   },
 };
 
