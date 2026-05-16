@@ -13,12 +13,20 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 type FeedbackPriority = "low" | "medium" | "high";
-const HIGH_PRIORITY_SIGNALS = ["crash", "cannot", "can't", "cant", "broken", "not working", "won't", "wont", "urgent", "security", "data loss"];
+const HIGH_PRIORITY_SIGNALS = ["crash", "cannot", "cant", "broken", "not working", "wont", "urgent", "security", "data loss"];
 const MEDIUM_PRIORITY_SIGNALS = ["slow", "error", "bug", "issue", "fail", "problem", "confusing"];
 const MAX_ISSUE_TITLE_TEXT_LENGTH = 70;
+const MAX_SAFE_ISSUE_URL_LENGTH = 1800;
+
+function truncateAtWordBoundary(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  const truncated = text.slice(0, maxLength).trim();
+  const lastSpace = truncated.lastIndexOf(" ");
+  return lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated;
+}
 
 function assessFeedbackPriority(input: string): FeedbackPriority {
-  const text = input.toLowerCase();
+  const text = input.toLowerCase().replace(/[’']/g, "");
   if (!text.trim()) return "low";
 
   if (HIGH_PRIORITY_SIGNALS.some((signal) => text.includes(signal))) return "high";
@@ -310,7 +318,7 @@ export default function ProgressPage() {
               const repoOwner = "mcgillesdorce";
               const repoName = "comptiaAplus";
               const issueTitle = trimmedFeedback
-                ? `[Feedback][${feedbackPriority.toUpperCase()}] ${trimmedFeedback.slice(0, MAX_ISSUE_TITLE_TEXT_LENGTH)}`
+                ? `[Feedback][${feedbackPriority.toUpperCase()}] ${truncateAtWordBoundary(trimmedFeedback, MAX_ISSUE_TITLE_TEXT_LENGTH)}`
                 : `[Feedback][${feedbackPriority.toUpperCase()}] Screenshot-only report`;
               const issueBody = [
                 "## Feedback submission",
@@ -324,6 +332,10 @@ export default function ProgressPage() {
               ].join("\n");
 
               const issueUrl = `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+              if (issueUrl.length > MAX_SAFE_ISSUE_URL_LENGTH) {
+                setFeedbackSubmitError("Your feedback is too long to submit automatically. Please shorten it and try again.");
+                return;
+              }
               window.open(issueUrl, "_blank", "noopener,noreferrer");
             }}
             className="w-full rounded-lg bg-slate-900 py-2.5 font-medium text-white"
