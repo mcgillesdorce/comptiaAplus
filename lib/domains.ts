@@ -53,4 +53,8 @@ export const WEAKNESS_PRIORITIES: Record<WeaknessTag, { label: string; priority:
   "smf-mmf":                { label: "Single-Mode vs Multi-Mode Fiber", priority: 9 },
   "t568a-568b-crossover":   { label: "T-568A/B Crossover Wiring", priority: 8 },
   "twisted-pair-theory":    { label: "Twisted Pair Crosstalk Cancellation", priority: 6 },
+  "copper-tools":           { label: "Copper Cabling Tools (Crimper/Punchdown/Tone)", priority: 8 },
+  "cable-testing-tools":    { label: "Cable Testing (Wire Map/Certifier/TDR/OTDR)", priority: 8 },
+  "network-tap":            { label: "Network Taps (Passive vs Active)", priority: 7 },
+  "coax-cabling":           { label: "Coaxial Cabling (RG-6/RG-59, BNC/F-type)", priority: 7 },
 };

@@ -50,7 +50,12 @@ export type WeaknessTag =
   | "power-24pin"             // 24-pin ATX motherboard power
   | "smf-mmf"                 // single-mode vs multi-mode fiber
   | "t568a-568b-crossover"    // pin assignments and crossover rules
-  | "twisted-pair-theory";    // how twist cancels crosstalk
+  | "twisted-pair-theory"     // how twist cancels crosstalk
+  // --- Section 5.3 Network Cable Types ---
+  | "copper-tools"            // crimper, punchdown, tone generator/probe
+  | "cable-testing-tools"     // wire map tester, certifier, TDR, OTDR
+  | "network-tap"             // passive vs active taps
+  | "coax-cabling";           // RG-6 vs RG-59, BNC, F-type
 
 export interface Choice {
   id: string;

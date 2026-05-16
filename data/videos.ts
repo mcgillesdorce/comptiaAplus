@@ -119,6 +119,10 @@ export const TAG_VIDEO_MAP: Record<WeaknessTag, string[]> = {
   "smf-mmf":                ["poQdq2APqic", "Qxbp-c23cYY"],
   "t568a-568b-crossover":   ["1w42VC2_JYo"],
   "twisted-pair-theory":    ["29X5Ho3m2KU"],
+  "copper-tools":           ["29X5Ho3m2KU", "VO8C3lrWlVU"],
+  "cable-testing-tools":    ["CHQQgjtrhYU", "29X5Ho3m2KU"],
+  "network-tap":            ["0hd6_bx0ydo"],
+  "coax-cabling":           ["29X5Ho3m2KU", "VO8C3lrWlVU"],
 };
 
 // Utility: get a video by its YouTube ID
