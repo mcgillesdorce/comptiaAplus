@@ -15,7 +15,7 @@ export default function ReferenceIndexPage() {
         <p className="font-mono text-xs uppercase tracking-wider text-slate-500">
           Reference
         </p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           Read & review
         </h1>
         <p className="mt-2 text-sm text-slate-600">

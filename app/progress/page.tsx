@@ -70,7 +70,7 @@ export default function ProgressPage() {
         <p className="font-mono text-xs uppercase tracking-wider text-slate-500">
           Progress
         </p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           Where you stand
         </h1>
       </header>
