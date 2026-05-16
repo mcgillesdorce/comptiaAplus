@@ -150,7 +150,12 @@ export default function VideosPage() {
   const hasQuizData = Object.keys(questionStats).length > 0;
   const recentWeakTags = useMemo(() => {
     const recentSessions = sessions
-      .filter((s) => s.weaknessResults && Object.keys(s.weaknessResults).length > 0)
+      .filter(
+        (s) =>
+          Number.isFinite(s.finishedAt) &&
+          s.weaknessResults &&
+          Object.keys(s.weaknessResults).length > 0
+      )
       .sort((a, b) => b.finishedAt - a.finishedAt)
       .slice(0, 2);
 
@@ -159,7 +164,7 @@ export default function VideosPage() {
     const byTag = new Map<WeaknessTag, { attempted: number; correct: number }>();
 
     for (const session of recentSessions) {
-      for (const [tag, result] of Object.entries(session.weaknessResults ?? {})) {
+      for (const [tag, result] of Object.entries(session.weaknessResults!)) {
         const weaknessTag = tag as WeaknessTag;
         const existing = byTag.get(weaknessTag) ?? { attempted: 0, correct: 0 };
         byTag.set(weaknessTag, {
