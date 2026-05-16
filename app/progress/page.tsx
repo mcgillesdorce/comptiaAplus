@@ -10,6 +10,29 @@ import { allQuestions } from "@/data/questions";
 import { cn, formatRelativeTime } from "@/lib/utils";
 import { Calendar, TrendingUp, TrendingDown, Award, AlertTriangle } from "lucide-react";
 import Link from "next/link";
+import { useMemo, useState } from "react";
+
+type FeedbackPriority = "low" | "medium" | "high";
+const HIGH_PRIORITY_SIGNALS = ["crash", "cannot", "cant", "broken", "not working", "wont", "urgent", "security", "data loss"];
+const MEDIUM_PRIORITY_SIGNALS = ["slow", "error", "bug", "issue", "fail", "problem", "confusing"];
+const MAX_ISSUE_TITLE_TEXT_LENGTH = 70;
+const MAX_SAFE_ISSUE_URL_LENGTH = 1800;
+
+function truncateAtWordBoundary(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  const truncated = text.slice(0, maxLength).trim();
+  const lastSpace = truncated.lastIndexOf(" ");
+  return lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated;
+}
+
+function assessFeedbackPriority(input: string): FeedbackPriority {
+  const text = input.toLowerCase().replace(/[’']/g, "");
+  if (!text.trim()) return "low";
+
+  if (HIGH_PRIORITY_SIGNALS.some((signal) => text.includes(signal))) return "high";
+  if (MEDIUM_PRIORITY_SIGNALS.some((signal) => text.includes(signal))) return "medium";
+  return "low";
+}
 
 export default function ProgressPage() {
   const stats = useStudyStore((s) => s.questionStats);
@@ -17,6 +40,9 @@ export default function ProgressPage() {
   const targetDate = useStudyStore((s) => s.targetExamDate);
   const setTargetDate = useStudyStore((s) => s.setTargetDate);
   const resetProgress = useStudyStore((s) => s.resetProgress);
+  const [feedbackText, setFeedbackText] = useState("");
+  const [screenshotFileName, setScreenshotFileName] = useState<string | null>(null);
+  const [feedbackSubmitError, setFeedbackSubmitError] = useState<string | null>(null);
 
   const domainStats = computeDomainStats(stats);
   const weaknessStats = computeWeaknessStats(stats);
@@ -25,6 +51,7 @@ export default function ProgressPage() {
   const totalAttempted = Object.values(stats).reduce((s, x) => s + x.attempts, 0);
   const totalCorrect = Object.values(stats).reduce((s, x) => s + x.correct, 0);
   const overallAccuracy = totalAttempted === 0 ? 0 : Math.round((totalCorrect / totalAttempted) * 100);
+  const feedbackPriority = useMemo(() => assessFeedbackPriority(feedbackText), [feedbackText]);
 
   const exam1Missed = allQuestions.filter((q) => q.source === "exam1-missed");
   const exam2Missed = allQuestions.filter((q) => q.source === "exam2-missed");
@@ -232,6 +259,92 @@ export default function ProgressPage() {
           >
             Reset all progress
           </button>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+          <h3 className="text-sm font-semibold text-slate-900">Feedback</h3>
+          <p className="text-xs text-slate-600">
+            Share feedback or attach a screenshot. A GitHub issue will be prefilled with a priority check.
+          </p>
+          <textarea
+            value={feedbackText}
+            onChange={(e) => {
+              setFeedbackText(e.target.value);
+              setFeedbackSubmitError(null);
+            }}
+            rows={4}
+            placeholder="Describe the issue you ran into..."
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          />
+          <div>
+            <label className="text-sm font-medium text-slate-700" htmlFor="feedback-screenshot">
+              Screenshot (optional)
+            </label>
+            <input
+              id="feedback-screenshot"
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                setScreenshotFileName(file?.name ?? null);
+                setFeedbackSubmitError(null);
+              }}
+              className="mt-2 block w-full text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-700"
+            />
+          </div>
+          <p className="text-xs text-slate-500">
+            Priority check:{" "}
+            <span
+              className={cn(
+                "rounded-full px-2 py-0.5 font-mono text-[11px] uppercase",
+                feedbackPriority === "high"
+                  ? "bg-red-100 text-red-700"
+                  : feedbackPriority === "medium"
+                    ? "bg-amber-100 text-amber-700"
+                    : "bg-emerald-100 text-emerald-700"
+              )}
+            >
+              {feedbackPriority}
+            </span>
+          </p>
+          <button
+            onClick={() => {
+              const trimmedFeedback = feedbackText.trim();
+              if (!trimmedFeedback && !screenshotFileName) {
+                setFeedbackSubmitError("Please enter feedback or attach a screenshot before submitting.");
+                return;
+              }
+              setFeedbackSubmitError(null);
+
+              const repoOwner = "mcgillesdorce";
+              const repoName = "comptiaAplus";
+              const issueTitle = trimmedFeedback
+                ? `[Feedback][${feedbackPriority.toUpperCase()}] ${truncateAtWordBoundary(trimmedFeedback, MAX_ISSUE_TITLE_TEXT_LENGTH)}`
+                : `[Feedback][${feedbackPriority.toUpperCase()}] Screenshot-only report`;
+              const issueBody = [
+                "## Feedback submission",
+                "",
+                `**Priority (auto-filtered):** ${feedbackPriority.toUpperCase()}`,
+                "",
+                "**Feedback**",
+                trimmedFeedback || "(No feedback text provided)",
+                "",
+                `**Screenshot file:** ${screenshotFileName ?? "None attached"}`,
+              ].join("\n");
+
+              const issueUrl = `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+              if (issueUrl.length > MAX_SAFE_ISSUE_URL_LENGTH) {
+                setFeedbackSubmitError("Your feedback is too long to submit automatically. Please shorten it and try again.");
+                return;
+              }
+              window.open(issueUrl, "_blank", "noopener,noreferrer");
+            }}
+            className="w-full rounded-lg bg-slate-900 py-2.5 font-medium text-white"
+          >
+            Create feedback issue
+          </button>
+          {feedbackSubmitError && (
+            <p className="text-xs font-medium text-red-600">{feedbackSubmitError}</p>
+          )}
         </div>
         <p className="text-center font-mono text-xs text-slate-400">
           Overall accuracy: {overallAccuracy}% · {totalAttempted} total attempts
