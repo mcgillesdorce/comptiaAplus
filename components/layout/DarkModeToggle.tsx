@@ -26,7 +26,7 @@ export function DarkModeToggle() {
     <button
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="fixed left-4 top-4 z-50 rounded-full bg-white/90 p-2 shadow-md backdrop-blur-sm transition-colors dark:bg-slate-800/90"
+      className="fixed right-4 top-4 z-50 rounded-full bg-white/90 p-2 shadow-md backdrop-blur-sm transition-colors dark:bg-slate-800/90"
     >
       {dark ? (
         <Sun className="h-5 w-5 text-amber-400" />
