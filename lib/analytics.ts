@@ -88,10 +88,10 @@ function getRecentWeaknessMissRates(
     .slice(0, limit);
 
   const totals = new Map<WeaknessTag, { missWeighted: number; weightSum: number }>();
-  const maxIndex = Math.max(1, recentSessions.length - 1);
+  const sessionCount = Math.max(1, recentSessions.length);
 
   recentSessions.forEach((session, index) => {
-    const recencyWeight = 1 - index / maxIndex;
+    const recencyWeight = (sessionCount - index) / sessionCount;
     for (const [tag, result] of Object.entries(session.weaknessResults ?? {})) {
       if (result.total <= 0) continue;
       const missRate = 1 - result.correct / result.total;
