@@ -1,4 +1,13 @@
-import type { Question, QuestionStat, WeaknessTag, WeaknessStats, WeaknessTrend, DomainStats, Domain, QuizSession } from "./types";
+import type {
+  Question,
+  QuestionStat,
+  WeaknessTag,
+  WeaknessStats,
+  WeaknessTrend,
+  DomainStats,
+  Domain,
+  QuizSession,
+} from "./types";
 import { allQuestions } from "@/data/questions";
 import { WEAKNESS_PRIORITIES } from "./domains";
 
@@ -15,8 +24,10 @@ import { WEAKNESS_PRIORITIES } from "./domains";
 export function pickWeakQuestions(
   stats: Record<string, QuestionStat>,
   count: number,
-  domainFilter?: Domain[]
+  domainFilter?: Domain[],
+  sessions: QuizSession[] = []
 ): Question[] {
+  const recentWeaknessMissRates = getRecentWeaknessMissRates(sessions);
   const candidates = domainFilter && domainFilter.length > 0
     ? allQuestions.filter((q) => domainFilter.includes(q.domain))
     : allQuestions;
@@ -27,6 +38,9 @@ export function pickWeakQuestions(
     // Base score: how often Gilly missed this category
     const weaknessBoost = q.weaknessTags.reduce((sum, tag) => {
       return sum + (WEAKNESS_PRIORITIES[tag]?.priority ?? 0);
+    }, 0);
+    const recentWeaknessBoost = q.weaknessTags.reduce((sum, tag) => {
+      return sum + (recentWeaknessMissRates.get(tag) ?? 0);
     }, 0);
 
     // Source boost: actual missed questions > drills > concept builders
@@ -51,7 +65,8 @@ export function pickWeakQuestions(
       (weaknessBoost + sourceBoost) *
       performanceScore *
       Math.log(recencyDays + 2) *
-      reviewBoost;
+      reviewBoost *
+      (1 + recentWeaknessBoost);
 
     // Inject a little randomness so it's not the same set every time
     const jitter = 0.85 + Math.random() * 0.3;
@@ -61,6 +76,41 @@ export function pickWeakQuestions(
 
   scored.sort((a, b) => b.priority - a.priority);
   return scored.slice(0, count).map((s) => s.question);
+}
+
+function getRecentWeaknessMissRates(
+  sessions: QuizSession[],
+  limit = 5
+): Map<WeaknessTag, number> {
+  const recentSessions = sessions
+    .filter((s) => s.weaknessResults && Object.keys(s.weaknessResults).length > 0)
+    .sort((a, b) => b.finishedAt - a.finishedAt)
+    .slice(0, limit);
+
+  const totals = new Map<WeaknessTag, { missWeighted: number; weightSum: number }>();
+  const maxIndex = Math.max(1, recentSessions.length - 1);
+
+  recentSessions.forEach((session, index) => {
+    const recencyWeight = 1 - index / maxIndex;
+    for (const [tag, result] of Object.entries(session.weaknessResults ?? {})) {
+      if (result.total <= 0) continue;
+      const missRate = 1 - result.correct / result.total;
+      const weaknessTag = tag as WeaknessTag;
+      const existing = totals.get(weaknessTag) ?? { missWeighted: 0, weightSum: 0 };
+      totals.set(weaknessTag, {
+        missWeighted: existing.missWeighted + missRate * recencyWeight,
+        weightSum: existing.weightSum + recencyWeight,
+      });
+    }
+  });
+
+  const missRates = new Map<WeaknessTag, number>();
+  for (const [tag, total] of totals) {
+    if (total.weightSum > 0) {
+      missRates.set(tag, total.missWeighted / total.weightSum);
+    }
+  }
+  return missRates;
 }
 
 /**
