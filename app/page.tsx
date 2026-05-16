@@ -33,7 +33,7 @@ export default function HomePage() {
         <p className="font-mono text-xs uppercase tracking-wider text-slate-500">
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
         </p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           Hi Gilly. Ready to grind?
         </h1>
       </header>

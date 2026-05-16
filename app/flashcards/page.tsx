@@ -64,7 +64,7 @@ export default function FlashcardsPage() {
           <p className="font-mono text-xs uppercase tracking-wider text-slate-500">
             Flashcards
           </p>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
             Tap to flip
           </h1>
         </div>
