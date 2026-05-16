@@ -13,16 +13,16 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 type FeedbackPriority = "low" | "medium" | "high";
+const HIGH_PRIORITY_SIGNALS = ["crash", "cannot", "can't", "cant", "broken", "not working", "won't", "wont", "urgent", "security", "data loss"];
+const MEDIUM_PRIORITY_SIGNALS = ["slow", "error", "bug", "issue", "fail", "problem", "confusing"];
+const MAX_ISSUE_TITLE_TEXT_LENGTH = 70;
 
 function assessFeedbackPriority(input: string): FeedbackPriority {
   const text = input.toLowerCase();
   if (!text.trim()) return "low";
 
-  const highSignals = ["crash", "cannot", "can't", "cant", "broken", "not working", "won't", "wont", "urgent", "security", "data loss"];
-  const mediumSignals = ["slow", "error", "bug", "issue", "fail", "problem", "confusing"];
-
-  if (highSignals.some((signal) => text.includes(signal))) return "high";
-  if (mediumSignals.some((signal) => text.includes(signal))) return "medium";
+  if (HIGH_PRIORITY_SIGNALS.some((signal) => text.includes(signal))) return "high";
+  if (MEDIUM_PRIORITY_SIGNALS.some((signal) => text.includes(signal))) return "medium";
   return "low";
 }
 
@@ -34,6 +34,7 @@ export default function ProgressPage() {
   const resetProgress = useStudyStore((s) => s.resetProgress);
   const [feedbackText, setFeedbackText] = useState("");
   const [screenshotFileName, setScreenshotFileName] = useState<string | null>(null);
+  const [feedbackSubmitError, setFeedbackSubmitError] = useState<string | null>(null);
 
   const domainStats = computeDomainStats(stats);
   const weaknessStats = computeWeaknessStats(stats);
@@ -258,7 +259,10 @@ export default function ProgressPage() {
           </p>
           <textarea
             value={feedbackText}
-            onChange={(e) => setFeedbackText(e.target.value)}
+            onChange={(e) => {
+              setFeedbackText(e.target.value);
+              setFeedbackSubmitError(null);
+            }}
             rows={4}
             placeholder="Describe the issue you ran into..."
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
@@ -274,6 +278,7 @@ export default function ProgressPage() {
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 setScreenshotFileName(file?.name ?? null);
+                setFeedbackSubmitError(null);
               }}
               className="mt-2 block w-full text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-700"
             />
@@ -297,14 +302,15 @@ export default function ProgressPage() {
             onClick={() => {
               const trimmedFeedback = feedbackText.trim();
               if (!trimmedFeedback && !screenshotFileName) {
-                alert("Please enter feedback or attach a screenshot before submitting.");
+                setFeedbackSubmitError("Please enter feedback or attach a screenshot before submitting.");
                 return;
               }
+              setFeedbackSubmitError(null);
 
               const repoOwner = "mcgillesdorce";
               const repoName = "comptiaAplus";
               const issueTitle = trimmedFeedback
-                ? `[Feedback][${feedbackPriority.toUpperCase()}] ${trimmedFeedback.slice(0, 70)}`
+                ? `[Feedback][${feedbackPriority.toUpperCase()}] ${trimmedFeedback.slice(0, MAX_ISSUE_TITLE_TEXT_LENGTH)}`
                 : `[Feedback][${feedbackPriority.toUpperCase()}] Screenshot-only report`;
               const issueBody = [
                 "## Feedback submission",
@@ -324,6 +330,9 @@ export default function ProgressPage() {
           >
             Create feedback issue
           </button>
+          {feedbackSubmitError && (
+            <p className="text-xs font-medium text-red-600">{feedbackSubmitError}</p>
+          )}
         </div>
         <p className="text-center font-mono text-xs text-slate-400">
           Overall accuracy: {overallAccuracy}% · {totalAttempted} total attempts
