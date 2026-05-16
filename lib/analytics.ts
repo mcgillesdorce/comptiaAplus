@@ -39,9 +39,12 @@ export function pickWeakQuestions(
     const weaknessBoost = q.weaknessTags.reduce((sum, tag) => {
       return sum + (WEAKNESS_PRIORITIES[tag]?.priority ?? 0);
     }, 0);
-    const recentWeaknessBoost = q.weaknessTags.reduce((sum, tag) => {
-      return sum + (recentWeaknessMissRates.get(tag) ?? 0);
-    }, 0);
+    const recentWeaknessBoost = Math.min(
+      1,
+      q.weaknessTags.reduce((sum, tag) => {
+        return sum + (recentWeaknessMissRates.get(tag) ?? 0);
+      }, 0)
+    );
 
     // Source boost: actual missed questions > drills > concept builders
     const sourceBoost =
@@ -86,6 +89,7 @@ function getRecentWeaknessMissRates(
     .filter((s) => s.weaknessResults && Object.keys(s.weaknessResults).length > 0)
     .sort((a, b) => b.finishedAt - a.finishedAt)
     .slice(0, limit);
+  if (recentSessions.length === 0) return new Map();
 
   const totals = new Map<WeaknessTag, { missWeighted: number; weightSum: number }>();
   const sessionCount = Math.max(1, recentSessions.length);
