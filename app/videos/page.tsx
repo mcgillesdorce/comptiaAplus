@@ -74,11 +74,13 @@ function VideoCard({
 function RecommendedTab({
   videos,
   hasQuizData,
+  usesRecentSessions,
   selected,
   onSelect,
 }: {
   videos: MesserVideo[];
   hasQuizData: boolean;
+  usesRecentSessions: boolean;
   selected: MesserVideo | null;
   onSelect: (v: MesserVideo) => void;
 }) {
@@ -87,7 +89,9 @@ function RecommendedTab({
       <div className="flex items-center gap-2 text-xs text-gray-400">
         <Brain size={13} className="text-purple-400" />
         <span>
-          {hasQuizData
+          {usesRecentSessions
+            ? "Based on your last two quiz weak spots"
+            : hasQuizData
             ? "Based on your quiz weak spots"
             : "Top priority topics — take quizzes to personalise"}
         </span>
@@ -139,14 +143,55 @@ function AllVideosTab({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function VideosPage() {
-  const { questionStats } = useStudyStore();
+  const { questionStats, sessions } = useStudyStore();
   const [activeTab, setActiveTab] = useState<Tab>("recommended");
   const [selectedVideo, setSelectedVideo] = useState<MesserVideo | null>(null);
 
   const hasQuizData = Object.keys(questionStats).length > 0;
+  const recentWeakTags = useMemo(() => {
+    const recentSessions = sessions
+      .filter(
+        (s) =>
+          Number.isFinite(s.finishedAt) &&
+          s.weaknessResults &&
+          Object.keys(s.weaknessResults).length > 0
+      )
+      .sort((a, b) => b.finishedAt - a.finishedAt)
+      .slice(0, 2);
+
+    if (recentSessions.length === 0) return [];
+
+    const byTag = new Map<WeaknessTag, { attempted: number; correct: number }>();
+
+    for (const session of recentSessions) {
+      for (const [tag, result] of Object.entries(session.weaknessResults!)) {
+        const weaknessTag = tag as WeaknessTag;
+        const existing = byTag.get(weaknessTag) ?? { attempted: 0, correct: 0 };
+        byTag.set(weaknessTag, {
+          attempted: existing.attempted + result.total,
+          correct: existing.correct + result.correct,
+        });
+      }
+    }
+
+    return Array.from(byTag.entries())
+      .filter(([, v]) => v.attempted > 0)
+      .map(([tag, v]) => ({
+        tag,
+        attempted: v.attempted,
+        accuracyPct: Math.round((v.correct / v.attempted) * 100),
+      }))
+      .filter((s) => s.accuracyPct < 80)
+      .sort((a, b) => a.accuracyPct - b.accuracyPct)
+      .map((s) => s.tag);
+  }, [sessions]);
 
   // Compute recommended videos based on weak areas
   const recommendedVideos = useMemo(() => {
+    if (recentWeakTags.length > 0) {
+      return getVideosForTags(recentWeakTags).slice(0, 15);
+    }
+
     const stats = computeWeaknessStats(questionStats);
 
     // Tags where the user is actually struggling (attempted & < 80% accuracy)
@@ -164,7 +209,7 @@ export default function VideosPage() {
     }
 
     return getVideosForTags(weakTags).slice(0, 15);
-  }, [questionStats]);
+  }, [questionStats, recentWeakTags]);
 
   // Group all videos by section for the "All Videos" tab
   const videosBySection = useMemo(() => {
@@ -255,6 +300,7 @@ export default function VideosPage() {
           <RecommendedTab
             videos={recommendedVideos}
             hasQuizData={hasQuizData}
+            usesRecentSessions={recentWeakTags.length > 0}
             selected={selectedVideo}
             onSelect={handleSelect}
           />
