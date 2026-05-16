@@ -273,7 +273,7 @@ export default function ProgressPage() {
             }}
             rows={4}
             placeholder="Describe the issue you ran into..."
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
           />
           <div>
             <label className="text-sm font-medium text-slate-700" htmlFor="feedback-screenshot">
