@@ -123,6 +123,60 @@ export const TAG_VIDEO_MAP: Record<WeaknessTag, string[]> = {
   "cable-testing-tools":    ["CHQQgjtrhYU", "29X5Ho3m2KU"],
   "network-tap":            ["0hd6_bx0ydo"],
   "coax-cabling":           ["29X5Ho3m2KU", "VO8C3lrWlVU"],
+  // --- Section 2.1 ---
+  "usb-standards":          ["JGuVE-3CvT4", "VO8C3lrWlVU"],
+  "display-cables":         ["FK1b4stA2hk", "xOyialyd4JU"],
+  "thunderbolt":            ["JGuVE-3CvT4", "FK1b4stA2hk"],
+  "sata-interface":         ["YM4pig2XYCo", "UfLNl8-c9VM"],
+  // --- Section 3.1 ---
+  "psu-wattage":            ["gK0SYCnWoIM"],
+  "psu-connectors":         ["gK0SYCnWoIM", "UjJwjjwa6Q0"],
+  "psu-types":              ["gK0SYCnWoIM"],
+  "cooling-systems":        ["qC306MGytR8"],
+  // --- Section 4.2 ---
+  "psu-troubleshoot":       ["HgeURynWn_w", "gK0SYCnWoIM"],
+  "post-codes":             ["HgeURynWn_w", "TgUxAM8rjyg"],
+  "boot-sequence":          ["TgUxAM8rjyg", "QfJkU0vD3gg"],
+  "bsod-codes":             ["HgeURynWn_w"],
+  "drive-health":           ["aVIuyHCNPCE"],
+  "raid-rebuild":           ["5E16qftlfRY", "aVIuyHCNPCE"],
+  // --- Section 5.4 ---
+  "wifi-80211-standards":   ["aTuaEk5hnAs"],
+  "wifi-frequency":         ["aTuaEk5hnAs"],
+  "wifi-6-ax":              ["aTuaEk5hnAs"],
+  "wifi-7-be":              ["aTuaEk5hnAs"],
+  "short-range-wireless":   ["aTuaEk5hnAs", "1LADZLBV3vo"],
+  // --- Section 6.1 ---
+  "internet-conn-types":    ["iN2QnGFl06E", "PBEXIMeqRNY"],
+  "dsl-types":              ["iN2QnGFl06E"],
+  "docsis":                 ["iN2QnGFl06E"],
+  "fiber-isp-types":        ["iN2QnGFl06E", "poQdq2APqic"],
+  "cellular-data":          ["iN2QnGFl06E", "1LADZLBV3vo"],
+  // --- Section 6.4 ---
+  "dhcp-process":           ["HwUqCZFx6wk"],
+  "dns-records":            ["lAHqO9sDVy4"],
+  "dns-hierarchy":          ["lAHqO9sDVy4"],
+  "vlan-config":            ["Z1wPgxsx4GI"],
+  "vpn-types":              ["Z1wPgxsx4GI"],
+  // --- Section 7.2 ---
+  "proxy-server":           ["0hd6_bx0ydo", "Z-9mkqi2ELI"],
+  "utm-spam-gateway":       ["0hd6_bx0ydo"],
+  "load-balancer":          ["0hd6_bx0ydo"],
+  "embedded-scada":         ["0hd6_bx0ydo"],
+  "iot-security":           ["0hd6_bx0ydo"],
+  // --- Section 7.3 ---
+  "wired-tshooting":        ["VBDS_kOHhVk", "CHQQgjtrhYU"],
+  "network-speed-tshooting":["VBDS_kOHhVk"],
+  "wireless-tshooting":     ["VBDS_kOHhVk"],
+  "voip-tshooting":         ["VBDS_kOHhVk", "Z-9mkqi2ELI"],
+  // --- Section 10.2 ---
+  "laser-imaging":          ["hp2DfL6KxwA", "ctAOL7WyEUY"],
+  "laser-maintenance":      ["hp2DfL6KxwA"],
+  "inkjet-thermal-impact":  ["qIIiTWNnWuQ", "izk4zbSkUTg", "wkSlTGmPlWU"],
+  // --- Section 10.3 ---
+  "print-quality-issues":   ["_BhO_nYod0o"],
+  "print-feed-issues":      ["_BhO_nYod0o"],
+  "printer-connectivity":   ["_BhO_nYod0o", "ctAOL7WyEUY"],
 };
 
 // Utility: get a video by its YouTube ID

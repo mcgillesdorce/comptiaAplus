@@ -57,4 +57,58 @@ export const WEAKNESS_PRIORITIES: Record<WeaknessTag, { label: string; priority:
   "cable-testing-tools":    { label: "Cable Testing (Wire Map/Certifier/TDR/OTDR)", priority: 8 },
   "network-tap":            { label: "Network Taps (Passive vs Active)", priority: 7 },
   "coax-cabling":           { label: "Coaxial Cabling (RG-6/RG-59, BNC/F-type)", priority: 7 },
+  // --- Section 2.1 ---
+  "usb-standards":          { label: "USB Standards (2.0/3.x/4, Type-A/B/C)", priority: 8 },
+  "display-cables":         { label: "Display Cables (HDMI, DisplayPort, DVI)", priority: 8 },
+  "thunderbolt":            { label: "Thunderbolt / USB4 Interface", priority: 7 },
+  "sata-interface":         { label: "SATA I/II/III, eSATA, Molex", priority: 7 },
+  // --- Section 3.1 ---
+  "psu-wattage":            { label: "PSU Wattage & 80 PLUS Ratings", priority: 8 },
+  "psu-connectors":         { label: "PSU Connectors (24-pin, PCIe, SATA, Molex)", priority: 8 },
+  "psu-types":              { label: "PSU Types (Modular, Redundant)", priority: 7 },
+  "cooling-systems":        { label: "Cooling (Fans, Heat Sinks, Liquid Cooling)", priority: 7 },
+  // --- Section 4.2 ---
+  "psu-troubleshoot":       { label: "PSU Troubleshooting (Dead, Overheating)", priority: 9 },
+  "post-codes":             { label: "POST Beep Codes & LED Indicators", priority: 9 },
+  "boot-sequence":          { label: "Boot Order & UEFI Boot Configuration", priority: 8 },
+  "bsod-codes":             { label: "BSOD Stop Codes & Memory Dumps", priority: 9 },
+  "drive-health":           { label: "Drive Health (S.M.A.R.T., Bad Sectors)", priority: 9 },
+  "raid-rebuild":           { label: "RAID Degraded Mode & Rebuild", priority: 8 },
+  // --- Section 5.4 ---
+  "wifi-80211-standards":   { label: "Wi-Fi 802.11 Standards (a/b/g/n/ac/ax/be)", priority: 9 },
+  "wifi-frequency":         { label: "Wi-Fi Frequency Bands (2.4/5/6 GHz)", priority: 8 },
+  "wifi-6-ax":              { label: "Wi-Fi 6/6E (OFDMA, MU-MIMO, BSS Coloring)", priority: 8 },
+  "wifi-7-be":              { label: "Wi-Fi 7 (802.11be, MLO, 320 MHz)", priority: 7 },
+  "short-range-wireless":   { label: "Bluetooth, RFID, NFC", priority: 8 },
+  // --- Section 6.1 ---
+  "internet-conn-types":    { label: "Internet Connection Types (DSL/Cable/Fiber)", priority: 8 },
+  "dsl-types":              { label: "DSL Types (ADSL, SDSL, VDSL)", priority: 7 },
+  "docsis":                 { label: "DOCSIS / Cable Modem Technology", priority: 7 },
+  "fiber-isp-types":        { label: "Fiber ISP Types (FTTC, FTTP, FTTH, ONT)", priority: 8 },
+  "cellular-data":          { label: "Cellular Data (4G LTE vs 5G NR)", priority: 7 },
+  // --- Section 6.4 ---
+  "dhcp-process":           { label: "DHCP DORA Process & Scopes", priority: 9 },
+  "dns-records":            { label: "DNS Record Types (A, AAAA, CNAME, MX, TXT, PTR)", priority: 9 },
+  "dns-hierarchy":          { label: "DNS Hierarchy (Root, TLD, Authoritative)", priority: 8 },
+  "vlan-config":            { label: "VLAN 802.1Q Tagging & Trunking", priority: 9 },
+  "vpn-types":              { label: "VPN Types (Site-to-Site, Remote Access, IPsec, SSL)", priority: 8 },
+  // --- Section 7.2 ---
+  "proxy-server":           { label: "Proxy Servers (Forward vs Reverse)", priority: 8 },
+  "utm-spam-gateway":       { label: "UTM / Spam Gateway / NGFW", priority: 8 },
+  "load-balancer":          { label: "Load Balancers (Algorithms, Sticky Sessions)", priority: 7 },
+  "embedded-scada":         { label: "SCADA / ICS / Embedded Systems", priority: 8 },
+  "iot-security":           { label: "IoT Security & Segmentation", priority: 8 },
+  // --- Section 7.3 ---
+  "wired-tshooting":        { label: "Wired Network Troubleshooting", priority: 9 },
+  "network-speed-tshooting":{ label: "Network Speed Issues (Duplex Mismatch)", priority: 8 },
+  "wireless-tshooting":     { label: "Wireless Troubleshooting (RSSI, Interference)", priority: 9 },
+  "voip-tshooting":         { label: "VoIP Troubleshooting (Jitter, QoS)", priority: 8 },
+  // --- Section 10.2 ---
+  "laser-imaging":          { label: "Laser Printer 7-Step Imaging Process", priority: 9 },
+  "laser-maintenance":      { label: "Laser Printer Maintenance (Fuser, Drum, Toner)", priority: 8 },
+  "inkjet-thermal-impact":  { label: "Inkjet, Thermal & Impact Printer Types", priority: 7 },
+  // --- Section 10.3 ---
+  "print-quality-issues":   { label: "Print Quality Issues (Ghosting, Streaks, Smear)", priority: 9 },
+  "print-feed-issues":      { label: "Print Feed Issues (Jams, Misfeeds, Double Feed)", priority: 8 },
+  "printer-connectivity":   { label: "Printer Connectivity Troubleshooting", priority: 8 },
 };
