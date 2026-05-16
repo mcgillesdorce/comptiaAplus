@@ -4,6 +4,7 @@ import {
   Brain,
   Briefcase,
   ChevronRight,
+  DollarSign,
   Globe,
   Lock,
   PlayCircle,
@@ -233,6 +234,14 @@ function CareerCard({ cert }: { cert: CertBundle }) {
               {title}
             </span>
           ))}
+        </div>
+      )}
+      {/* Average pay */}
+      {cert.avgPay && (
+        <div className="flex items-center gap-1.5 px-4 pb-3 font-mono text-[11px] font-semibold text-amber-600 dark:text-amber-400">
+          <DollarSign className="h-3.5 w-3.5 flex-shrink-0" />
+          Avg entry pay&nbsp;&nbsp;
+          ${Math.round(cert.avgPay.min / 1000)}k–${Math.round(cert.avgPay.max / 1000)}k / yr
         </div>
       )}
     </div>

@@ -16,6 +16,8 @@ export interface CertBundle {
   remoteOpenings?: number;
   /** Entry-level job titles this cert unlocks */
   entryTitles?: string[];
+  /** Entry-level average annual pay range (USD) */
+  avgPay?: { min: number; max: number };
 }
 
 export const CERT_BUNDLES: CertBundle[] = [
@@ -41,6 +43,7 @@ export const CERT_BUNDLES: CertBundle[] = [
       "PC Technician",
       "Technical Support Representative",
     ],
+    avgPay: { min: 38000, max: 62000 },
   },
   {
     id: "a-plus-1202",
@@ -62,6 +65,7 @@ export const CERT_BUNDLES: CertBundle[] = [
       "IT Operations Technician",
       "Desktop Support Analyst",
     ],
+    avgPay: { min: 38000, max: 62000 },
   },
   {
     id: "network-plus",
@@ -83,6 +87,7 @@ export const CERT_BUNDLES: CertBundle[] = [
       "Junior Systems Administrator",
       "IT Infrastructure Technician",
     ],
+    avgPay: { min: 48000, max: 74000 },
   },
   {
     id: "security-plus",
@@ -104,5 +109,6 @@ export const CERT_BUNDLES: CertBundle[] = [
       "Security Operations Analyst",
       "Vulnerability Assessment Technician",
     ],
+    avgPay: { min: 60000, max: 92000 },
   },
 ];
