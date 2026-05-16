@@ -254,7 +254,7 @@ export default function ProgressPage() {
         <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
           <h3 className="text-sm font-semibold text-slate-900">Feedback</h3>
           <p className="text-xs text-slate-600">
-            Share a complaint or attach a screenshot. A GitHub issue will be pre-filled with a priority check.
+            Share feedback or attach a screenshot. A GitHub issue will be prefilled with a priority check.
           </p>
           <textarea
             value={feedbackText}
@@ -297,7 +297,7 @@ export default function ProgressPage() {
             onClick={() => {
               const trimmedFeedback = feedbackText.trim();
               if (!trimmedFeedback && !screenshotFileName) {
-                alert("Please enter a complaint or attach a screenshot before submitting feedback.");
+                alert("Please enter feedback or attach a screenshot before submitting.");
                 return;
               }
 
@@ -311,8 +311,8 @@ export default function ProgressPage() {
                 "",
                 `**Priority (auto-filtered):** ${feedbackPriority.toUpperCase()}`,
                 "",
-                "**Complaint**",
-                trimmedFeedback || "(No complaint text provided)",
+                "**Feedback**",
+                trimmedFeedback || "(No feedback text provided)",
                 "",
                 `**Screenshot file:** ${screenshotFileName ?? "None attached"}`,
               ].join("\n");
