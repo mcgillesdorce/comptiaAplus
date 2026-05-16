@@ -90,7 +90,7 @@ function RecommendedTab({
         <Brain size={13} className="text-purple-400" />
         <span>
           {usesRecentSessions
-            ? "Based on your latest 2 quiz weak spots"
+            ? "Based on your latest two quiz weak spots"
             : hasQuizData
             ? "Based on your quiz weak spots"
             : "Top priority topics — take quizzes to personalise"}
@@ -173,7 +173,7 @@ export default function VideosPage() {
       .map(([tag, v]) => ({
         tag,
         attempted: v.attempted,
-        accuracyPct: v.attempted === 0 ? 0 : Math.round((v.correct / v.attempted) * 100),
+        accuracyPct: Math.round((v.correct / v.attempted) * 100),
       }))
       .filter((s) => s.attempted > 0 && s.accuracyPct < 80)
       .sort((a, b) => a.accuracyPct - b.accuracyPct)
