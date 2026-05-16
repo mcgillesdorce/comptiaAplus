@@ -101,9 +101,7 @@ export default function HomePage() {
           {CERT_BUNDLES.map((cert) => (
             <CertCard key={cert.id} cert={cert} />
           ))}
-        </div>        <p className="font-mono text-[10px] text-slate-400 dark:text-slate-500 text-center">
-          Job figures: US listings across Indeed, LinkedIn & Dice — May 2026
-        </p>
+        </div>
       </section>
 
       {/* ── Career paths ──────────────────────────────────────────────────────────── */}
@@ -120,7 +118,11 @@ export default function HomePage() {
           {CERT_BUNDLES.map((cert) => (
             <CareerCard key={cert.id} cert={cert} />
           ))}
-        </div>      </section>
+        </div>
+        <p className="font-mono text-[10px] text-slate-400 dark:text-slate-500 text-center">
+          Job figures: US listings across Indeed, LinkedIn &amp; Dice — May 2026
+        </p>
+      </section>
     </div>
   );
 }
@@ -159,20 +161,6 @@ function CertCard({ cert }: { cert: CertBundle }) {
               {cert.questionCount && <span>{cert.questionCount} Qs</span>}
               {cert.videoCount && <span>{cert.videoCount} videos</span>}
             </div>
-            {cert.jobOpenings && (
-              <div className="mt-2 space-y-1">
-                <div className="flex items-center gap-1.5 font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                  <Briefcase className="h-3 w-3 flex-shrink-0" />
-                  {formatJobs(cert.jobOpenings)} openings
-                </div>
-                {cert.remoteOpenings && (
-                  <div className="flex items-center gap-1.5 font-mono text-[10px] text-sky-600 dark:text-sky-400 font-semibold">
-                    <Globe className="h-3 w-3 flex-shrink-0" />
-                    {formatJobs(cert.remoteOpenings)} remote
-                  </div>
-                )}
-              </div>
-            )}
             <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400">
               Study now <ChevronRight className="h-3.5 w-3.5" />
             </div>
@@ -182,20 +170,6 @@ function CertCard({ cert }: { cert: CertBundle }) {
             <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
               {cert.description}
             </p>
-            {cert.jobOpenings && (
-              <div className="mt-2 space-y-1">
-                <div className="flex items-center gap-1.5 font-mono text-[10px] text-slate-400 font-semibold">
-                  <Briefcase className="h-3 w-3 flex-shrink-0" />
-                  {formatJobs(cert.jobOpenings)} openings
-                </div>
-                {cert.remoteOpenings && (
-                  <div className="flex items-center gap-1.5 font-mono text-[10px] text-slate-400 font-semibold">
-                    <Globe className="h-3 w-3 flex-shrink-0" />
-                    {formatJobs(cert.remoteOpenings)} remote
-                  </div>
-                )}
-              </div>
-            )}
             <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-slate-400">
               <Lock className="h-3 w-3" /> Coming soon
             </div>
