@@ -59,8 +59,30 @@ export function pickWeakQuestions(
     return { question: q, priority: priority * jitter };
   });
 
-  scored.sort((a, b) => b.priority - a.priority);
-  return scored.slice(0, count).map((s) => s.question);
+  const weightedPool = scored.map((entry) => ({
+    ...entry,
+    priority: Math.max(entry.priority, 0.01),
+  }));
+  const selected: Question[] = [];
+
+  while (selected.length < count && weightedPool.length > 0) {
+    const totalPriority = weightedPool.reduce((sum, entry) => sum + entry.priority, 0);
+    let threshold = Math.random() * totalPriority;
+    let selectedIndex = weightedPool.length - 1;
+
+    for (let i = 0; i < weightedPool.length; i++) {
+      threshold -= weightedPool[i].priority;
+      if (threshold <= 0) {
+        selectedIndex = i;
+        break;
+      }
+    }
+
+    selected.push(weightedPool[selectedIndex].question);
+    weightedPool.splice(selectedIndex, 1);
+  }
+
+  return selected;
 }
 
 /**

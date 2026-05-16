@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useStudyStore } from "@/lib/store";
 import { allQuestions } from "@/data/questions";
@@ -20,7 +20,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-function QuizSessionContent() {
+function QuizSessionContent({ searchKey }: { searchKey: string }) {
   const router = useRouter();
   const params = useSearchParams();
   const recordAnswer = useStudyStore((s) => s.recordAnswer);
@@ -39,7 +39,7 @@ function QuizSessionContent() {
   const domainsParam = params.get("domains");
   const count = Number(params.get("n") ?? 10);
 
-  // Build the question set ONCE on mount
+  // Build the question set once for the current session query.
   const questions = useMemo<Question[]>(() => {
     if (weakness) {
       return shuffle(getQuestionsByWeakness(weakness)).slice(0, count);
@@ -55,8 +55,10 @@ function QuizSessionContent() {
       return shuffle(allQuestions.filter((q) => domains.includes(q.domain))).slice(0, count);
     }
     return shuffle(allQuestions).slice(0, count);
+    // stats are intentionally snapshotted per session so the question set
+    // does not reshuffle mid-quiz as answers are recorded.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchKey]);
 
   const [idx, setIdx] = useState(0);
   const [selectedChoices, setSelectedChoices] = useState<string[]>([]);
@@ -112,7 +114,11 @@ function QuizSessionContent() {
           bumpStreak();
           router.push(`/quiz/results?id=${sessionId}`);
         }}
-        onRetry={() => router.push(window.location.pathname + window.location.search)}
+        onRetry={() => {
+          const retryParams = new URLSearchParams(window.location.search);
+          retryParams.set("retry", crypto.randomUUID());
+          router.push(`${window.location.pathname}?${retryParams.toString()}`);
+        }}
       />
     );
   }
@@ -390,10 +396,17 @@ function ResultsScreen({
   );
 }
 
+function QuizSessionContentWithKey() {
+  const params = useSearchParams();
+  const searchKey = params.toString();
+
+  return <QuizSessionContent key={searchKey} searchKey={searchKey} />;
+}
+
 export default function QuizSessionPage() {
   return (
     <Suspense fallback={<div className="pt-12 text-center text-slate-500">Loading...</div>}>
-      <QuizSessionContent />
+      <QuizSessionContentWithKey />
     </Suspense>
   );
 }
