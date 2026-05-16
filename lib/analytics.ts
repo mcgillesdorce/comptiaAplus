@@ -81,6 +81,10 @@ export function pickWeakQuestions(
   return scored.slice(0, count).map((s) => s.question);
 }
 
+/**
+ * Build a per-weakness miss-rate map from recent quiz sessions.
+ * More recent sessions carry more weight, and values are normalized to 0..1.
+ */
 function getRecentWeaknessMissRates(
   sessions: QuizSession[],
   limit = 5
@@ -92,7 +96,7 @@ function getRecentWeaknessMissRates(
   if (recentSessions.length === 0) return new Map();
 
   const totals = new Map<WeaknessTag, { missWeighted: number; weightSum: number }>();
-  const sessionCount = Math.max(1, recentSessions.length);
+  const sessionCount = recentSessions.length;
 
   recentSessions.forEach((session, index) => {
     const recencyWeight = (sessionCount - index) / sessionCount;
