@@ -10,12 +10,13 @@ import { RotateCcw, X, Bookmark, BookmarkCheck } from "lucide-react";
 
 export default function FlashcardsPage() {
   const stats = useStudyStore((s) => s.questionStats);
+  const sessions = useStudyStore((s) => s.sessions);
   const rateConfidence = useStudyStore((s) => s.rateConfidence);
   const toggleReview = useStudyStore((s) => s.toggleReview);
   const recordAnswer = useStudyStore((s) => s.recordAnswer);
 
   // Start with weak-area-weighted deck (20 cards)
-  const [deck] = useState<Question[]>(() => pickWeakQuestions(stats, 20));
+  const [deck] = useState<Question[]>(() => pickWeakQuestions(stats, 20, undefined, sessions));
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
