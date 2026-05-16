@@ -2,7 +2,9 @@ import Link from "next/link";
 import {
   BookOpen,
   Brain,
+  Briefcase,
   ChevronRight,
+  Globe,
   Lock,
   PlayCircle,
   TrendingUp,
@@ -36,6 +38,11 @@ const HOW_IT_WORKS = [
     body: "Weakness analytics show exactly which topics still need work so you never study blind.",
   },
 ];
+
+function formatJobs(n: number): string {
+  if (n >= 1000) return `${Math.round(n / 1000)}k+`;
+  return `${n}+`;
+}
 
 export default function HomePage() {
   return (
@@ -94,8 +101,26 @@ export default function HomePage() {
           {CERT_BUNDLES.map((cert) => (
             <CertCard key={cert.id} cert={cert} />
           ))}
-        </div>
+        </div>        <p className="font-mono text-[10px] text-slate-400 dark:text-slate-500 text-center">
+          Job figures: US listings across Indeed, LinkedIn & Dice — May 2026
+        </p>
       </section>
+
+      {/* ── Career paths ──────────────────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+            Where this takes you
+          </h2>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Entry-level titles that open up once you pass each cert.
+          </p>
+        </div>
+        <div className="space-y-3">
+          {CERT_BUNDLES.map((cert) => (
+            <CareerCard key={cert.id} cert={cert} />
+          ))}
+        </div>      </section>
     </div>
   );
 }
@@ -130,10 +155,24 @@ function CertCard({ cert }: { cert: CertBundle }) {
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">
               {cert.description}
             </p>
-            <div className="mt-3 flex items-center gap-3 font-mono text-[10px] text-slate-400">
+            <div className="mt-2 flex items-center gap-3 font-mono text-[10px] text-slate-400">
               {cert.questionCount && <span>{cert.questionCount} Qs</span>}
               {cert.videoCount && <span>{cert.videoCount} videos</span>}
             </div>
+            {cert.jobOpenings && (
+              <div className="mt-2 space-y-1">
+                <div className="flex items-center gap-1.5 font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <Briefcase className="h-3 w-3 flex-shrink-0" />
+                  {formatJobs(cert.jobOpenings)} openings
+                </div>
+                {cert.remoteOpenings && (
+                  <div className="flex items-center gap-1.5 font-mono text-[10px] text-sky-600 dark:text-sky-400 font-semibold">
+                    <Globe className="h-3 w-3 flex-shrink-0" />
+                    {formatJobs(cert.remoteOpenings)} remote
+                  </div>
+                )}
+              </div>
+            )}
             <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400">
               Study now <ChevronRight className="h-3.5 w-3.5" />
             </div>
@@ -143,6 +182,20 @@ function CertCard({ cert }: { cert: CertBundle }) {
             <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
               {cert.description}
             </p>
+            {cert.jobOpenings && (
+              <div className="mt-2 space-y-1">
+                <div className="flex items-center gap-1.5 font-mono text-[10px] text-slate-400 font-semibold">
+                  <Briefcase className="h-3 w-3 flex-shrink-0" />
+                  {formatJobs(cert.jobOpenings)} openings
+                </div>
+                {cert.remoteOpenings && (
+                  <div className="flex items-center gap-1.5 font-mono text-[10px] text-slate-400 font-semibold">
+                    <Globe className="h-3 w-3 flex-shrink-0" />
+                    {formatJobs(cert.remoteOpenings)} remote
+                  </div>
+                )}
+              </div>
+            )}
             <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-slate-400">
               <Lock className="h-3 w-3" /> Coming soon
             </div>
@@ -158,5 +211,56 @@ function CertCard({ cert }: { cert: CertBundle }) {
     <Link href={cert.href} className="flex flex-col">
       {inner}
     </Link>
+  );
+}
+
+function CareerCard({ cert }: { cert: CertBundle }) {
+  const gradientDot: Record<string, string> = {
+    "a-plus-1201":   "bg-violet-500",
+    "a-plus-1202":   "bg-amber-500",
+    "network-plus":  "bg-sky-500",
+    "security-plus": "bg-rose-500",
+  };
+
+  return (
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 overflow-hidden">
+      {/* Header row */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-700/60">
+        <div className="flex items-center gap-2">
+          <span className={`h-2.5 w-2.5 rounded-full flex-shrink-0 ${gradientDot[cert.id] ?? "bg-slate-400"}`} />
+          <div>
+            <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">
+              {cert.name}
+            </span>
+            <span className="ml-2 font-mono text-[10px] text-slate-400">{cert.code}</span>
+          </div>
+        </div>
+        {cert.jobOpenings && (
+          <div className="text-right">
+            <p className="flex items-center gap-1 font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold justify-end">
+              <Briefcase className="h-3 w-3" />{formatJobs(cert.jobOpenings)}
+            </p>
+            {cert.remoteOpenings && (
+              <p className="flex items-center gap-1 font-mono text-[10px] text-sky-600 dark:text-sky-400 font-semibold justify-end">
+                <Globe className="h-3 w-3" />{formatJobs(cert.remoteOpenings)} remote
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+      {/* Job title pills */}
+      {cert.entryTitles && (
+        <div className="px-4 py-3 flex flex-wrap gap-2">
+          {cert.entryTitles.map((title) => (
+            <span
+              key={title}
+              className="rounded-full border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-2.5 py-0.5 text-[11px] font-medium text-slate-700 dark:text-slate-300"
+            >
+              {title}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

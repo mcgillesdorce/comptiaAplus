@@ -10,6 +10,12 @@ export interface CertBundle {
   videoCount?: number;
   /** Tailwind gradient utility classes for the card header */
   gradient: string;
+  /** Approximate total job postings on major boards (US, updated May 2026) */
+  jobOpenings?: number;
+  /** Approximate remote-only subset of jobOpenings */
+  remoteOpenings?: number;
+  /** Entry-level job titles this cert unlocks */
+  entryTitles?: string[];
 }
 
 export const CERT_BUNDLES: CertBundle[] = [
@@ -25,6 +31,16 @@ export const CERT_BUNDLES: CertBundle[] = [
     questionCount: 210,
     videoCount: 63,
     gradient: "from-violet-600 to-indigo-700",
+    jobOpenings: 54000,
+    remoteOpenings: 19000,
+    entryTitles: [
+      "Help Desk Technician",
+      "IT Support Specialist",
+      "Desktop Support Technician",
+      "Field Service Technician",
+      "PC Technician",
+      "Technical Support Representative",
+    ],
   },
   {
     id: "a-plus-1202",
@@ -36,6 +52,16 @@ export const CERT_BUNDLES: CertBundle[] = [
     href: "#",
     active: false,
     gradient: "from-amber-600 to-orange-700",
+    jobOpenings: 54000,
+    remoteOpenings: 19000,
+    entryTitles: [
+      "IT Support Specialist",
+      "Help Desk Analyst",
+      "Systems Support Technician",
+      "End-User Computing Technician",
+      "IT Operations Technician",
+      "Desktop Support Analyst",
+    ],
   },
   {
     id: "network-plus",
@@ -47,6 +73,16 @@ export const CERT_BUNDLES: CertBundle[] = [
     href: "#",
     active: false,
     gradient: "from-sky-600 to-blue-700",
+    jobOpenings: 41000,
+    remoteOpenings: 14000,
+    entryTitles: [
+      "Network Technician",
+      "Junior Network Administrator",
+      "NOC Technician",
+      "Network Support Specialist",
+      "Junior Systems Administrator",
+      "IT Infrastructure Technician",
+    ],
   },
   {
     id: "security-plus",
@@ -58,5 +94,15 @@ export const CERT_BUNDLES: CertBundle[] = [
     href: "#",
     active: false,
     gradient: "from-rose-600 to-pink-700",
+    jobOpenings: 89000,
+    remoteOpenings: 38000,
+    entryTitles: [
+      "SOC Analyst (Tier I)",
+      "Junior Security Analyst",
+      "Cybersecurity Technician",
+      "Information Security Analyst",
+      "Security Operations Analyst",
+      "Vulnerability Assessment Technician",
+    ],
   },
 ];
