@@ -8,9 +8,9 @@ export function DarkModeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("theme");
-    const isDark = stored === "dark";
-    setDark(isDark);
+    // The anti-flash inline script already applied the correct class;
+    // read it from the DOM to sync React state without duplicating logic.
+    setDark(document.documentElement.classList.contains("dark"));
   }, []);
 
   function toggle() {
