@@ -48,10 +48,10 @@ export const allQuestions: Question[] = [
     source: "exam2-missed",
     prompt: "Which fiber optic connector has a round metal body with a bayonet-style twist-lock mechanism?",
     choices: [
-      { id: "a", text: "ST", correct: false },
+      { id: "a", text: "ST", correct: true },
       { id: "b", text: "LC", correct: false },
       { id: "c", text: "F-type", correct: false },
-      { id: "d", text: "SC", correct: true },
+      { id: "d", text: "SC", correct: false },
     ],
     explanation: "Wait — re-read this carefully. This question asks about a BAYONET twist-lock connector. That's ST (Straight Tip), NOT SC. SC has a square push-pull design. You picked F-type on the actual exam which is a coax connector entirely. Always: ROUND + BAYONET = ST.",
     triggerPhrase: "Round bayonet fiber = ST ('Stick & Twist')",

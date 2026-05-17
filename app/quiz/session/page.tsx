@@ -67,6 +67,13 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
   const [correctCount, setCorrectCount] = useState(0);
   const [startedAt] = useState(() => Date.now());
 
+  // Shuffle choices once per question so the correct answer isn't always in the same position
+  const shuffledChoices = useMemo(
+    () => (questions[idx] ? shuffle([...questions[idx].choices]) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [idx]
+  );
+
   // Handle empty question set
   if (questions.length === 0) {
     return (
@@ -238,8 +245,8 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
         )}
 
         {/* Choices */}
-        <div className="space-y-2">
-          {current.choices.map((choice) => {
+        <div className="space-y-2 pb-28">
+          {shuffledChoices.map((choice) => {
             const selected = selectedChoices.includes(choice.id);
             const isCorrect = choice.correct;
             const showAsCorrect = showResult && isCorrect;
