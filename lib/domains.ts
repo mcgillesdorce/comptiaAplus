@@ -111,4 +111,6 @@ export const WEAKNESS_PRIORITIES: Record<WeaknessTag, { label: string; priority:
   "print-quality-issues":   { label: "Print Quality Issues (Ghosting, Streaks, Smear)", priority: 9 },
   "print-feed-issues":      { label: "Print Feed Issues (Jams, Misfeeds, Double Feed)", priority: 8 },
   "printer-connectivity":   { label: "Printer Connectivity Troubleshooting", priority: 8 },
+  // --- Port & Protocol Numbers ---
+  "port-numbers":            { label: "Port & Protocol Numbers", priority: 9 },
 };

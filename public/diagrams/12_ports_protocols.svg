@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 580" width="800" height="580">
+  <rect width="800" height="580" fill="#FAFAFA" rx="6"/>
+  <text x="400" y="30" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">CompTIA A+ Port Numbers — Quick Reference</text>
+
+  <!-- Column headers -->
+  <rect x="20" y="40" width="760" height="36" rx="4" fill="#1F3864"/>
+  <text x="100" y="63" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFF" text-anchor="middle">Port(s)</text>
+  <text x="270" y="63" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFF" text-anchor="middle">Protocol</text>
+  <text x="490" y="63" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFF" text-anchor="middle">Service / Purpose</text>
+  <text x="720" y="63" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#FFF" text-anchor="middle">Transport</text>
+  <line x1="180" y1="40" x2="180" y2="76" stroke="#FFF" stroke-width="1" opacity="0.3"/>
+  <line x1="370" y1="40" x2="370" y2="76" stroke="#FFF" stroke-width="1" opacity="0.3"/>
+  <line x1="670" y1="40" x2="670" y2="76" stroke="#FFF" stroke-width="1" opacity="0.3"/>
+
+  <!-- Row 1: FTP -->
+  <rect x="20" y="76" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="96" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">20 / 21</text>
+  <text x="270" y="96" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">FTP</text>
+  <text x="490" y="96" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">File Transfer Protocol (20=data, 21=control)</text>
+  <text x="720" y="96" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 2: SSH -->
+  <rect x="20" y="106" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="126" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">22</text>
+  <text x="270" y="126" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">SSH</text>
+  <text x="490" y="126" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Secure Shell — encrypted remote login</text>
+  <text x="720" y="126" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 3: Telnet -->
+  <rect x="20" y="136" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="156" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">23</text>
+  <text x="270" y="156" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">Telnet</text>
+  <text x="490" y="156" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Remote login — unencrypted (legacy)</text>
+  <text x="720" y="156" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 4: SMTP -->
+  <rect x="20" y="166" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="186" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">25</text>
+  <text x="270" y="186" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">SMTP</text>
+  <text x="490" y="186" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Simple Mail Transfer Protocol — send email</text>
+  <text x="720" y="186" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 5: DNS -->
+  <rect x="20" y="196" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">53</text>
+  <text x="270" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">DNS</text>
+  <text x="490" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Domain Name System — name to IP resolution</text>
+  <text x="720" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">UDP/TCP</text>
+
+  <!-- Row 6: DHCP -->
+  <rect x="20" y="226" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="246" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">67 / 68</text>
+  <text x="270" y="246" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">DHCP</text>
+  <text x="490" y="246" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Dynamic Host Config (67=server, 68=client)</text>
+  <text x="720" y="246" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">UDP</text>
+
+  <!-- Row 7: HTTP -->
+  <rect x="20" y="256" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="276" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">80</text>
+  <text x="270" y="276" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">HTTP</text>
+  <text x="490" y="276" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">HyperText Transfer Protocol — web traffic</text>
+  <text x="720" y="276" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 8: POP3 -->
+  <rect x="20" y="286" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="306" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">110</text>
+  <text x="270" y="306" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">POP3</text>
+  <text x="490" y="306" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Post Office Protocol v3 — retrieve email (downloads)</text>
+  <text x="720" y="306" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 9: NTP -->
+  <rect x="20" y="316" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="336" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">123</text>
+  <text x="270" y="336" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">NTP</text>
+  <text x="490" y="336" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Network Time Protocol — clock synchronization</text>
+  <text x="720" y="336" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">UDP</text>
+
+  <!-- Row 10: IMAP -->
+  <rect x="20" y="346" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="366" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">143</text>
+  <text x="270" y="366" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">IMAP</text>
+  <text x="490" y="366" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Internet Message Access Protocol — sync email</text>
+  <text x="720" y="366" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 11: SNMP -->
+  <rect x="20" y="376" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="396" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">161 / 162</text>
+  <text x="270" y="396" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">SNMP</text>
+  <text x="490" y="396" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Simple Network Mgmt (161=queries, 162=traps)</text>
+  <text x="720" y="396" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">UDP</text>
+
+  <!-- Row 12: LDAP -->
+  <rect x="20" y="406" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="426" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">389</text>
+  <text x="270" y="426" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">LDAP</text>
+  <text x="490" y="426" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Lightweight Directory Access Protocol — AD queries</text>
+  <text x="720" y="426" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP/UDP</text>
+
+  <!-- Row 13: HTTPS -->
+  <rect x="20" y="436" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="456" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">443</text>
+  <text x="270" y="456" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">HTTPS</text>
+  <text x="490" y="456" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">HTTP Secure — encrypted web (TLS/SSL)</text>
+  <text x="720" y="456" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 14: SMB -->
+  <rect x="20" y="466" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="486" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">445</text>
+  <text x="270" y="486" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">SMB</text>
+  <text x="490" y="486" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Server Message Block — Windows file sharing</text>
+  <text x="720" y="486" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 15: AFP -->
+  <rect x="20" y="496" width="760" height="30" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="516" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">548</text>
+  <text x="270" y="516" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">AFP</text>
+  <text x="490" y="516" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Apple Filing Protocol — macOS file sharing</text>
+  <text x="720" y="516" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <!-- Row 16: RDP -->
+  <rect x="20" y="526" width="760" height="30" fill="#FFF" stroke="#BCD4E6" stroke-width="0.5"/>
+  <text x="100" y="546" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">3389</text>
+  <text x="270" y="546" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">RDP</text>
+  <text x="490" y="546" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#333" text-anchor="middle">Remote Desktop Protocol — Windows remote GUI</text>
+  <text x="720" y="546" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#666" text-anchor="middle">TCP</text>
+
+  <line x1="180" y1="76" x2="180" y2="556" stroke="#BCD4E6" stroke-width="1"/>
+  <line x1="370" y1="76" x2="370" y2="556" stroke="#BCD4E6" stroke-width="1"/>
+  <line x1="670" y1="76" x2="670" y2="556" stroke="#BCD4E6" stroke-width="1"/>
+
+  <text x="400" y="574" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#888" text-anchor="middle" font-style="italic">Memory trick: FTP=20/21 | SSH=22 | Telnet=23 | SMTP=25 | DNS=53 | DHCP=67/68 | HTTP=80 | POP3=110 | NTP=123 | IMAP=143 | SNMP=161/162 | LDAP=389 | HTTPS=443 | SMB=445 | AFP=548 | RDP=3389</text>
+</svg>

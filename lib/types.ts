@@ -109,7 +109,9 @@ export type WeaknessTag =
   // --- Section 10.3 Troubleshoot Print Devices ---
   | "print-quality-issues"    // ghosting, fading, streaking, smearing
   | "print-feed-issues"       // paper jam, misfeed, double feed
-  | "printer-connectivity";   // USB/network/wireless printer setup issues
+  | "printer-connectivity"    // USB/network/wireless printer setup issues
+  // --- Port & Protocol Numbers ---
+  | "port-numbers";           // TCP/UDP port memorization for CompTIA A+
 
 export interface Choice {
   id: string;
