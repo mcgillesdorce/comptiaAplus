@@ -4,21 +4,25 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DOMAINS, WEAKNESS_PRIORITIES } from "@/lib/domains";
 import { useStudyStore } from "@/lib/store";
-import { computeWeaknessStats } from "@/lib/analytics";
+import { computeWeaknessStats, computeUncoveredTopics } from "@/lib/analytics";
 import { allQuestions } from "@/data/questions";
 import type { Domain } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Zap, Bookmark, RefreshCw, Filter, Target } from "lucide-react";
+import { Zap, Bookmark, RefreshCw, Filter, Target, BookOpen, ChevronRight } from "lucide-react";
 
 export default function QuizPage() {
   const router = useRouter();
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(10);
   const stats = useStudyStore((s) => s.questionStats);
+  const sessions = useStudyStore((s) => s.sessions);
 
   const flaggedCount = Object.values(stats).filter((s) => s.markedForReview).length;
   const weaknessStats = computeWeaknessStats(stats);
   const lowAccuracyTags = weaknessStats.filter((w) => w.attempted > 0 && w.accuracyPct < 70);
+  const uncoveredTopics = computeUncoveredTopics(sessions, 5);
+  const [showAllUncovered, setShowAllUncovered] = useState(false);
+  const visibleUncovered = showAllUncovered ? uncoveredTopics : uncoveredTopics.slice(0, 5);
 
   const toggleDomain = (d: Domain) => {
     setSelectedDomains((prev) =>
@@ -124,6 +128,60 @@ export default function QuizPage() {
               </Link>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* Uncovered Topics */}
+      {uncoveredTopics.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-slate-700" />
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Not yet covered</h2>
+            </div>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-500">
+              last 5 quizzes
+            </span>
+          </div>
+          <p className="text-xs text-slate-500">
+            {sessions.length === 0
+              ? "No quizzes taken yet — all topics are uncovered."
+              : `${uncoveredTopics.length} topic${uncoveredTopics.length === 1 ? "" : "s"} with available questions haven't appeared in your last ${Math.min(sessions.length, 5)} quiz${Math.min(sessions.length, 5) === 1 ? "" : "zes"}.`}
+          </p>
+          <div className="grid gap-2">
+            {visibleUncovered.map((t) => (
+              <Link
+                key={t.tag}
+                href={`/quiz/session?weakness=${t.tag}`}
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 transition-all active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800"
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
+                    {t.label}
+                  </p>
+                  <p className="font-mono text-xs text-slate-500">
+                    {t.questionCount} question{t.questionCount === 1 ? "" : "s"} available
+                  </p>
+                </div>
+                <div className="ml-3 flex items-center gap-2 flex-shrink-0">
+                  <span className="rounded-full bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                    P{t.priority}
+                  </span>
+                  <ChevronRight className="h-4 w-4 text-slate-400" />
+                </div>
+              </Link>
+            ))}
+          </div>
+          {uncoveredTopics.length > 5 && (
+            <button
+              onClick={() => setShowAllUncovered((v) => !v)}
+              className="w-full rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-600 transition-all hover:bg-slate-50"
+            >
+              {showAllUncovered
+                ? "Show less"
+                : `Show ${uncoveredTopics.length - 5} more topics`}
+            </button>
+          )}
         </section>
       )}
 

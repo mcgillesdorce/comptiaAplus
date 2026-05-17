@@ -220,6 +220,49 @@ export function computeWeaknessStats(
 }
 
 /**
+ * Return weakness topics that had zero questions answered across the last N
+ * quiz sessions — i.e. topics that haven't been touched recently.
+ * Only includes tags that actually have questions in the bank.
+ * Results are sorted highest→lowest priority so the most important gaps show first.
+ */
+export function computeUncoveredTopics(
+  sessions: QuizSession[],
+  limit = 5
+): { tag: WeaknessTag; label: string; priority: number; questionCount: number }[] {
+  // Build the set of tags covered across the most recent `limit` sessions.
+  const recentSessions = [...sessions]
+    .sort((a, b) => b.finishedAt - a.finishedAt)
+    .slice(0, limit);
+
+  const coveredTags = new Set<WeaknessTag>();
+  for (const session of recentSessions) {
+    for (const tag of Object.keys(session.weaknessResults ?? {})) {
+      coveredTags.add(tag as WeaknessTag);
+    }
+  }
+
+  // Count available questions per tag.
+  const qCountByTag = new Map<WeaknessTag, number>();
+  for (const q of allQuestions) {
+    for (const tag of q.weaknessTags) {
+      qCountByTag.set(tag, (qCountByTag.get(tag) ?? 0) + 1);
+    }
+  }
+
+  // Collect tags that have questions but weren't covered in those sessions.
+  const result: { tag: WeaknessTag; label: string; priority: number; questionCount: number }[] = [];
+  for (const [tag, info] of Object.entries(WEAKNESS_PRIORITIES)) {
+    const weakTag = tag as WeaknessTag;
+    const qCount = qCountByTag.get(weakTag) ?? 0;
+    if (qCount > 0 && !coveredTags.has(weakTag)) {
+      result.push({ tag: weakTag, label: info.label, priority: info.priority, questionCount: qCount });
+    }
+  }
+
+  return result.sort((a, b) => b.priority - a.priority);
+}
+
+/**
  * Compute days until exam.
  */
 export function daysUntilExam(targetDate: string | null): number | null {
