@@ -49,14 +49,14 @@ export default function QuizPage() {
       {/* Smart Modes */}
       <section className="space-y-3">
         <Link
-          href="/quiz/session?mode=weak"
+          href="/quiz/session?mode=weak&n=20"
           className="flex items-center gap-4 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-5 text-white shadow-md transition-all active:scale-[0.99]"
         >
           <Zap className="h-8 w-8 flex-shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-lg">Smart Quiz</p>
             <p className="text-sm text-brand-100">
-              Auto-picks from your weakest areas
+              20 questions · auto-picks your weakest areas
             </p>
           </div>
         </Link>

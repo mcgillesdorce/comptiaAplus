@@ -284,12 +284,13 @@ export function computeReadinessScore(stats: Record<string, QuestionStat>): {
   const domainStats = computeDomainStats(stats);
 
   // A+ Core 1 domain weights
+  // V15 exam objective weights
   const weights: Record<Domain, number> = {
-    "1.0-mobile": 0.15,
-    "2.0-networking": 0.20,
+    "1.0-mobile": 0.13,
+    "2.0-networking": 0.23,
     "3.0-hardware": 0.25,
     "4.0-virtualization-cloud": 0.11,
-    "5.0-troubleshooting": 0.29,
+    "5.0-troubleshooting": 0.28,
   };
 
   let weighted = 0;

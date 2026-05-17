@@ -1,11 +1,11 @@
 import type { Domain, WeaknessTag } from "./types";
 
 export const DOMAINS: Record<Domain, { name: string; color: string; weight: number }> = {
-  "1.0-mobile": { name: "Mobile Devices", color: "var(--color-domain-mobile)", weight: 15 },
-  "2.0-networking": { name: "Networking", color: "var(--color-domain-networking)", weight: 20 },
+  "1.0-mobile": { name: "Mobile Devices", color: "var(--color-domain-mobile)", weight: 13 },
+  "2.0-networking": { name: "Networking", color: "var(--color-domain-networking)", weight: 23 },
   "3.0-hardware": { name: "Hardware", color: "var(--color-domain-hardware)", weight: 25 },
   "4.0-virtualization-cloud": { name: "Virtualization & Cloud", color: "var(--color-domain-virtualization)", weight: 11 },
-  "5.0-troubleshooting": { name: "Hardware & Network Troubleshooting", color: "var(--color-domain-troubleshooting)", weight: 29 },
+  "5.0-troubleshooting": { name: "Hardware & Network Troubleshooting", color: "var(--color-domain-troubleshooting)", weight: 28 },
 };
 
 // Gilly's weakness rankings from BOTH practice exams
