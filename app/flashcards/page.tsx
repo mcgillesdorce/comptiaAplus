@@ -52,10 +52,16 @@ const TOPIC_STACKS: Stack[] = [
     tags: ["cat-ratings", "t568a-568b-crossover", "wiring-standards", "emi-shielding", "crosstalk", "coax-cabling"],
   },
   {
+    id: "wireless",
+    label: "Wireless Standards",
+    emoji: "📶",
+    tags: ["wifi-80211-standards", "wireless-channels", "wireless-standards", "wifi-frequency", "wifi-6-ax", "wifi-7-be", "ap-troubleshooting"],
+  },
+  {
     id: "networking",
     label: "Networking",
     emoji: "📡",
-    tags: ["wifi-80211-standards", "wireless-channels", "internet-conn-types", "dhcp-process", "dns-records", "wireless-standards"],
+    tags: ["internet-conn-types", "dhcp-process", "dns-records"],
   },
   {
     id: "all",
