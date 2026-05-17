@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="800" height="380">
+  <rect width="800" height="380" fill="#FAFAFA" rx="6"/>
+  <text x="400" y="32" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">Copper Cable Categories -- IEEE 802.3 Standard</text>
+
+  <!-- Table header -->
+  <rect x="40" y="48" width="720" height="40" rx="4" fill="#1F3864"/>
+  <text x="170" y="73" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFF" text-anchor="middle">Ethernet Standard</text>
+  <text x="400" y="73" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFF" text-anchor="middle">Cable Category</text>
+  <text x="630" y="73" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFF" text-anchor="middle">Maximum Distance</text>
+  <line x1="300" y1="48" x2="300" y2="88" stroke="#FFF" stroke-width="1" opacity="0.3"/>
+  <line x1="510" y1="48" x2="510" y2="88" stroke="#FFF" stroke-width="1" opacity="0.3"/>
+
+  <!-- Row 1: Cat 5 -->
+  <rect x="40" y="88" width="720" height="58" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="1"/>
+  <text x="170" y="118" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">1000BASE-T</text>
+  <text x="170" y="136" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">(1 Gigabit Ethernet)</text>
+  <text x="400" y="122" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1A73CC" text-anchor="middle">Category 5</text>
+  <text x="630" y="122" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">100 meters</text>
+  <line x1="300" y1="88" x2="300" y2="146" stroke="#BCD4E6" stroke-width="1"/>
+  <line x1="510" y1="88" x2="510" y2="146" stroke="#BCD4E6" stroke-width="1"/>
+
+  <!-- Row 2: Cat 5e -->
+  <rect x="40" y="146" width="720" height="58" fill="#FFF" stroke="#BCD4E6" stroke-width="1"/>
+  <text x="170" y="176" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">1000BASE-T</text>
+  <text x="170" y="194" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">(1 Gigabit Ethernet)</text>
+  <text x="400" y="172" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1A73CC" text-anchor="middle">Category 5e</text>
+  <text x="400" y="190" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">(enhanced -- reduced crosstalk)</text>
+  <text x="630" y="180" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">100 meters</text>
+  <line x1="300" y1="146" x2="300" y2="204" stroke="#BCD4E6" stroke-width="1"/>
+  <line x1="510" y1="146" x2="510" y2="204" stroke="#BCD4E6" stroke-width="1"/>
+
+  <!-- Row 3: Cat 6 (taller for two distance rows) -->
+  <rect x="40" y="204" width="720" height="70" fill="#EBF5FF" stroke="#BCD4E6" stroke-width="1"/>
+  <text x="170" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">10GBASE-T</text>
+  <text x="170" y="256" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">(10 Gigabit Ethernet)</text>
+  <text x="400" y="246" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1A73CC" text-anchor="middle">Category 6</text>
+  <text x="630" y="228" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#C0392B" text-anchor="middle">Unshielded: 55 meters</text>
+  <text x="630" y="250" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700" fill="#1F3864" text-anchor="middle">Shielded: 100 meters</text>
+  <line x1="300" y1="204" x2="300" y2="274" stroke="#BCD4E6" stroke-width="1"/>
+  <line x1="510" y1="204" x2="510" y2="274" stroke="#BCD4E6" stroke-width="1"/>
+
+  <!-- Row 4: Cat 6A -->
+  <rect x="40" y="274" width="720" height="70" fill="#FFF" stroke="#BCD4E6" stroke-width="1"/>
+  <text x="170" y="308" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">10GBASE-T</text>
+  <text x="170" y="326" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">(10 Gigabit Ethernet)</text>
+  <text x="400" y="304" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1A73CC" text-anchor="middle">Category 6A</text>
+  <text x="400" y="322" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">(augmented)</text>
+  <text x="630" y="312" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#2A7D2E" text-anchor="middle">100 meters</text>
+  <line x1="300" y1="274" x2="300" y2="344" stroke="#BCD4E6" stroke-width="1"/>
+  <line x1="510" y1="274" x2="510" y2="344" stroke="#BCD4E6" stroke-width="1"/>
+
+  <text x="400" y="368" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#666" text-anchor="middle" font-style="italic">Key: Cat 6 UTP limited to 55m for 10GbE -- Cat 6A achieves full 100m for 10GbE without shielding</text>
+</svg>

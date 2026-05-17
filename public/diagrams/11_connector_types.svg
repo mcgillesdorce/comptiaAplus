@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 490" width="800" height="490">
+  <rect width="800" height="490" fill="#FAFAFA" rx="6"/>
+  <text x="400" y="26" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">Common Connector Types -- Visual Identification</text>
+
+  <!-- ===== ROW 1 ===== -->
+
+  <!-- RJ45 -->
+  <rect x="8" y="36" width="148" height="200" rx="5" fill="#EBF5FF" stroke="#1A73CC" stroke-width="1.5"/>
+  <text x="82" y="54" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">RJ45 (8P8C)</text>
+  <rect x="28" y="62" width="108" height="72" rx="3" fill="#CCC" stroke="#888" stroke-width="1.5"/>
+  <rect x="32" y="66" width="100" height="40" fill="#AAA"/>
+  <rect x="36" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="49" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="62" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="75" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="88" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="101" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="114" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="127" y="67" width="10" height="28" fill="#555" rx="1"/>
+  <rect x="65" y="56" width="34" height="8" rx="2" fill="#BBB" stroke="#888" stroke-width="1"/>
+  <text x="82" y="158" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">8 contacts</text>
+  <text x="82" y="173" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Ethernet (Cat5/5e/6/6A)</text>
+  <text x="82" y="188" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Larger than RJ11</text>
+  <text x="82" y="225" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"8 pins = network"</text>
+
+  <!-- RJ11 -->
+  <rect x="164" y="36" width="148" height="200" rx="5" fill="#FFF8E0" stroke="#D4A017" stroke-width="1.5"/>
+  <text x="238" y="54" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">RJ11 (6P4C)</text>
+  <rect x="184" y="62" width="108" height="72" rx="3" fill="#CCC" stroke="#888" stroke-width="1.5"/>
+  <rect x="188" y="66" width="100" height="40" fill="#AAA"/>
+  <rect x="195" y="67" width="11" height="28" fill="#DDD" rx="1" stroke="#999"/>
+  <rect x="210" y="67" width="11" height="28" fill="#555" rx="1"/>
+  <rect x="225" y="67" width="11" height="28" fill="#555" rx="1"/>
+  <rect x="240" y="67" width="11" height="28" fill="#555" rx="1"/>
+  <rect x="255" y="67" width="11" height="28" fill="#555" rx="1"/>
+  <rect x="270" y="67" width="11" height="28" fill="#DDD" rx="1" stroke="#999"/>
+  <rect x="221" y="56" width="34" height="8" rx="2" fill="#BBB" stroke="#888" stroke-width="1"/>
+  <text x="238" y="158" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">4 active contacts</text>
+  <text x="238" y="173" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Telephone / modem</text>
+  <text x="238" y="188" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Smaller than RJ45</text>
+  <text x="238" y="225" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"4 pins = phone"</text>
+
+  <!-- BNC -->
+  <rect x="320" y="36" width="148" height="200" rx="5" fill="#EAFAF1" stroke="#1E8449" stroke-width="1.5"/>
+  <text x="394" y="54" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">BNC</text>
+  <circle cx="394" cy="108" r="38" fill="#CCC" stroke="#888" stroke-width="2"/>
+  <circle cx="394" cy="108" r="27" fill="#999" stroke="#666" stroke-width="1.5"/>
+  <rect x="353" y="101" width="9" height="14" rx="2" fill="#777"/>
+  <rect x="432" y="101" width="9" height="14" rx="2" fill="#777"/>
+  <circle cx="394" cy="108" r="8" fill="#FFD700" stroke="#B8860B" stroke-width="1.5"/>
+  <circle cx="394" cy="108" r="3" fill="#555"/>
+  <text x="394" y="165" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Bayonet twist-lock</text>
+  <text x="394" y="180" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Coaxial / 10BASE-2</text>
+  <text x="394" y="195" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Video surveillance</text>
+  <text x="394" y="225" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"Quarter-turn lock"</text>
+
+  <!-- F-Type -->
+  <rect x="476" y="36" width="148" height="200" rx="5" fill="#F5EEF8" stroke="#7D3C98" stroke-width="1.5"/>
+  <text x="550" y="54" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">F-Type</text>
+  <circle cx="550" cy="105" r="36" fill="#C0C0C0" stroke="#888" stroke-width="2"/>
+  <circle cx="550" cy="105" r="26" fill="#999" stroke="#777" stroke-width="1.5"/>
+  <circle cx="550" cy="105" r="30" fill="none" stroke="#AAA" stroke-width="3" stroke-dasharray="5,3"/>
+  <circle cx="550" cy="105" r="7" fill="#FFD700" stroke="#B8860B" stroke-width="1.5"/>
+  <line x1="550" y1="98" x2="550" y2="112" stroke="#555" stroke-width="2.5"/>
+  <text x="550" y="162" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Threaded barrel</text>
+  <text x="550" y="177" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Cable TV / DOCSIS</text>
+  <text x="550" y="192" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Set-top boxes, wall plates</text>
+  <text x="550" y="225" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"Screw-on coax"</text>
+
+  <!-- USB-C -->
+  <rect x="632" y="36" width="160" height="200" rx="5" fill="#FDEDEC" stroke="#C0392B" stroke-width="1.5"/>
+  <text x="712" y="54" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">USB-C</text>
+  <rect x="662" y="78" width="100" height="48" rx="24" fill="#555" stroke="#333" stroke-width="1.5"/>
+  <rect x="667" y="83" width="90" height="38" rx="19" fill="#444"/>
+  <rect x="672" y="88" width="80" height="28" rx="14" fill="#EEE"/>
+  <rect x="680" y="93" width="10" height="18" fill="#DAA520" rx="1"/>
+  <rect x="695" y="93" width="10" height="18" fill="#DAA520" rx="1"/>
+  <rect x="720" y="93" width="10" height="18" fill="#DAA520" rx="1"/>
+  <rect x="735" y="93" width="10" height="18" fill="#DAA520" rx="1"/>
+  <text x="712" y="152" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Oval / Reversible</text>
+  <text x="712" y="167" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">USB 3.1 / 3.2 / 4</text>
+  <text x="712" y="182" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Thunderbolt 3/4</text>
+  <text x="712" y="225" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"Reversible plug"</text>
+
+  <!-- ===== ROW 2 ===== -->
+
+  <!-- HDMI -->
+  <rect x="8" y="248" width="148" height="210" rx="5" fill="#EBF5FF" stroke="#1A73CC" stroke-width="1.5"/>
+  <text x="82" y="266" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">HDMI</text>
+  <polygon points="20,276 144,276 138,320 26,320" fill="#555" stroke="#333" stroke-width="1.5"/>
+  <polygon points="24,280 140,280 135,317 29,317" fill="#333"/>
+  <line x1="32" y1="283" x2="32" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="41" y1="283" x2="41" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="50" y1="283" x2="50" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="59" y1="283" x2="59" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="68" y1="283" x2="68" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="77" y1="283" x2="77" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="86" y1="283" x2="86" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="95" y1="283" x2="95" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="104" y1="283" x2="104" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="113" y1="283" x2="113" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="122" y1="283" x2="121" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <text x="82" y="342" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">19-pin trapezoid</text>
+  <text x="82" y="357" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Audio + Video</text>
+  <text x="82" y="372" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">TVs, monitors</text>
+  <text x="82" y="446" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"Trapezoidal body"</text>
+
+  <!-- DisplayPort -->
+  <rect x="164" y="248" width="148" height="210" rx="5" fill="#EAFAF1" stroke="#1E8449" stroke-width="1.5"/>
+  <text x="238" y="266" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">DisplayPort</text>
+  <!-- Rectangle with notched bottom-right corner -->
+  <polygon points="176,276 296,276 296,308 282,320 176,320" fill="#555" stroke="#333" stroke-width="1.5"/>
+  <polygon points="180,280 292,280 292,306 279,317 180,317" fill="#333"/>
+  <line x1="186" y1="283" x2="186" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="196" y1="283" x2="196" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="206" y1="283" x2="206" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="216" y1="283" x2="216" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="226" y1="283" x2="226" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="236" y1="283" x2="236" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="246" y1="283" x2="246" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="256" y1="283" x2="256" y2="313" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="266" y1="283" x2="265" y2="310" stroke="#CCC" stroke-width="1.5"/>
+  <line x1="276" y1="283" x2="274" y2="306" stroke="#CCC" stroke-width="1.5"/>
+  <text x="238" y="342" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Notched corner</text>
+  <text x="238" y="357" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Audio + Video</text>
+  <text x="238" y="372" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Daisy-chain monitors</text>
+  <text x="238" y="446" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"One notched corner"</text>
+
+  <!-- VGA DB-15 -->
+  <rect x="320" y="248" width="148" height="210" rx="5" fill="#FFF8E0" stroke="#D4A017" stroke-width="1.5"/>
+  <text x="394" y="266" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">VGA (DB-15)</text>
+  <path d="M338,276 L450,276 Q458,276 458,284 L458,318 Q458,326 450,326 L338,326 Q330,326 330,318 L330,284 Q330,276 338,276Z" fill="#555" stroke="#333" stroke-width="1.5"/>
+  <!-- 5+5+5 pins -->
+  <circle cx="344" cy="289" r="3" fill="#CCC"/>
+  <circle cx="357" cy="289" r="3" fill="#CCC"/>
+  <circle cx="370" cy="289" r="3" fill="#CCC"/>
+  <circle cx="383" cy="289" r="3" fill="#CCC"/>
+  <circle cx="396" cy="289" r="3" fill="#CCC"/>
+  <circle cx="409" cy="289" r="3" fill="#CCC"/>
+  <circle cx="422" cy="289" r="3" fill="#CCC"/>
+  <circle cx="435" cy="289" r="3" fill="#CCC"/>
+  <circle cx="448" cy="289" r="3" fill="#CCC"/>
+  <circle cx="344" cy="302" r="3" fill="#CCC"/>
+  <circle cx="358" cy="302" r="3" fill="#CCC"/>
+  <circle cx="372" cy="302" r="3" fill="#CCC"/>
+  <circle cx="386" cy="302" r="3" fill="#CCC"/>
+  <circle cx="400" cy="302" r="3" fill="#CCC"/>
+  <circle cx="414" cy="302" r="3" fill="#CCC"/>
+  <circle cx="344" cy="316" r="3" fill="#CCC"/>
+  <circle cx="357" cy="316" r="3" fill="#CCC"/>
+  <circle cx="370" cy="316" r="3" fill="#CCC"/>
+  <circle cx="383" cy="316" r="3" fill="#CCC"/>
+  <circle cx="396" cy="316" r="3" fill="#CCC"/>
+  <circle cx="409" cy="316" r="3" fill="#CCC"/>
+  <circle cx="422" cy="316" r="3" fill="#CCC"/>
+  <circle cx="435" cy="316" r="3" fill="#CCC"/>
+  <circle cx="448" cy="316" r="3" fill="#CCC"/>
+  <circle cx="328" cy="301" r="6" fill="#AAA" stroke="#777" stroke-width="1"/>
+  <circle cx="460" cy="301" r="6" fill="#AAA" stroke="#777" stroke-width="1"/>
+  <text x="394" y="348" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">15-pin D-sub (3 rows)</text>
+  <text x="394" y="363" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Analog video only</text>
+  <text x="394" y="378" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Legacy monitors</text>
+  <text x="394" y="446" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"No audio -- video only"</text>
+
+  <!-- LC Fiber -->
+  <rect x="476" y="248" width="148" height="210" rx="5" fill="#EAFAF1" stroke="#1E8449" stroke-width="1.5"/>
+  <text x="550" y="266" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">LC Fiber</text>
+  <rect x="510" y="276" width="80" height="52" rx="3" fill="#CC8844" stroke="#8B6F47" stroke-width="1.5"/>
+  <rect x="515" y="281" width="70" height="42" rx="2" fill="#E8C88A"/>
+  <rect x="543" y="268" width="14" height="10" rx="2" fill="#8B6F47"/>
+  <circle cx="550" cy="273" r="3.5" fill="#FAFAFA" stroke="#555" stroke-width="1"/>
+  <path d="M520,328 L520,340 L580,340 L580,328" fill="none" stroke="#8B6F47" stroke-width="2.5"/>
+  <text x="550" y="362" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">RJ-style clip latch</text>
+  <text x="550" y="377" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Half size of SC</text>
+  <text x="550" y="392" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Most popular data center</text>
+  <text x="550" y="446" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"Little Connector"</text>
+
+  <!-- SC Fiber -->
+  <rect x="632" y="248" width="160" height="210" rx="5" fill="#FFF8E0" stroke="#D4A017" stroke-width="1.5"/>
+  <text x="712" y="266" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="#1F3864" text-anchor="middle">SC Fiber</text>
+  <rect x="662" y="276" width="100" height="62" rx="4" fill="#1F6FCC" stroke="#0050AA" stroke-width="2"/>
+  <rect x="667" y="281" width="90" height="52" rx="3" fill="#2A85DD"/>
+  <rect x="706" y="266" width="12" height="12" rx="2" fill="#1F6FCC"/>
+  <rect x="706" y="278" width="12" height="24" fill="#FAFAFA" stroke="#555" stroke-width="1"/>
+  <circle cx="712" cy="290" r="4" fill="#FAFAFA" stroke="#333" stroke-width="1"/>
+  <text x="712" y="360" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Square push-pull</text>
+  <text x="712" y="375" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Large square body</text>
+  <text x="712" y="390" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#555" text-anchor="middle">Subscriber Connector</text>
+  <text x="712" y="446" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-style="italic">"Square Connector"</text>
+
+  <text x="400" y="478" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#666" text-anchor="middle" font-style="italic">HDMI = trapezoid | DisplayPort = notched corner | VGA = 15-pin D-sub | USB-C = reversible oval | LC = half SC size</text>
+</svg>

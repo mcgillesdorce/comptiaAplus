@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <rect width="800" height="400" fill="#FAFAFA" rx="6"/>
+  <text x="400" y="30" font-family="'Segoe UI',Arial,sans-serif" font-size="15" font-weight="700" fill="#1F3864" text-anchor="middle">Display Panel Technologies</text>
+
+  <!-- TN column -->
+  <rect x="10" y="44" width="185" height="330" rx="6" fill="#FFF8E0" stroke="#D4A017" stroke-width="2"/>
+  <rect x="10" y="44" width="185" height="38" rx="6" fill="#D4A017"/>
+  <rect x="10" y="68" width="185" height="14" fill="#D4A017"/>
+  <text x="102" y="68" font-family="'Segoe UI',Arial,sans-serif" font-size="16" font-weight="700" fill="#FFF" text-anchor="middle">TN</text>
+  <text x="102" y="83" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#FFF" text-anchor="middle">Twisted Nematic</text>
+  <rect x="41" y="96" width="122" height="72" rx="4" fill="#AAA" stroke="#777" stroke-width="1.5"/>
+  <rect x="45" y="100" width="114" height="64" fill="#4A90D9"/>
+  <rect x="75" y="168" width="24" height="10" rx="1" fill="#BBB"/>
+  <rect x="60" y="178" width="54" height="4" rx="1" fill="#BBB"/>
+  <text x="102" y="197" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Original LCD type</text>
+  <text x="102" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#2A7D2E" text-anchor="middle" font-weight="700">+ Fastest response</text>
+  <text x="102" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#2A7D2E" text-anchor="middle">  Great for gaming</text>
+  <text x="102" y="256" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#2A7D2E" text-anchor="middle" font-weight="700">+ Least expensive</text>
+  <text x="102" y="280" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#C0392B" text-anchor="middle" font-weight="700">- Poor viewing angles</text>
+  <text x="102" y="296" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#C0392B" text-anchor="middle">  Color shifts off-axis</text>
+  <text x="102" y="358" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#D4A017" text-anchor="middle" font-weight="700" font-style="italic">Has backlight</text>
+
+  <!-- IPS column -->
+  <rect x="205" y="44" width="185" height="330" rx="6" fill="#E8F4FD" stroke="#1A73CC" stroke-width="2"/>
+  <rect x="205" y="44" width="185" height="38" rx="6" fill="#1A73CC"/>
+  <rect x="205" y="68" width="185" height="14" fill="#1A73CC"/>
+  <text x="297" y="68" font-family="'Segoe UI',Arial,sans-serif" font-size="16" font-weight="700" fill="#FFF" text-anchor="middle">IPS</text>
+  <text x="297" y="83" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#FFF" text-anchor="middle">In-Plane Switching</text>
+  <rect x="236" y="96" width="122" height="72" rx="4" fill="#AAA" stroke="#777" stroke-width="1.5"/>
+  <rect x="240" y="100" width="114" height="64" fill="#2563CC"/>
+  <rect x="270" y="168" width="24" height="10" rx="1" fill="#BBB"/>
+  <rect x="255" y="178" width="54" height="4" rx="1" fill="#BBB"/>
+  <text x="297" y="197" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Best color accuracy</text>
+  <text x="297" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#2A7D2E" text-anchor="middle" font-weight="700">+ Excellent color</text>
+  <text x="297" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#2A7D2E" text-anchor="middle">  Wide viewing angles</text>
+  <text x="297" y="256" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#2A7D2E" text-anchor="middle" font-weight="700">+ Accurate off-axis</text>
+  <text x="297" y="280" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#C0392B" text-anchor="middle" font-weight="700">- More expensive</text>
+  <text x="297" y="296" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#C0392B" text-anchor="middle">  to produce than TN</text>
+  <text x="297" y="358" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#1A73CC" text-anchor="middle" font-weight="700" font-style="italic">Has backlight</text>
+
+  <!-- VA column -->
+  <rect x="400" y="44" width="185" height="330" rx="6" fill="#EAFAF1" stroke="#1E8449" stroke-width="2"/>
+  <rect x="400" y="44" width="185" height="38" rx="6" fill="#1E8449"/>
+  <rect x="400" y="68" width="185" height="14" fill="#1E8449"/>
+  <text x="492" y="68" font-family="'Segoe UI',Arial,sans-serif" font-size="16" font-weight="700" fill="#FFF" text-anchor="middle">VA</text>
+  <text x="492" y="83" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#FFF" text-anchor="middle">Vertical Alignment</text>
+  <rect x="431" y="96" width="122" height="72" rx="4" fill="#AAA" stroke="#777" stroke-width="1.5"/>
+  <rect x="435" y="100" width="114" height="64" fill="#27AE60"/>
+  <rect x="465" y="168" width="24" height="10" rx="1" fill="#BBB"/>
+  <rect x="450" y="178" width="54" height="4" rx="1" fill="#BBB"/>
+  <text x="492" y="197" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">TN + IPS compromise</text>
+  <text x="492" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#2A7D2E" text-anchor="middle" font-weight="700">+ Good color</text>
+  <text x="492" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#2A7D2E" text-anchor="middle">  Better contrast</text>
+  <text x="492" y="256" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#C0392B" text-anchor="middle" font-weight="700">- Slower response</text>
+  <text x="492" y="272" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#C0392B" text-anchor="middle">  than TN</text>
+  <text x="492" y="358" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#1E8449" text-anchor="middle" font-weight="700" font-style="italic">Has backlight</text>
+
+  <!-- OLED column -->
+  <rect x="595" y="44" width="197" height="330" rx="6" fill="#F5EEF8" stroke="#7D3C98" stroke-width="2"/>
+  <rect x="595" y="44" width="197" height="38" rx="6" fill="#7D3C98"/>
+  <rect x="595" y="68" width="197" height="14" fill="#7D3C98"/>
+  <text x="693" y="68" font-family="'Segoe UI',Arial,sans-serif" font-size="16" font-weight="700" fill="#FFF" text-anchor="middle">OLED</text>
+  <text x="693" y="83" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#FFF" text-anchor="middle">Organic Light Emitting Diode</text>
+  <!-- Dark screen with bright self-emitting pixels -->
+  <rect x="634" y="96" width="118" height="72" rx="4" fill="#111" stroke="#444" stroke-width="1.5"/>
+  <rect x="638" y="100" width="24" height="16" fill="#FF6B6B" rx="1"/>
+  <rect x="665" y="100" width="24" height="16" fill="#4ECDC4" rx="1"/>
+  <rect x="692" y="100" width="24" height="16" fill="#FFD700" rx="1"/>
+  <rect x="719" y="100" width="25" height="16" fill="#96CEB4" rx="1"/>
+  <rect x="638" y="119" width="24" height="16" fill="#DDA0DD" rx="1"/>
+  <rect x="665" y="119" width="24" height="16" fill="#000" rx="1"/>
+  <rect x="692" y="119" width="24" height="16" fill="#45B7D1" rx="1"/>
+  <rect x="719" y="119" width="25" height="16" fill="#FF4500" rx="1"/>
+  <rect x="638" y="138" width="24" height="16" fill="#000" rx="1"/>
+  <rect x="665" y="138" width="24" height="16" fill="#32CD32" rx="1"/>
+  <rect x="692" y="138" width="24" height="16" fill="#FF6B6B" rx="1"/>
+  <rect x="719" y="138" width="25" height="16" fill="#000" rx="1"/>
+  <rect x="672" y="168" width="24" height="10" rx="1" fill="#444"/>
+  <rect x="655" y="178" width="60" height="4" rx="1" fill="#444"/>
+  <text x="693" y="197" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#1F3864" text-anchor="middle">Each pixel self-emits</text>
+  <text x="693" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#2A7D2E" text-anchor="middle" font-weight="700">+ NO backlight</text>
+  <text x="693" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#2A7D2E" text-anchor="middle">  True black pixels</text>
+  <text x="693" y="256" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#2A7D2E" text-anchor="middle" font-weight="700">+ Thin, flexible, light</text>
+  <text x="693" y="272" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#2A7D2E" text-anchor="middle">  Phones, tablets, watches</text>
+  <text x="693" y="292" font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#C0392B" text-anchor="middle" font-weight="700">- Higher cost than LCD</text>
+  <text x="693" y="358" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#7D3C98" text-anchor="middle" font-weight="700" font-style="italic">NO backlight needed</text>
+
+  <text x="400" y="390" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#666" text-anchor="middle" font-style="italic">TN / IPS / VA all require a backlight -- OLED pixels emit their own light (true black possible)</text>
+</svg>
