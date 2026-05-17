@@ -1,10 +1,11 @@
-import type { Domain } from "@/lib/types";
+import type { Domain, WeaknessTag } from "@/lib/types";
 
 export interface ReferenceTopic {
   slug: string;
   title: string;
   domain: Domain;
   priority: number; // higher = surfaced more prominently
+  weaknessTags: WeaknessTag[]; // mapped to quiz accuracy for live sorting
   sections: ReferenceSection[];
 }
 
@@ -30,6 +31,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "Jitter vs Latency",
     domain: "2.0-networking",
     priority: 10,
+    weaknessTags: ["jitter-vs-latency"],
     sections: [
       {
         heading: "Why this matters to you",
@@ -63,6 +65,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "Fiber Optic Connectors",
     domain: "2.0-networking",
     priority: 10,
+    weaknessTags: ["fiber-connectors", "smf-mmf"],
     sections: [
       {
         heading: "Why this matters to you",
@@ -96,6 +99,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "Laser Printer Imaging Process",
     domain: "5.0-troubleshooting",
     priority: 9,
+    weaknessTags: ["imaging-process", "printer-components"],
     sections: [
       {
         heading: "The 7-step sequence",
@@ -132,6 +136,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "Motherboard Components",
     domain: "3.0-hardware",
     priority: 9,
+    weaknessTags: ["motherboard-id", "expansion-bus", "power-8pin", "power-24pin", "psu-connectors"],
     sections: [
       {
         heading: "Component map",
@@ -174,6 +179,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "Memory Types",
     domain: "3.0-hardware",
     priority: 9,
+    weaknessTags: ["memory-types", "cache-hierarchy", "memory-form-factors", "ddr-generations", "ddr-compat", "virtual-memory", "dual-channel", "cache-access-times"],
     sections: [
       {
         heading: "DIMM vs SODIMM",
@@ -209,6 +215,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "Cabling & Wiring Standards",
     domain: "2.0-networking",
     priority: 8,
+    weaknessTags: ["wiring-standards", "t568a-568b-crossover", "crosstalk", "split-pair", "cat-ratings", "attenuation", "emi-shielding"],
     sections: [
       {
         heading: "Categories at a glance",
@@ -254,6 +261,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "Common Ports",
     domain: "2.0-networking",
     priority: 8,
+    weaknessTags: ["ports"],
     sections: [
       {
         heading: "Memorize these",
@@ -287,6 +295,7 @@ export const referenceTopics: ReferenceTopic[] = [
     title: "RAID Levels",
     domain: "3.0-hardware",
     priority: 7,
+    weaknessTags: ["raid-2-drives", "raid-rebuild"],
     sections: [
       {
         heading: "Drive count is everything",
