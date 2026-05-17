@@ -36,6 +36,37 @@ function buildDeck(
   return shuffle(filtered);
 }
 
+function StackPicker({
+  activeId,
+  onSelect,
+}: {
+  activeId: string;
+  onSelect: (s: StackDef) => void;
+}) {
+  return (
+    <div className="space-y-1.5 pt-2">
+      <p className="font-mono text-xs uppercase tracking-wider text-slate-500">Topic</p>
+      <div className="grid grid-cols-3 gap-2">
+        {STACKS.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => onSelect(s)}
+            className={cn(
+              "flex flex-col items-center gap-0.5 rounded-xl py-2.5 transition-colors active:scale-[0.97]",
+              s.id === activeId
+                ? "bg-brand-700 text-white"
+                : "bg-slate-100 text-slate-600",
+            )}
+          >
+            <span className="text-lg">{s.emoji}</span>
+            <span className="text-xs font-semibold leading-tight">{s.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function FlashcardsPage() {
   const stats = useStudyStore((s) => s.questionStats);
   const sessions = useStudyStore((s) => s.sessions);
@@ -59,24 +90,7 @@ export default function FlashcardsPage() {
   if (deck.length === 0) {
     return (
       <div className="space-y-4">
-        {/* Stack picker still visible even when empty */}
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 pt-2 scrollbar-none">
-          {STACKS.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => handleSelectStack(s)}
-              className={cn(
-                "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
-                s.id === activeStackId
-                  ? "bg-brand-700 text-white"
-                  : "bg-slate-100 text-slate-600",
-              )}
-            >
-              <span>{s.emoji}</span>
-              <span>{s.label}</span>
-            </button>
-          ))}
-        </div>
+        <StackPicker activeId={activeStackId} onSelect={handleSelectStack} />
         <div className="pt-8 text-center">
           <p className="text-slate-600">No flashcards in this stack yet.</p>
         </div>
@@ -87,24 +101,8 @@ export default function FlashcardsPage() {
   if (idx >= deck.length) {
     return (
       <div className="space-y-4">
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 pt-2 scrollbar-none">
-          {STACKS.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => handleSelectStack(s)}
-              className={cn(
-                "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
-                s.id === activeStackId
-                  ? "bg-brand-700 text-white"
-                  : "bg-slate-100 text-slate-600",
-              )}
-            >
-              <span>{s.emoji}</span>
-              <span>{s.label}</span>
-            </button>
-          ))}
-        </div>
-        <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-4 text-center">
+        <StackPicker activeId={activeStackId} onSelect={handleSelectStack} />
+        <div className="flex min-h-[40vh] flex-col items-center justify-center space-y-4 text-center">
           <p className="text-4xl">🎉</p>
           <p className="text-xl font-semibold text-slate-900">Deck complete</p>
           <p className="text-sm text-slate-600">You reviewed {deck.length} cards</p>
@@ -140,23 +138,7 @@ export default function FlashcardsPage() {
   return (
     <div className="space-y-4">
       {/* Stack picker */}
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 pt-2 scrollbar-none">
-        {STACKS.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => handleSelectStack(s)}
-            className={cn(
-              "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
-              s.id === activeStackId
-                ? "bg-brand-700 text-white"
-                : "bg-slate-100 text-slate-600",
-            )}
-          >
-            <span>{s.emoji}</span>
-            <span>{s.label}</span>
-          </button>
-        ))}
-      </div>
+      <StackPicker activeId={activeStackId} onSelect={handleSelectStack} />
 
       {/* Header */}
       <div className="flex items-center justify-between pt-2">
