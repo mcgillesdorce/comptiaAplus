@@ -1,4 +1,6 @@
-"use client";
+import { writeFileSync } from "fs";
+
+const src = `"use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStudyStore } from "@/lib/store";
@@ -21,7 +23,7 @@ type Stack = {
 const WEAK_STACK: Stack = {
   id: "weak",
   label: "Weak Points",
-  emoji: "🎯",
+  emoji: "\u{1F3AF}",
   subtitle: "Questions you've struggled with most",
   isWeak: true,
 };
@@ -30,37 +32,37 @@ const TOPIC_STACKS: Stack[] = [
   {
     id: "ports",
     label: "Port Numbers",
-    emoji: "🔌",
+    emoji: "\u{1F50C}",
     tags: ["port-numbers"],
   },
   {
     id: "connectors",
     label: "Connectors",
-    emoji: "🔗",
+    emoji: "\u{1F517}",
     tags: ["ports", "usb-standards", "thunderbolt", "coax-cabling", "fiber-connectors", "display-cables"],
   },
   {
     id: "display",
     label: "Display Tech",
-    emoji: "📺",
+    emoji: "\u{1F4FA}",
     tags: ["display-tech", "display-cables", "laptop-display"],
   },
   {
     id: "cables",
     label: "Cable Types",
-    emoji: "🔧",
+    emoji: "\u{1F527}",
     tags: ["cat-ratings", "t568a-568b-crossover", "wiring-standards", "emi-shielding", "crosstalk", "coax-cabling"],
   },
   {
     id: "networking",
     label: "Networking",
-    emoji: "📡",
+    emoji: "\u{1F4E1}",
     tags: ["wifi-80211-standards", "wireless-channels", "internet-conn-types", "dhcp-process", "dns-records", "wireless-standards"],
   },
   {
     id: "all",
     label: "All Topics",
-    emoji: "📚",
+    emoji: "\u{1F4DA}",
     isAll: true,
   },
 ];
@@ -192,7 +194,7 @@ export default function FlashcardsPage() {
   if (idx >= deck.length) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
-        <p className="text-5xl">🎉</p>
+        <p className="text-5xl">\u{1F389}</p>
         <p className="text-xl font-bold text-slate-900">Deck complete!</p>
         <p className="text-sm text-slate-500">{deck.length} cards reviewed</p>
         <div className="flex gap-3 pt-2">
@@ -240,7 +242,7 @@ export default function FlashcardsPage() {
       <div className="h-1.5 overflow-hidden rounded-full bg-slate-200">
         <div
           className="h-full bg-brand-700 transition-all duration-500"
-          style={{ width: `${((idx + 1) / deck.length) * 100}%` }}
+          style={{ width: \`\${((idx + 1) / deck.length) * 100}%\` }}
         />
       </div>
 
@@ -302,7 +304,7 @@ export default function FlashcardsPage() {
             {current.triggerPhrase && (
               <div className="mt-auto rounded-xl bg-yellow-100 p-3">
                 <p className="font-mono text-xs font-medium text-yellow-900">
-                  💡 {current.triggerPhrase}
+                  \u{1F4A1} {current.triggerPhrase}
                 </p>
               </div>
             )}
@@ -346,3 +348,7 @@ export default function FlashcardsPage() {
     </div>
   );
 }
+`;
+
+writeFileSync("app/flashcards/page.tsx", src, "utf8");
+console.log("Written", src.split("\n").length, "lines");
