@@ -5696,12 +5696,12 @@ export const allQuestions: Question[] = [
     prompt: "A system administrator implemented a physical device that expedites cryptographic operations and manages cryptographic keys. What is this device?",
     choices: [
       { id: "a", text: "Boot options", correct: false },
-      { id: "b", text: "TPM", correct: true },
+      { id: "b", text: "TPM", correct: false },
       { id: "c", text: "Secure boot", correct: false },
-      { id: "d", text: "HSM", correct: false },
+      { id: "d", text: "HSM", correct: true },
     ],
-    explanation: "A TPM (Trusted Platform Module) is a dedicated microprocessor chip embedded on the motherboard that generates, stores, and manages cryptographic keys while performing cryptographic operations such as disk encryption (BitLocker) and platform integrity verification. Secure boot is a UEFI firmware feature that verifies the boot process using keys stored in the TPM â€” it is a feature, not a device. Boot options are BIOS/UEFI startup settings. An HSM (Hardware Security Module) is a separate enterprise-grade appliance for bulk cryptographic processing, more commonly covered in Security+ rather than CompTIA A+.",
-    triggerPhrase: "Chip on motherboard for cryptographic keys and operations = TPM",
+    explanation: "An HSM (Hardware Security Module) is a dedicated physical device that both accelerates (expedites) cryptographic operations in hardware and securely generates, stores, and manages cryptographic keys. HSMs are used in enterprise environments for PKI, payment processing, and certificate authorities. A TPM (Trusted Platform Module) is a chip soldered to the motherboard that stores keys and supports platform integrity checks (BitLocker, Secure Boot) -- it does not primarily expedite or accelerate crypto operations. Secure Boot is a UEFI firmware feature, not a device. Boot options are firmware settings.",
+    triggerPhrase: "Physical device that expedites crypto operations AND manages keys = HSM",
     weaknessTags: ["boot-sequence", "boot-errors"],
   },
   {
