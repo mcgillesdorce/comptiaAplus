@@ -1,12 +1,40 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStudyStore } from "@/lib/store";
 import { pickWeakQuestions } from "@/lib/analytics";
 import { allQuestions } from "@/data/questions";
-import type { Question } from "@/lib/types";
+import type { Question, WeaknessTag } from "@/lib/types";
 import { shuffle, cn } from "@/lib/utils";
 import { RotateCcw, X, Bookmark, BookmarkCheck } from "lucide-react";
+
+type StackDef = {
+  id: string;
+  label: string;
+  emoji: string;
+  tags?: WeaknessTag[];
+};
+
+const STACKS: StackDef[] = [
+  { id: "weak",        label: "Weak Areas",    emoji: "🎯" },
+  { id: "ports",       label: "Port Numbers",  emoji: "🔌", tags: ["port-numbers"] },
+  { id: "connectors",  label: "Connectors",    emoji: "🔗", tags: ["ports", "usb-standards", "thunderbolt", "coax-cabling", "fiber-connectors", "display-cables"] },
+  { id: "display",     label: "Display Tech",  emoji: "📺", tags: ["display-tech", "display-cables", "laptop-display"] },
+  { id: "cables",      label: "Cable Types",   emoji: "🔧", tags: ["cat-ratings", "t568a-568b-crossover", "wiring-standards", "emi-shielding", "crosstalk", "coax-cabling"] },
+  { id: "networking",  label: "Networking",    emoji: "📡", tags: ["wifi-80211-standards", "wireless-channels", "internet-conn-types", "dhcp-process", "dns-records", "wireless-standards"] },
+];
+
+function buildDeck(
+  stack: StackDef,
+  stats: ReturnType<typeof useStudyStore.getState>["questionStats"],
+  sessions: ReturnType<typeof useStudyStore.getState>["sessions"],
+): Question[] {
+  if (!stack.tags) return pickWeakQuestions(stats, 20, undefined, sessions);
+  const filtered = allQuestions.filter((q) =>
+    q.weaknessTags.some((t) => (stack.tags as WeaknessTag[]).includes(t))
+  );
+  return shuffle(filtered);
+}
 
 export default function FlashcardsPage() {
   const stats = useStudyStore((s) => s.questionStats);
@@ -15,31 +43,83 @@ export default function FlashcardsPage() {
   const toggleReview = useStudyStore((s) => s.toggleReview);
   const recordAnswer = useStudyStore((s) => s.recordAnswer);
 
-  // Start with weak-area-weighted deck (20 cards)
-  const [deck] = useState<Question[]>(() => pickWeakQuestions(stats, 20, undefined, sessions));
+  const [activeStackId, setActiveStackId] = useState("weak");
+  const [deck, setDeck] = useState<Question[]>(() => buildDeck(STACKS[0], stats, sessions));
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
+  function handleSelectStack(stack: StackDef) {
+    if (stack.id === activeStackId) return;
+    setActiveStackId(stack.id);
+    setDeck(buildDeck(stack, stats, sessions));
+    setIdx(0);
+    setFlipped(false);
+  }
+
   if (deck.length === 0) {
     return (
-      <div className="pt-12 text-center">
-        <p className="text-slate-600">No flashcards available yet.</p>
+      <div className="space-y-4">
+        {/* Stack picker still visible even when empty */}
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 pt-2 scrollbar-none">
+          {STACKS.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => handleSelectStack(s)}
+              className={cn(
+                "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
+                s.id === activeStackId
+                  ? "bg-brand-700 text-white"
+                  : "bg-slate-100 text-slate-600",
+              )}
+            >
+              <span>{s.emoji}</span>
+              <span>{s.label}</span>
+            </button>
+          ))}
+        </div>
+        <div className="pt-8 text-center">
+          <p className="text-slate-600">No flashcards in this stack yet.</p>
+        </div>
       </div>
     );
   }
 
   if (idx >= deck.length) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-4 text-center">
-        <p className="text-4xl">🎉</p>
-        <p className="text-xl font-semibold text-slate-900">Deck complete</p>
-        <p className="text-sm text-slate-600">You reviewed {deck.length} cards</p>
-        <button
-          onClick={() => location.reload()}
-          className="rounded-xl bg-brand-700 px-6 py-3 font-semibold text-white"
-        >
-          New deck
-        </button>
+      <div className="space-y-4">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 pt-2 scrollbar-none">
+          {STACKS.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => handleSelectStack(s)}
+              className={cn(
+                "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
+                s.id === activeStackId
+                  ? "bg-brand-700 text-white"
+                  : "bg-slate-100 text-slate-600",
+              )}
+            >
+              <span>{s.emoji}</span>
+              <span>{s.label}</span>
+            </button>
+          ))}
+        </div>
+        <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-4 text-center">
+          <p className="text-4xl">🎉</p>
+          <p className="text-xl font-semibold text-slate-900">Deck complete</p>
+          <p className="text-sm text-slate-600">You reviewed {deck.length} cards</p>
+          <button
+            onClick={() => {
+              const stack = STACKS.find((s) => s.id === activeStackId)!;
+              setDeck(buildDeck(stack, stats, sessions));
+              setIdx(0);
+              setFlipped(false);
+            }}
+            className="rounded-xl bg-brand-700 px-6 py-3 font-semibold text-white"
+          >
+            Restart this stack
+          </button>
+        </div>
       </div>
     );
   }
@@ -59,6 +139,25 @@ export default function FlashcardsPage() {
 
   return (
     <div className="space-y-4">
+      {/* Stack picker */}
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 pt-2 scrollbar-none">
+        {STACKS.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => handleSelectStack(s)}
+            className={cn(
+              "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors",
+              s.id === activeStackId
+                ? "bg-brand-700 text-white"
+                : "bg-slate-100 text-slate-600",
+            )}
+          >
+            <span>{s.emoji}</span>
+            <span>{s.label}</span>
+          </button>
+        ))}
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between pt-2">
         <div>
