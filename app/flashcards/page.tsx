@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useStudyStore } from "@/lib/store";
 import { pickWeakQuestions } from "@/lib/analytics";
 import { allQuestions } from "@/data/questions";
+import { questions1202 } from "@/data/questions/1202";
 import type { Domain, Question, WeaknessTag } from "@/lib/types";
 import { shuffle, cn } from "@/lib/utils";
 import { RotateCcw, X, Bookmark, BookmarkCheck, ChevronLeft } from "lucide-react";
@@ -15,6 +16,7 @@ type Stack = {
   emoji: string;
   subtitle?: string;
   tags?: WeaknessTag[];
+  domains?: Domain[];
   isWeak?: boolean;
   isAll?: boolean;
 };
@@ -27,7 +29,7 @@ const WEAK_STACK: Stack = {
   isWeak: true,
 };
 
-const TOPIC_STACKS: Stack[] = [
+const TOPIC_STACKS_CORE1: Stack[] = [
   {
     id: "ports",
     label: "Port Numbers",
@@ -84,6 +86,39 @@ const TOPIC_STACKS: Stack[] = [
   },
 ];
 
+const TOPIC_STACKS_1202: Stack[] = [
+  {
+    id: "os",
+    label: "Operating Systems",
+    emoji: "🖥️",
+    domains: ["1.0-operating-systems"],
+  },
+  {
+    id: "security",
+    label: "Security",
+    emoji: "🛡️",
+    domains: ["2.0-security"],
+  },
+  {
+    id: "software-troubleshooting",
+    label: "Software Troubleshooting",
+    emoji: "🧰",
+    domains: ["3.0-software-troubleshooting"],
+  },
+  {
+    id: "operational-procedures",
+    label: "Operational Procedures",
+    emoji: "📋",
+    domains: ["4.0-operational-procedures"],
+  },
+  {
+    id: "all",
+    label: "All Topics",
+    emoji: "📚",
+    isAll: true,
+  },
+];
+
 const CORE2_DOMAIN_SET = new Set<Domain>([
   "1.0-operating-systems",
   "2.0-security",
@@ -95,11 +130,12 @@ function buildDeck(
   stack: Stack,
   stats: ReturnType<typeof useStudyStore.getState>["questionStats"],
   sessions: ReturnType<typeof useStudyStore.getState>["sessions"],
-  domainFilter?: Set<Domain>
+  domainFilter: Set<Domain> | undefined,
+  questions: Question[]
 ): Question[] {
   const sourceQuestions = domainFilter
-    ? allQuestions.filter((q) => domainFilter.has(q.domain))
-    : allQuestions;
+    ? questions.filter((q) => domainFilter.has(q.domain))
+    : questions;
 
   if (stack.isWeak) {
     return pickWeakQuestions(
@@ -107,15 +143,25 @@ function buildDeck(
       30,
       domainFilter ? Array.from(domainFilter) : undefined,
       sessions
-    );
+    ).filter((q) => sourceQuestions.includes(q));
   }
   if (stack.isAll) return shuffle([...sourceQuestions]);
+  if (stack.domains?.length) {
+    const stackDomainSet = new Set(stack.domains);
+    return shuffle(sourceQuestions.filter((q) => stackDomainSet.has(q.domain)));
+  }
   const tagSet = new Set(stack.tags ?? []);
   return shuffle(sourceQuestions.filter((q) => q.weaknessTags.some((t) => tagSet.has(t))));
 }
 
 // ── Picker screen ─────────────────────────────────────────────────────────────
-function PickerScreen({ onPick }: { onPick: (s: Stack) => void }) {
+function PickerScreen({
+  onPick,
+  topicStacks,
+}: {
+  onPick: (s: Stack) => void;
+  topicStacks: Stack[];
+}) {
   return (
     <div className="space-y-4 pt-2">
       <p className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
@@ -136,7 +182,7 @@ function PickerScreen({ onPick }: { onPick: (s: Stack) => void }) {
 
       {/* Topic grid */}
       <div className="grid grid-cols-2 gap-2">
-        {TOPIC_STACKS.map((s) =>
+        {topicStacks.map((s) =>
           s.isAll ? (
             <button
               key={s.id}
@@ -180,6 +226,8 @@ function FlashcardsPageContent() {
   const recordAnswer   = useStudyStore((s) => s.recordAnswer);
   const is1202         = searchParams.get("cert") === "1202";
   const domainFilter   = is1202 ? CORE2_DOMAIN_SET : undefined;
+  const questions      = is1202 ? questions1202 : allQuestions;
+  const topicStacks    = is1202 ? TOPIC_STACKS_1202 : TOPIC_STACKS_CORE1;
 
   const [activeStack, setActiveStack] = useState<Stack | null>(null);
   const [deck,        setDeck]        = useState<Question[]>([]);
@@ -188,7 +236,7 @@ function FlashcardsPageContent() {
 
   function handlePick(s: Stack) {
     setActiveStack(s);
-    setDeck(buildDeck(s, stats, sessions, domainFilter));
+    setDeck(buildDeck(s, stats, sessions, domainFilter, questions));
     setIdx(0);
     setFlipped(false);
   }
@@ -202,7 +250,7 @@ function FlashcardsPageContent() {
 
   function handleRestart() {
     if (!activeStack) return;
-    setDeck(buildDeck(activeStack, stats, sessions, domainFilter));
+    setDeck(buildDeck(activeStack, stats, sessions, domainFilter, questions));
     setIdx(0);
     setFlipped(false);
   }
@@ -218,7 +266,7 @@ function FlashcardsPageContent() {
   }
 
   // ── No stack selected ──
-  if (!activeStack) return <PickerScreen onPick={handlePick} />;
+  if (!activeStack) return <PickerScreen onPick={handlePick} topicStacks={topicStacks} />;
 
   // ── Empty deck (no matching questions yet) ──
   if (deck.length === 0) {
