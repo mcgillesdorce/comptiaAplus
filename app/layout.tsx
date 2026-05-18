@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { DarkModeToggle } from "@/components/layout/DarkModeToggle";
@@ -39,7 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen pb-24 antialiased">
         <DarkModeToggle />
         <main className="mx-auto max-w-2xl px-4 pt-6">{children}</main>
-        <BottomNav />
+        <Suspense fallback={null}>
+          <BottomNav />
+        </Suspense>
       </body>
     </html>
   );

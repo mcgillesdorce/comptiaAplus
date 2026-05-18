@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import { useStudyStore } from "@/lib/store";
 import {
   computeDomainStats,
@@ -11,6 +12,14 @@ import { cn, formatRelativeTime } from "@/lib/utils";
 import { Calendar, TrendingUp, TrendingDown, Award, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+
+const CORE2_DOMAINS = [
+  "1.0-operating-systems",
+  "2.0-security",
+  "3.0-software-troubleshooting",
+  "4.0-operational-procedures",
+].join(",");
 
 type FeedbackPriority = "low" | "medium" | "high";
 const HIGH_PRIORITY_SIGNALS = ["crash", "cannot", "cant", "broken", "not working", "wont", "urgent", "security", "data loss"];
@@ -35,6 +44,16 @@ function assessFeedbackPriority(input: string): FeedbackPriority {
 }
 
 export default function ProgressPage() {
+  return (
+    <Suspense fallback={<div className="space-y-6" />}>
+      <ProgressPageContent />
+    </Suspense>
+  );
+}
+
+function ProgressPageContent() {
+  const searchParams = useSearchParams();
+  const is1202 = searchParams.get("cert") === "1202";
   const stats = useStudyStore((s) => s.questionStats);
   const sessions = useStudyStore((s) => s.sessions);
   const targetDate = useStudyStore((s) => s.targetExamDate);
@@ -44,12 +63,28 @@ export default function ProgressPage() {
   const [screenshotFileName, setScreenshotFileName] = useState<string | null>(null);
   const [feedbackSubmitError, setFeedbackSubmitError] = useState<string | null>(null);
 
-  const domainStats = computeDomainStats(stats);
-  const weaknessStats = computeWeaknessStats(stats);
-  const readiness = computeReadinessScore(stats);
+  const scopedStats = useMemo(
+    () =>
+      is1202
+        ? Object.fromEntries(Object.entries(stats).filter(([id]) => id.startsWith("1202-")))
+        : stats,
+    [is1202, stats]
+  );
 
-  const totalAttempted = Object.values(stats).reduce((s, x) => s + x.attempts, 0);
-  const totalCorrect = Object.values(stats).reduce((s, x) => s + x.correct, 0);
+  const scopedSessions = useMemo(
+    () =>
+      is1202
+        ? sessions.filter((s) => s.questionIds.some((id) => id.startsWith("1202-")))
+        : sessions,
+    [is1202, sessions]
+  );
+
+  const domainStats = computeDomainStats(scopedStats);
+  const weaknessStats = computeWeaknessStats(scopedStats);
+  const readiness = computeReadinessScore(scopedStats);
+
+  const totalAttempted = Object.values(scopedStats).reduce((s, x) => s + x.attempts, 0);
+  const totalCorrect = Object.values(scopedStats).reduce((s, x) => s + x.correct, 0);
   const overallAccuracy = totalAttempted === 0 ? 0 : Math.round((totalCorrect / totalAttempted) * 100);
   const feedbackPriority = useMemo(() => assessFeedbackPriority(feedbackText), [feedbackText]);
 
@@ -79,7 +114,7 @@ export default function ProgressPage() {
       <div className="rounded-3xl border border-slate-200 bg-white p-6">
         <div className="flex items-center gap-2">
           <Award className="h-5 w-5 text-brand-700" />
-          <p className="font-semibold text-slate-900">A+ Core 1 readiness</p>
+          <p className="font-semibold text-slate-900">{is1202 ? "A+ Core 2 readiness" : "A+ Core 1 readiness"}</p>
         </div>
         <p className="mt-3 font-mono text-5xl font-bold tabular-nums text-slate-900">
           {readiness.estimatedScore}%
@@ -87,26 +122,27 @@ export default function ProgressPage() {
         <p className="mt-1 text-sm text-slate-600">{readiness.message}</p>
       </div>
 
-      {/* Exam-missed recovery */}
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-slate-900">Practice exam recovery</h2>
-        <p className="text-sm text-slate-600">
-          Track how many of your originally-missed questions you&apos;ve now mastered.
-        </p>
+      {!is1202 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-slate-900">Practice exam recovery</h2>
+          <p className="text-sm text-slate-600">
+            Track how many of your originally-missed questions you&apos;ve now mastered.
+          </p>
 
-        <div className="grid grid-cols-2 gap-3">
-          <RecoveryCard
-            label="Exam 1"
-            mastered={exam1Mastered}
-            total={exam1Missed.length}
-          />
-          <RecoveryCard
-            label="Exam 2"
-            mastered={exam2Mastered}
-            total={exam2Missed.length}
-          />
-        </div>
-      </section>
+          <div className="grid grid-cols-2 gap-3">
+            <RecoveryCard
+              label="Exam 1"
+              mastered={exam1Mastered}
+              total={exam1Missed.length}
+            />
+            <RecoveryCard
+              label="Exam 2"
+              mastered={exam2Mastered}
+              total={exam2Missed.length}
+            />
+          </div>
+        </section>
+      )}
 
       {/* Weakness leaderboard */}
       {weaknessStats.length > 0 && (
@@ -124,7 +160,7 @@ export default function ProgressPage() {
               return (
                 <Link
                   key={w.tag}
-                  href={`/quiz/session?weakness=${w.tag}`}
+                  href={is1202 ? `/quiz/session?weakness=${w.tag}&domains=${CORE2_DOMAINS}` : `/quiz/session?weakness=${w.tag}`}
                   className="block rounded-xl border border-slate-200 bg-white p-3"
                 >
                   <div className="flex items-center justify-between">
@@ -205,11 +241,11 @@ export default function ProgressPage() {
       )}
 
       {/* Recent sessions */}
-      {sessions.length > 0 && (
+      {scopedSessions.length > 0 && (
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-slate-900">Recent sessions</h2>
           <div className="space-y-2">
-            {sessions.slice(-5).reverse().map((s) => (
+            {scopedSessions.slice(-5).reverse().map((s) => (
               <div key={s.id} className="rounded-xl border border-slate-200 bg-white p-3">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-slate-900">

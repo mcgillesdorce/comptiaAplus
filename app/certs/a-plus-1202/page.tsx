@@ -41,7 +41,7 @@ const TOOLS = [
   { href: "/flashcards?cert=1202",  icon: Layers,      label: "Flashcards",    sublabel: "Quick review" },
   { href: "/videos?cert=1202",      icon: PlayCircle,  label: "Videos",        sublabel: "Prof. Messer" },
   { href: "/reference?cert=1202",   icon: BookOpen,    label: "Reference",     sublabel: "Study notes" },
-  { href: "/progress",    icon: BarChart3,   label: "Progress",      sublabel: "Weak spot tracker" },
+  { href: "/progress?cert=1202",    icon: BarChart3,   label: "Progress",      sublabel: "Weak spot tracker" },
 ];
 
 export default function APlus1202Hub() {

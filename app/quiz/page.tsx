@@ -36,10 +36,41 @@ function QuizPageContent() {
   const stats = useStudyStore((s) => s.questionStats);
   const sessions = useStudyStore((s) => s.sessions);
 
-  const flaggedCount = Object.values(stats).filter((s) => s.markedForReview).length;
-  const weaknessStats = computeWeaknessStats(stats);
+  const scopedStats = useMemo(
+    () =>
+      is1202
+        ? Object.fromEntries(Object.entries(stats).filter(([id]) => id.startsWith("1202-")))
+        : stats,
+    [is1202, stats]
+  );
+
+  const scopedSessions = useMemo(
+    () =>
+      is1202
+        ? sessions.filter((s) => s.questionIds.some((id) => id.startsWith("1202-")))
+        : sessions,
+    [is1202, sessions]
+  );
+
+  const core2Tags = useMemo(() => {
+    if (!is1202) return null;
+    const tags = new Set<string>();
+    for (const q of allQuestions) {
+      if (CORE2_DOMAINS.includes(q.domain)) {
+        for (const tag of q.weaknessTags) tags.add(tag);
+      }
+    }
+    return tags;
+  }, [is1202]);
+
+  const flaggedCount = Object.entries(scopedStats).filter(([, s]) => s.markedForReview).length;
+  const weaknessStats = computeWeaknessStats(scopedStats);
   const lowAccuracyTags = weaknessStats.filter((w) => w.attempted > 0 && w.accuracyPct < 70);
-  const uncoveredTopics = computeUncoveredTopics(sessions, 5);
+  const uncoveredTopics = useMemo(() => {
+    const topics = computeUncoveredTopics(scopedSessions, 5);
+    if (!core2Tags) return topics;
+    return topics.filter((t) => core2Tags.has(t.tag));
+  }, [core2Tags, scopedSessions]);
   const [showAllUncovered, setShowAllUncovered] = useState(false);
   const visibleUncovered = showAllUncovered ? uncoveredTopics : uncoveredTopics.slice(0, 5);
   const visibleDomains = useMemo(
@@ -55,7 +86,11 @@ function QuizPageContent() {
 
   const startCustomQuiz = () => {
     const params = new URLSearchParams();
-    if (selectedDomains.length > 0) params.set("domains", selectedDomains.join(","));
+    if (selectedDomains.length > 0) {
+      params.set("domains", selectedDomains.join(","));
+    } else if (is1202) {
+      params.set("domains", CORE2_DOMAINS.join(","));
+    }
     params.set("n", String(count));
     router.push(`/quiz/session?${params.toString()}`);
   };
@@ -86,7 +121,7 @@ function QuizPageContent() {
 
         {flaggedCount > 0 && (
           <Link
-            href="/quiz/session?mode=review"
+            href={`/quiz/session?mode=review${domainQuery}`}
             className="flex items-center gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-5 transition-all active:scale-[0.99]"
           >
             <Bookmark className="h-7 w-7 flex-shrink-0 fill-amber-500 text-amber-500" />
@@ -167,9 +202,9 @@ function QuizPageContent() {
             </span>
           </div>
           <p className="text-xs text-slate-500">
-            {sessions.length === 0
+            {scopedSessions.length === 0
               ? "No quizzes taken yet — all topics are uncovered."
-              : `${uncoveredTopics.length} topic${uncoveredTopics.length === 1 ? "" : "s"} with available questions haven't appeared in your last ${Math.min(sessions.length, 5)} quiz${Math.min(sessions.length, 5) === 1 ? "" : "zes"}.`}
+              : `${uncoveredTopics.length} topic${uncoveredTopics.length === 1 ? "" : "s"} with available questions haven't appeared in your last ${Math.min(scopedSessions.length, 5)} quiz${Math.min(scopedSessions.length, 5) === 1 ? "" : "zes"}.`}
           </p>
           <div className="grid gap-2">
             {visibleUncovered.map((t) => (

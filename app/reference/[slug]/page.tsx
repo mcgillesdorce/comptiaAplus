@@ -6,10 +6,21 @@ import { ArrowLeft, AlertTriangle, Info, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
+const CORE2_DOMAINS = new Set([
+  "1.0-operating-systems",
+  "2.0-security",
+  "3.0-software-troubleshooting",
+  "4.0-operational-procedures",
+]);
+
 export default function ReferenceDetailPage() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
   const topic = referenceTopics.find((t) => t.slug === params.slug);
+  const isCore2Topic = topic ? CORE2_DOMAINS.has(topic.domain) : false;
+  const quickQuizHref = isCore2Topic
+    ? "/quiz/session?n=10&domains=1.0-operating-systems,2.0-security,3.0-software-troubleshooting,4.0-operational-procedures"
+    : "/quiz/session?n=10";
 
   if (!topic) {
     return (
@@ -128,7 +139,7 @@ export default function ReferenceDetailPage() {
       <div className="rounded-2xl border border-brand-200 bg-brand-50 p-5 text-center">
         <p className="font-semibold text-slate-900">Test yourself on this topic</p>
         <Link
-          href={`/quiz/session?n=10`}
+          href={quickQuizHref}
           className="mt-3 inline-block rounded-xl bg-brand-700 px-6 py-3 font-semibold text-white"
         >
           Take a quick quiz
