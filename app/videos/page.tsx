@@ -174,8 +174,16 @@ function VideosPageContent() {
   );
 
   const hasQuizData = Object.keys(scopedStats).length > 0;
+  const scopedSessions = useMemo(
+    () =>
+      is1202
+        ? sessions.filter((s) => s.questionIds.some((id) => id.startsWith("1202-")))
+        : sessions,
+    [is1202, sessions]
+  );
+
   const recentWeakTags = useMemo(() => {
-    const recentSessions = sessions
+    const recentSessions = scopedSessions
       .filter(
         (s) =>
           Number.isFinite(s.finishedAt) &&
@@ -210,7 +218,7 @@ function VideosPageContent() {
       .filter((s) => s.accuracyPct < 80)
       .sort((a, b) => a.accuracyPct - b.accuracyPct)
       .map((s) => s.tag);
-  }, [sessions]);
+  }, [scopedSessions]);
 
   // Compute recommended videos based on weak areas
   const recommendedVideos = useMemo(() => {

@@ -22,10 +22,20 @@ export function BottomNav() {
   const inCore2Path = pathname.startsWith("/certs/a-plus-1202");
   const inCore1Path = pathname.startsWith("/certs/a-plus-1201");
   const certParam = searchParams.get("cert");
+  const domainsParam = searchParams.get("domains") ?? "";
+  const hasCore2Domains = [
+    "1.0-operating-systems",
+    "2.0-security",
+    "3.0-software-troubleshooting",
+    "4.0-operational-procedures",
+  ].every((d) => domainsParam.includes(d));
+
   const certContext = certParam === "1202" || inCore2Path
     ? "1202"
     : certParam === "1201" || inCore1Path
     ? "1201"
+    : hasCore2Domains
+    ? "1202"
     : null;
 
   const query = certContext ? `?cert=${certContext}` : "";
@@ -46,6 +56,7 @@ export function BottomNav() {
   } as const;
 
   const homeTabs = CERT_BUNDLES.map((cert) => ({
+    id: cert.id,
     href: cert.active ? cert.href : "#",
     label: labelByBundleId[cert.id as keyof typeof labelByBundleId] ?? cert.code,
     icon: iconByBundleId[cert.id as keyof typeof iconByBundleId] ?? BookOpen,
@@ -53,12 +64,12 @@ export function BottomNav() {
   }));
 
   const studyTabs = [
-    { href: "/", label: "Home", icon: Home, disabled: false },
-    { href: `/quiz${query}`, label: "Quiz", icon: Brain, disabled: false },
-    { href: `/flashcards${query}`, label: "Cards", icon: Layers, disabled: false },
-    { href: `/videos${query}`, label: "Videos", icon: PlayCircle, disabled: false },
-    { href: `/reference${query}`, label: "Read", icon: BookOpen, disabled: false },
-    { href: `/progress${query}`, label: "Stats", icon: BarChart3, disabled: false },
+    { id: "home", href: "/", label: "Home", icon: Home, disabled: false },
+    { id: "quiz", href: `/quiz${query}`, label: "Quiz", icon: Brain, disabled: false },
+    { id: "cards", href: `/flashcards${query}`, label: "Cards", icon: Layers, disabled: false },
+    { id: "videos", href: `/videos${query}`, label: "Videos", icon: PlayCircle, disabled: false },
+    { id: "read", href: `/reference${query}`, label: "Read", icon: BookOpen, disabled: false },
+    { id: "stats", href: `/progress${query}`, label: "Stats", icon: BarChart3, disabled: false },
   ];
 
   const tabs = isHomePage ? homeTabs : studyTabs;
@@ -66,10 +77,10 @@ export function BottomNav() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/80 bg-white/95 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/95">
       <ul className="mx-auto flex max-w-2xl">
-        {tabs.map(({ href, label, icon: Icon, disabled }) => {
+        {tabs.map(({ id, href, label, icon: Icon, disabled }) => {
           const active = pathname === href || (href !== "/" && pathname.startsWith(href));
           return (
-            <li key={href} className="flex-1">
+            <li key={id} className="flex-1">
               {disabled ? (
                 <span className="flex cursor-not-allowed flex-col items-center gap-1 py-3 text-xs font-medium text-slate-400 dark:text-slate-500">
                   <Icon className="h-5 w-5" />

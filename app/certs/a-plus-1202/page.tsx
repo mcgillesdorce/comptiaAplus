@@ -31,7 +31,7 @@ const CORE2_DOMAINS = [
 
 const TOOLS = [
   {
-    href: `/quiz/session?mode=weak&domains=${CORE2_DOMAINS}`,
+    href: `/quiz/session?mode=weak&domains=${CORE2_DOMAINS}&cert=1202`,
     icon: Brain,
     label: "Smart Quiz",
     sublabel: "Recommended",
@@ -155,7 +155,7 @@ export default function APlus1202Hub() {
             {topWeaknesses.map((w) => (
               <Link
                 key={w.tag}
-                href={`/quiz/session?weakness=${w.tag}&domains=${CORE2_DOMAINS}`}
+                href={`/quiz/session?weakness=${w.tag}&domains=${CORE2_DOMAINS}&cert=1202`}
                 className="flex items-center justify-between rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 transition-all hover:border-amber-300 hover:shadow-sm active:scale-[0.99]"
               >
                 <div className="flex-1 min-w-0">
@@ -206,7 +206,7 @@ export default function APlus1202Hub() {
 
         {/* Smart Quiz hero */}
         <Link
-          href={`/quiz/session?mode=weak&domains=${CORE2_DOMAINS}`}
+          href={`/quiz/session?mode=weak&domains=${CORE2_DOMAINS}&cert=1202`}
           className="flex items-center justify-between rounded-2xl bg-gradient-to-br from-amber-600 to-orange-700 p-5 text-white shadow-md transition-all active:scale-[0.99]"
         >
           <div>
