@@ -64,6 +64,18 @@ const TOPIC_STACKS: Stack[] = [
     tags: ["internet-conn-types", "dhcp-process", "dns-records"],
   },
   {
+    id: "raid",
+    label: "RAID & Storage",
+    emoji: "💾",
+    tags: ["raid-levels"],
+  },
+  {
+    id: "cloud",
+    label: "Cloud & VMs",
+    emoji: "☁️",
+    tags: ["cloud-models", "cloud-characteristics", "hypervisors", "virtualization-types"],
+  },
+  {
     id: "all",
     label: "All Topics",
     emoji: "📚",

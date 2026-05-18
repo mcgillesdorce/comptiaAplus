@@ -179,6 +179,14 @@ export const TAG_VIDEO_MAP: Record<WeaknessTag, string[]> = {
   "printer-connectivity":   ["_BhO_nYod0o", "ctAOL7WyEUY"],
   // --- Port & Protocol Numbers ---
   "port-numbers":            [],
+  // --- RAID Levels ---
+  "raid-levels":             [],
+  // --- Cloud Computing ---
+  "cloud-models":            [],
+  "cloud-characteristics":   [],
+  // --- Virtualization ---
+  "hypervisors":             [],
+  "virtualization-types":    [],
 };
 
 // Utility: get a video by its YouTube ID

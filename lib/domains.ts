@@ -113,4 +113,12 @@ export const WEAKNESS_PRIORITIES: Record<WeaknessTag, { label: string; priority:
   "printer-connectivity":   { label: "Printer Connectivity Troubleshooting", priority: 8 },
   // --- Port & Protocol Numbers ---
   "port-numbers":            { label: "Port & Protocol Numbers", priority: 9 },
+  // --- RAID Levels ---
+  "raid-levels":             { label: "RAID 0/1/5/6/10 Configurations", priority: 9 },
+  // --- Cloud Computing ---
+  "cloud-models":            { label: "Cloud Models (IaaS/SaaS/PaaS, Public/Private/Hybrid)", priority: 9 },
+  "cloud-characteristics":   { label: "Cloud Characteristics (Elasticity, Multitenancy)", priority: 8 },
+  // --- Virtualization ---
+  "hypervisors":             { label: "Hypervisors (Type 1 vs Type 2)", priority: 9 },
+  "virtualization-types":    { label: "Virtualization Types (VMs, Containers, VDI, Sandbox)", priority: 8 },
 };
