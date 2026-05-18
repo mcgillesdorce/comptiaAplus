@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Suspense, useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { Brain, ListVideo, Play } from "lucide-react";
 import { useStudyStore } from "@/lib/store";
 import { computeWeaknessStats } from "@/lib/analytics";
@@ -11,9 +12,16 @@ import {
   getVideosForTags,
   type MesserVideo,
 } from "@/data/videos";
+import {
+  ALL_VIDEOS_1202,
+  PLAYLIST_ID_1202,
+  getVideos1202ForTags,
+  type MesserVideo1202,
+} from "@/data/videos/1202";
 import type { WeaknessTag } from "@/lib/types";
 
 type Tab = "recommended" | "all";
+type AnyMesserVideo = MesserVideo | MesserVideo1202;
 
 // ─── Video Card ──────────────────────────────────────────────────────────────
 function VideoCard({
@@ -21,7 +29,7 @@ function VideoCard({
   isSelected,
   onSelect,
 }: {
-  video: MesserVideo;
+  video: AnyMesserVideo;
   isSelected: boolean;
   onSelect: () => void;
 }) {
@@ -78,11 +86,11 @@ function RecommendedTab({
   selected,
   onSelect,
 }: {
-  videos: MesserVideo[];
+  videos: AnyMesserVideo[];
   hasQuizData: boolean;
   usesRecentSessions: boolean;
-  selected: MesserVideo | null;
-  onSelect: (v: MesserVideo) => void;
+  selected: AnyMesserVideo | null;
+  onSelect: (v: AnyMesserVideo) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -114,9 +122,9 @@ function AllVideosTab({
   selected,
   onSelect,
 }: {
-  groups: Map<string, MesserVideo[]>;
-  selected: MesserVideo | null;
-  onSelect: (v: MesserVideo) => void;
+  groups: Map<string, AnyMesserVideo[]>;
+  selected: AnyMesserVideo | null;
+  onSelect: (v: AnyMesserVideo) => void;
 }) {
   return (
     <div className="space-y-5">
@@ -143,11 +151,29 @@ function AllVideosTab({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function VideosPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-950" />}>
+      <VideosPageContent />
+    </Suspense>
+  );
+}
+
+function VideosPageContent() {
+  const searchParams = useSearchParams();
+  const is1202 = searchParams.get("cert") === "1202";
   const { questionStats, sessions } = useStudyStore();
   const [activeTab, setActiveTab] = useState<Tab>("recommended");
-  const [selectedVideo, setSelectedVideo] = useState<MesserVideo | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<AnyMesserVideo | null>(null);
 
-  const hasQuizData = Object.keys(questionStats).length > 0;
+  const scopedStats = useMemo(
+    () =>
+      is1202
+        ? Object.fromEntries(Object.entries(questionStats).filter(([id]) => id.startsWith("1202-")))
+        : questionStats,
+    [is1202, questionStats]
+  );
+
+  const hasQuizData = Object.keys(scopedStats).length > 0;
   const recentWeakTags = useMemo(() => {
     const recentSessions = sessions
       .filter(
@@ -188,11 +214,35 @@ export default function VideosPage() {
 
   // Compute recommended videos based on weak areas
   const recommendedVideos = useMemo(() => {
+    if (is1202) {
+      if (recentWeakTags.length > 0) {
+        const byRecent = getVideos1202ForTags(recentWeakTags);
+        if (byRecent.length > 0) return byRecent.slice(0, 15);
+      }
+
+      const stats1202 = computeWeaknessStats(scopedStats);
+      const weakTags1202 = stats1202
+        .filter((s) => s.attempted > 0 && s.accuracyPct < 80)
+        .map((s) => s.tag);
+
+      if (weakTags1202.length === 0) {
+        const defaultTags = Object.entries(WEAKNESS_PRIORITIES)
+          .sort((a, b) => b[1].priority - a[1].priority)
+          .slice(0, 12)
+          .map(([tag]) => tag as WeaknessTag);
+        const byPriority = getVideos1202ForTags(defaultTags);
+        return (byPriority.length > 0 ? byPriority : ALL_VIDEOS_1202).slice(0, 12);
+      }
+
+      const byWeakness = getVideos1202ForTags(weakTags1202);
+      return (byWeakness.length > 0 ? byWeakness : ALL_VIDEOS_1202).slice(0, 15);
+    }
+
     if (recentWeakTags.length > 0) {
       return getVideosForTags(recentWeakTags).slice(0, 15);
     }
 
-    const stats = computeWeaknessStats(questionStats);
+    const stats = computeWeaknessStats(scopedStats);
 
     // Tags where the user is actually struggling (attempted & < 80% accuracy)
     const weakTags = stats
@@ -209,30 +259,33 @@ export default function VideosPage() {
     }
 
     return getVideosForTags(weakTags).slice(0, 15);
-  }, [questionStats, recentWeakTags]);
+  }, [is1202, recentWeakTags, scopedStats]);
 
   // Group all videos by section for the "All Videos" tab
   const videosBySection = useMemo(() => {
-    const grouped = new Map<string, MesserVideo[]>();
-    for (const video of ALL_VIDEOS) {
+    const grouped = new Map<string, AnyMesserVideo[]>();
+    const source = is1202 ? ALL_VIDEOS_1202 : ALL_VIDEOS;
+    for (const video of source) {
       const list = grouped.get(video.section) ?? [];
       list.push(video);
       grouped.set(video.section, list);
     }
     return grouped;
-  }, []);
+  }, [is1202]);
 
-  function handleSelect(video: MesserVideo) {
+  function handleSelect(video: AnyMesserVideo) {
     setSelectedVideo((prev) => (prev?.id === video.id ? null : video));
   }
 
   // The player src: selected video or the full playlist
   const playerSrc = selectedVideo
     ? `https://www.youtube-nocookie.com/embed/${selectedVideo.id}?autoplay=1&rel=0`
-    : `https://www.youtube-nocookie.com/embed/videoseries?list=${PLAYLIST_ID}&rel=0`;
+    : `https://www.youtube-nocookie.com/embed/videoseries?list=${is1202 ? PLAYLIST_ID_1202 : PLAYLIST_ID}&rel=0`;
 
   const playerTitle = selectedVideo
     ? selectedVideo.title
+    : is1202
+    ? "Professor Messer A+ 220-1202 Course"
     : "Professor Messer A+ Course";
 
   return (

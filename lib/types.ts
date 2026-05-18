@@ -1,9 +1,15 @@
 export type Domain =
+  // --- 220-1201 Core 1 ---
   | "1.0-mobile"
   | "2.0-networking"
   | "3.0-hardware"
   | "4.0-virtualization-cloud"
-  | "5.0-troubleshooting";
+  | "5.0-troubleshooting"
+  // --- 220-1202 Core 2 ---
+  | "1.0-operating-systems"
+  | "2.0-security"
+  | "3.0-software-troubleshooting"
+  | "4.0-operational-procedures";
 
 export type Difficulty = "easy" | "medium" | "hard";
 
@@ -119,7 +125,50 @@ export type WeaknessTag =
   | "cloud-characteristics"   // elasticity, multitenancy, metered utilization, availability
   // --- Virtualization ---
   | "hypervisors"             // Type 1 vs Type 2 hypervisors, bare-metal vs hosted
-  | "virtualization-types";   // VMs, containers, VDI, sandbox use cases
+  | "virtualization-types"    // VMs, containers, VDI, sandbox use cases
+  // ============================================================
+  // === 220-1202 Core 2 weakness tags ==========================
+  // ============================================================
+  // --- 1.0 Operating Systems ---
+  | "os-types"                // Windows/Linux/macOS/ChromeOS comparison
+  | "file-systems"            // NTFS/ReFS/FAT32/ext4/XFS/APFS/exFAT
+  | "os-install"              // boot methods, install types, partitioning
+  | "windows-editions"        // Win10/Win11 Home/Pro/Enterprise features
+  | "windows-tools"           // Task Manager, MMC snap-ins, msconfig, regedit
+  | "windows-cli"             // cmd tools: cd, dir, ipconfig, chkdsk, sfc, diskpart
+  | "windows-settings"        // Control Panel vs Settings app
+  | "windows-networking"      // domain vs workgroup, mapped drives, VPN
+  | "macos-features"          // FileVault, Keychain, Time Machine, Finder, Spotlight
+  | "linux-commands"          // ls, chmod, sudo, apt/yum, grep, systemd
+  // --- 2.0 Security ---
+  | "physical-security"       // bollards, badge readers, biometrics, mantraps, cameras
+  | "logical-security"        // least privilege, MFA, zero trust, ACLs, directory services
+  | "windows-security"        // UAC, BitLocker, EFS, NTFS permissions, Active Directory
+  | "wireless-security"       // WPA2/WPA3, TKIP/AES, RADIUS, TACACS+, EAP types
+  | "malware-types"           // trojan, rootkit, ransomware, keylogger, fileless, spyware
+  | "malware-removal"         // 10-step malware removal process
+  | "social-engineering"      // phishing, vishing, smishing, tailgating, shoulder surfing
+  | "attack-types"            // DoS/DDoS, evil twin, zero-day, on-path, XSS, SQLi
+  | "security-hardening"      // password policy, account lockout, patching, encryption
+  | "mobile-security"         // MDM, remote wipe, BYOD, config profiles, app vetting
+  | "data-destruction"        // degaussing, shredding, low-level format, certificate of destruction
+  | "soho-security"           // SSID, UPnP, screened subnet, firmware, guest networks
+  | "browser-security"        // extensions, certificate warnings, private mode, pop-up blockers
+  // --- 3.0 Software Troubleshooting ---
+  | "windows-tshooting"       // BSOD, startup repair, app crashes, slow performance
+  | "mobile-app-tshooting"    // app crashes, OS updates, battery drain, connectivity
+  | "mobile-sec-tshooting"    // jailbreak symptoms, app spoofing, high data usage
+  | "pc-sec-tshooting"        // ransomware symptoms, browser redirects, pop-ups, fake AV
+  // --- 4.0 Operational Procedures ---
+  | "ticketing-systems"       // ticket fields, escalation, SLA, documentation
+  | "change-management"       // CAB, change types, rollback, sandbox, testing
+  | "backup-recovery"         // full/incremental/differential, GFS, 3-2-1 rule, RTO/RPO
+  | "safety-esd"              // ESD straps/mats, antistatic bags, lifting techniques
+  | "environmental"           // MSDS/SDS, UPS, surge suppressor, temp/humidity
+  | "privacy-licensing"       // EULA, PII, regulated data, NDA, AUP, GDPR
+  | "scripting"               // .bat/.ps1/.sh/.py use cases and basic syntax
+  | "remote-access"           // RDP, VNC, SSH, VPN, RMM tools
+  | "ai-management";          // AI bias, hallucinations, public vs private AI, AI tools
 
 export interface Choice {
   id: string;

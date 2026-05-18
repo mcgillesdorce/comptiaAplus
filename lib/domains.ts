@@ -1,11 +1,17 @@
 import type { Domain, WeaknessTag } from "./types";
 
 export const DOMAINS: Record<Domain, { name: string; color: string; weight: number }> = {
+  // --- 220-1201 Core 1 ---
   "1.0-mobile": { name: "Mobile Devices", color: "var(--color-domain-mobile)", weight: 13 },
   "2.0-networking": { name: "Networking", color: "var(--color-domain-networking)", weight: 23 },
   "3.0-hardware": { name: "Hardware", color: "var(--color-domain-hardware)", weight: 25 },
   "4.0-virtualization-cloud": { name: "Virtualization & Cloud", color: "var(--color-domain-virtualization)", weight: 11 },
   "5.0-troubleshooting": { name: "Hardware & Network Troubleshooting", color: "var(--color-domain-troubleshooting)", weight: 28 },
+  // --- 220-1202 Core 2 ---
+  "1.0-operating-systems": { name: "Operating Systems", color: "var(--color-domain-os)", weight: 27 },
+  "2.0-security": { name: "Security", color: "var(--color-domain-security)", weight: 24 },
+  "3.0-software-troubleshooting": { name: "Software Troubleshooting", color: "var(--color-domain-swts)", weight: 26 },
+  "4.0-operational-procedures": { name: "Operational Procedures", color: "var(--color-domain-ops)", weight: 23 },
 };
 
 // Gilly's weakness rankings from BOTH practice exams
@@ -121,4 +127,47 @@ export const WEAKNESS_PRIORITIES: Record<WeaknessTag, { label: string; priority:
   // --- Virtualization ---
   "hypervisors":             { label: "Hypervisors (Type 1 vs Type 2)", priority: 9 },
   "virtualization-types":    { label: "Virtualization Types (VMs, Containers, VDI, Sandbox)", priority: 8 },
+  // ================================================================
+  // === 220-1202 Core 2 weakness priorities ========================
+  // ================================================================
+  // --- 1.0 Operating Systems ---
+  "os-types":               { label: "OS Comparison (Windows/Linux/macOS/ChromeOS)", priority: 8 },
+  "file-systems":           { label: "File Systems (NTFS/FAT32/ext4/APFS/exFAT)", priority: 9 },
+  "os-install":             { label: "OS Installation Methods & Types", priority: 8 },
+  "windows-editions":       { label: "Windows Editions (Home/Pro/Enterprise)", priority: 9 },
+  "windows-tools":          { label: "Windows Admin Tools (Task Mgr/MMC/msconfig)", priority: 9 },
+  "windows-cli":            { label: "Windows CLI Tools (ipconfig/sfc/chkdsk/diskpart)", priority: 9 },
+  "windows-settings":       { label: "Windows Settings & Control Panel", priority: 7 },
+  "windows-networking":     { label: "Windows Networking (domain/workgroup/drives)", priority: 8 },
+  "macos-features":         { label: "macOS Features (FileVault/Time Machine/Keychain)", priority: 8 },
+  "linux-commands":         { label: "Linux Commands (ls/chmod/sudo/apt/grep)", priority: 9 },
+  // --- 2.0 Security ---
+  "physical-security":      { label: "Physical Security Controls", priority: 8 },
+  "logical-security":       { label: "Logical Security (MFA/Zero Trust/ACLs)", priority: 9 },
+  "windows-security":       { label: "Windows Security (UAC/BitLocker/AD/EFS)", priority: 9 },
+  "wireless-security":      { label: "Wireless Security (WPA3/RADIUS/TACACS+)", priority: 9 },
+  "malware-types":          { label: "Malware Types (trojan/rootkit/ransomware)", priority: 10, note: "High-frequency exam topic" },
+  "malware-removal":        { label: "10-Step Malware Removal Process", priority: 10, note: "Must know every step in order" },
+  "social-engineering":     { label: "Social Engineering (phishing/vishing/smishing)", priority: 9 },
+  "attack-types":           { label: "Attack Types (DoS/XSS/SQLi/on-path)", priority: 9 },
+  "security-hardening":     { label: "Security Hardening (passwords/lockout/patching)", priority: 8 },
+  "mobile-security":        { label: "Mobile Security (MDM/BYOD/remote wipe)", priority: 8 },
+  "data-destruction":       { label: "Data Destruction Methods", priority: 8 },
+  "soho-security":          { label: "SOHO Network Security", priority: 8 },
+  "browser-security":       { label: "Browser Security (certs/extensions/private mode)", priority: 7 },
+  // --- 3.0 Software Troubleshooting ---
+  "windows-tshooting":      { label: "Windows Troubleshooting (BSOD/startup/crashes)", priority: 9 },
+  "mobile-app-tshooting":   { label: "Mobile App Troubleshooting", priority: 8 },
+  "mobile-sec-tshooting":   { label: "Mobile Security Troubleshooting", priority: 8 },
+  "pc-sec-tshooting":       { label: "PC Security Troubleshooting (ransomware/redirects)", priority: 9 },
+  // --- 4.0 Operational Procedures ---
+  "ticketing-systems":      { label: "Ticketing & Documentation Systems", priority: 8 },
+  "change-management":      { label: "Change Management (CAB/rollback/sandbox)", priority: 9 },
+  "backup-recovery":        { label: "Backup & Recovery (full/incremental/3-2-1 rule)", priority: 9 },
+  "safety-esd":             { label: "ESD Safety & Antistatic Procedures", priority: 8 },
+  "environmental":          { label: "Environmental Procedures (UPS/SDS/humidity)", priority: 7 },
+  "privacy-licensing":      { label: "Privacy, Licensing & Policies (PII/EULA/NDA)", priority: 8 },
+  "scripting":              { label: "Scripting (.ps1/.py/.sh/.bat use cases)", priority: 8 },
+  "remote-access":          { label: "Remote Access Tools (RDP/VNC/SSH/VPN)", priority: 8 },
+  "ai-management":          { label: "AI Management (bias/hallucinations/public AI)", priority: 7 },
 };

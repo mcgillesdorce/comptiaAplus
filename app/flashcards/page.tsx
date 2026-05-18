@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStudyStore } from "@/lib/store";
 import { pickWeakQuestions } from "@/lib/analytics";
 import { allQuestions } from "@/data/questions";
-import type { Question, WeaknessTag } from "@/lib/types";
+import type { Domain, Question, WeaknessTag } from "@/lib/types";
 import { shuffle, cn } from "@/lib/utils";
 import { RotateCcw, X, Bookmark, BookmarkCheck, ChevronLeft } from "lucide-react";
 
@@ -83,15 +84,34 @@ const TOPIC_STACKS: Stack[] = [
   },
 ];
 
+const CORE2_DOMAIN_SET = new Set<Domain>([
+  "1.0-operating-systems",
+  "2.0-security",
+  "3.0-software-troubleshooting",
+  "4.0-operational-procedures",
+]);
+
 function buildDeck(
   stack: Stack,
   stats: ReturnType<typeof useStudyStore.getState>["questionStats"],
   sessions: ReturnType<typeof useStudyStore.getState>["sessions"],
+  domainFilter?: Set<Domain>
 ): Question[] {
-  if (stack.isWeak) return pickWeakQuestions(stats, 30, undefined, sessions);
-  if (stack.isAll) return shuffle([...allQuestions]);
+  const sourceQuestions = domainFilter
+    ? allQuestions.filter((q) => domainFilter.has(q.domain))
+    : allQuestions;
+
+  if (stack.isWeak) {
+    return pickWeakQuestions(
+      stats,
+      30,
+      domainFilter ? Array.from(domainFilter) : undefined,
+      sessions
+    );
+  }
+  if (stack.isAll) return shuffle([...sourceQuestions]);
   const tagSet = new Set(stack.tags ?? []);
-  return shuffle(allQuestions.filter((q) => q.weaknessTags.some((t) => tagSet.has(t))));
+  return shuffle(sourceQuestions.filter((q) => q.weaknessTags.some((t) => tagSet.has(t))));
 }
 
 // ── Picker screen ─────────────────────────────────────────────────────────────
@@ -144,11 +164,22 @@ function PickerScreen({ onPick }: { onPick: (s: Stack) => void }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function FlashcardsPage() {
+  return (
+    <Suspense fallback={<div className="space-y-4 pt-2" />}>
+      <FlashcardsPageContent />
+    </Suspense>
+  );
+}
+
+function FlashcardsPageContent() {
+  const searchParams   = useSearchParams();
   const stats          = useStudyStore((s) => s.questionStats);
   const sessions       = useStudyStore((s) => s.sessions);
   const rateConfidence = useStudyStore((s) => s.rateConfidence);
   const toggleReview   = useStudyStore((s) => s.toggleReview);
   const recordAnswer   = useStudyStore((s) => s.recordAnswer);
+  const is1202         = searchParams.get("cert") === "1202";
+  const domainFilter   = is1202 ? CORE2_DOMAIN_SET : undefined;
 
   const [activeStack, setActiveStack] = useState<Stack | null>(null);
   const [deck,        setDeck]        = useState<Question[]>([]);
@@ -157,7 +188,7 @@ export default function FlashcardsPage() {
 
   function handlePick(s: Stack) {
     setActiveStack(s);
-    setDeck(buildDeck(s, stats, sessions));
+    setDeck(buildDeck(s, stats, sessions, domainFilter));
     setIdx(0);
     setFlipped(false);
   }
@@ -171,7 +202,7 @@ export default function FlashcardsPage() {
 
   function handleRestart() {
     if (!activeStack) return;
-    setDeck(buildDeck(activeStack, stats, sessions));
+    setDeck(buildDeck(activeStack, stats, sessions, domainFilter));
     setIdx(0);
     setFlipped(false);
   }

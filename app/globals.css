@@ -20,6 +20,11 @@
   --color-domain-hardware: #F59E0B;
   --color-domain-virtualization: #8B5CF6;
   --color-domain-troubleshooting: #EF4444;
+  /* 1202 Core 2 domain colors */
+  --color-domain-os: #F97316;
+  --color-domain-security: #DC2626;
+  --color-domain-swts: #D97706;
+  --color-domain-ops: #16A34A;
 
   /* Feedback */
   --color-correct: #10B981;

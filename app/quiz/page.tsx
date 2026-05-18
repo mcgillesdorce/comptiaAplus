@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { DOMAINS, WEAKNESS_PRIORITIES } from "@/lib/domains";
 import { useStudyStore } from "@/lib/store";
 import { computeWeaknessStats, computeUncoveredTopics } from "@/lib/analytics";
@@ -10,8 +11,26 @@ import type { Domain } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Zap, Bookmark, RefreshCw, Filter, Target, BookOpen, ChevronRight } from "lucide-react";
 
+const CORE2_DOMAINS: Domain[] = [
+  "1.0-operating-systems",
+  "2.0-security",
+  "3.0-software-troubleshooting",
+  "4.0-operational-procedures",
+];
+
 export default function QuizPage() {
+  return (
+    <Suspense fallback={<div className="space-y-6" />}>
+      <QuizPageContent />
+    </Suspense>
+  );
+}
+
+function QuizPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const is1202 = searchParams.get("cert") === "1202";
+  const domainQuery = is1202 ? `&domains=${CORE2_DOMAINS.join(",")}` : "";
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(10);
   const stats = useStudyStore((s) => s.questionStats);
@@ -23,6 +42,10 @@ export default function QuizPage() {
   const uncoveredTopics = computeUncoveredTopics(sessions, 5);
   const [showAllUncovered, setShowAllUncovered] = useState(false);
   const visibleUncovered = showAllUncovered ? uncoveredTopics : uncoveredTopics.slice(0, 5);
+  const visibleDomains = useMemo(
+    () => (is1202 ? CORE2_DOMAINS : (Object.keys(DOMAINS) as Domain[])),
+    [is1202]
+  );
 
   const toggleDomain = (d: Domain) => {
     setSelectedDomains((prev) =>
@@ -49,7 +72,7 @@ export default function QuizPage() {
       {/* Smart Modes */}
       <section className="space-y-3">
         <Link
-          href="/quiz/session?mode=weak&n=20"
+          href={`/quiz/session?mode=weak&n=20${domainQuery}`}
           className="flex items-center gap-4 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-5 text-white shadow-md transition-all active:scale-[0.99]"
         >
           <Zap className="h-8 w-8 flex-shrink-0" />
@@ -77,7 +100,7 @@ export default function QuizPage() {
         )}
 
         <Link
-          href="/quiz/session?mode=all&n=15"
+          href={`/quiz/session?mode=all&n=15${domainQuery}`}
           className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-all active:scale-[0.99]"
         >
           <RefreshCw className="h-7 w-7 flex-shrink-0 text-slate-700" />
@@ -90,7 +113,7 @@ export default function QuizPage() {
         </Link>
 
         <Link
-          href="/quiz/session?mode=weak&n=20"
+          href={`/quiz/session?mode=weak&n=20${domainQuery}`}
           className="flex items-center gap-4 rounded-2xl border border-red-200 bg-red-50 p-5 transition-all active:scale-[0.99]"
         >
           <Target className="h-7 w-7 flex-shrink-0 text-red-600" />
@@ -111,7 +134,7 @@ export default function QuizPage() {
             {lowAccuracyTags.slice(0, 5).map((w) => (
               <Link
                 key={w.tag}
-                href={`/quiz/session?weakness=${w.tag}`}
+                href={`/quiz/session?weakness=${w.tag}${domainQuery}`}
                 className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3"
               >
                 <div className="flex-1">
@@ -152,7 +175,7 @@ export default function QuizPage() {
             {visibleUncovered.map((t) => (
               <Link
                 key={t.tag}
-                href={`/quiz/session?weakness=${t.tag}`}
+                href={`/quiz/session?weakness=${t.tag}${domainQuery}`}
                 className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 transition-all active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800"
               >
                 <div className="flex-1 min-w-0">
@@ -198,7 +221,7 @@ export default function QuizPage() {
               Domains <span className="text-slate-400">(none = all)</span>
             </p>
             <div className="flex flex-wrap gap-2">
-              {(Object.keys(DOMAINS) as Domain[]).map((d) => {
+              {visibleDomains.map((d) => {
                 const active = selectedDomains.includes(d);
                 const qCount = allQuestions.filter((q) => q.domain === d).length;
                 return (

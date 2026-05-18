@@ -1,4 +1,5 @@
 ﻿import type { Question } from "@/lib/types";
+import { questions1202 } from "./1202";
 
 // Every question Gilly has actually missed across Practice Exams #1 and #2,
 // plus concept-builder questions to lock in the weakest patterns.
@@ -7479,4 +7480,5 @@ export const allQuestions: Question[] = [
     weaknessTags: ["virtualization-types"],
   },
 
+  ...questions1202,
 ];

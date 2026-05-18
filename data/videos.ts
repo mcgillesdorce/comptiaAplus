@@ -77,7 +77,7 @@ export const ALL_VIDEOS: MesserVideo[] = [
 ];
 
 // Map each weakness tag to the most relevant video IDs (in priority order)
-export const TAG_VIDEO_MAP: Record<WeaknessTag, string[]> = {
+export const TAG_VIDEO_MAP: Partial<Record<WeaknessTag, string[]>> = {
   "jitter-vs-latency":      ["VBDS_kOHhVk", "RRFjKXxYJdM"],
   "fiber-connectors":       ["Qxbp-c23cYY", "poQdq2APqic"],
   "raid-2-drives":          ["5E16qftlfRY", "aVIuyHCNPCE"],

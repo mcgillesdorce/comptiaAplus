@@ -283,14 +283,19 @@ export function computeReadinessScore(stats: Record<string, QuestionStat>): {
 } {
   const domainStats = computeDomainStats(stats);
 
-  // A+ Core 1 domain weights
-  // V15 exam objective weights
+  // A+ Core 1 + Core 2 domain weights.
+  // We normalize by domains seen in the provided stats, so callers can pass
+  // either full A+ data or cert-scoped subsets.
   const weights: Record<Domain, number> = {
     "1.0-mobile": 0.13,
     "2.0-networking": 0.23,
     "3.0-hardware": 0.25,
     "4.0-virtualization-cloud": 0.11,
     "5.0-troubleshooting": 0.28,
+    "1.0-operating-systems": 0.27,
+    "2.0-security": 0.24,
+    "3.0-software-troubleshooting": 0.26,
+    "4.0-operational-procedures": 0.23,
   };
 
   let weighted = 0;

@@ -38,21 +38,26 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
   const weakness = params.get("weakness") as WeaknessTag | null;
   const domainsParam = params.get("domains");
   const count = Number(params.get("n") ?? 10);
+  const domainFilter = domainsParam?.split(",") as Domain[] | undefined;
 
   // Build the question set once for the current session query.
   const questions = useMemo<Question[]>(() => {
+    const applyDomainFilter = (items: Question[]) =>
+      domainFilter && domainFilter.length > 0
+        ? items.filter((q) => domainFilter.includes(q.domain))
+        : items;
+
     if (weakness) {
-      return shuffle(getQuestionsByWeakness(weakness)).slice(0, count);
+      return shuffle(applyDomainFilter(getQuestionsByWeakness(weakness))).slice(0, count);
     }
     if (mode === "review") {
-      return shuffle(getReviewQuestions(stats));
+      return shuffle(applyDomainFilter(getReviewQuestions(stats))).slice(0, count);
     }
     if (mode === "weak") {
-      return pickWeakQuestions(stats, count);
+      return pickWeakQuestions(stats, count, domainFilter, useStudyStore.getState().sessions);
     }
-    const domains = domainsParam?.split(",") as Domain[] | undefined;
-    if (domains && domains.length > 0) {
-      return shuffle(allQuestions.filter((q) => domains.includes(q.domain))).slice(0, count);
+    if (domainFilter && domainFilter.length > 0) {
+      return shuffle(allQuestions.filter((q) => domainFilter.includes(q.domain))).slice(0, count);
     }
     return shuffle(allQuestions).slice(0, count);
     // stats are intentionally snapshotted per session so the question set

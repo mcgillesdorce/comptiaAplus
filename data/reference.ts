@@ -1,4 +1,5 @@
 import type { Domain, WeaknessTag } from "@/lib/types";
+import { referenceTopics1202 } from "@/data/reference/1202";
 
 export interface ReferenceTopic {
   slug: string;
@@ -317,4 +318,5 @@ export const referenceTopics: ReferenceTopic[] = [
       },
     ],
   },
+  ...referenceTopics1202,
 ];

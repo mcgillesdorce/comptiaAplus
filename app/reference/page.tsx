@@ -1,6 +1,7 @@
 "use client";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { referenceTopics, type ReferenceTopic } from "@/data/reference";
 import { DOMAINS } from "@/lib/domains";
 import { useStudyStore } from "@/lib/store";
@@ -8,6 +9,13 @@ import { computeWeaknessStats } from "@/lib/analytics";
 import { ChevronRight, BookOpen, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { WeaknessTag } from "@/lib/types";
+
+const CORE2_DOMAINS = new Set([
+  "1.0-operating-systems",
+  "2.0-security",
+  "3.0-software-troubleshooting",
+  "4.0-operational-procedures",
+]);
 
 /** Lowest accuracy across the topic's weakness tags that have been attempted, or null if untested. */
 function topicAccuracy(
@@ -29,20 +37,44 @@ function urgency(topic: ReferenceTopic, accuracyMap: Map<WeaknessTag, number>): 
 }
 
 export default function ReferenceIndexPage() {
+  return (
+    <Suspense fallback={<div className="space-y-6" />}>
+      <ReferenceIndexContent />
+    </Suspense>
+  );
+}
+
+function ReferenceIndexContent() {
+  const searchParams = useSearchParams();
+  const is1202 = searchParams.get("cert") === "1202";
   const stats = useStudyStore((s) => s.questionStats);
-  const hasData = Object.keys(stats).length > 0;
+
+  const scopedStats = useMemo(
+    () =>
+      is1202
+        ? Object.fromEntries(Object.entries(stats).filter(([id]) => id.startsWith("1202-")))
+        : stats,
+    [is1202, stats]
+  );
+
+  const topics = useMemo(
+    () => (is1202 ? referenceTopics.filter((t) => CORE2_DOMAINS.has(t.domain)) : referenceTopics),
+    [is1202]
+  );
+
+  const hasData = Object.keys(scopedStats).length > 0;
 
   const accuracyMap = useMemo(() => {
     const map = new Map<WeaknessTag, number>();
-    for (const w of computeWeaknessStats(stats)) {
+    for (const w of computeWeaknessStats(scopedStats)) {
       map.set(w.tag, w.accuracyPct);
     }
     return map;
-  }, [stats]);
+  }, [scopedStats]);
 
   const sorted = useMemo(
-    () => [...referenceTopics].sort((a, b) => urgency(b, accuracyMap) - urgency(a, accuracyMap)),
-    [accuracyMap]
+    () => [...topics].sort((a, b) => urgency(b, accuracyMap) - urgency(a, accuracyMap)),
+    [accuracyMap, topics]
   );
 
   return (
@@ -67,12 +99,13 @@ export default function ReferenceIndexPage() {
           const quizParams = new URLSearchParams({
             weakness: topic.weaknessTags[0],
             n: "10",
+            ...(is1202 ? { domains: Array.from(CORE2_DOMAINS).join(",") } : {}),
           }).toString();
 
           return (
             <div key={topic.slug} className="flex items-stretch gap-2">
               <Link
-                href={`/reference/${topic.slug}`}
+                href={is1202 ? `/reference/${topic.slug}?cert=1202` : `/reference/${topic.slug}`}
                 className="flex flex-1 items-center gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 p-4 transition-all active:scale-[0.99]"
               >
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-900/30">
