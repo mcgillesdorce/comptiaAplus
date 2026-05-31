@@ -4547,4 +4547,379 @@ export const questions1202: Question[] = [
     triggerPhrase: "Electrical fire = Carbon dioxide (CO2). Non-conductive, no residue, displaces O2. Dry powder works but damages electronics. Water/foam = conduct electricity = shock hazard.",
     weaknessTags: ["environmental", "safety-esd"],
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // SOHO ROUTER SECURITY, BROWSER PRIVACY & HASHING  (sec-118–137)
+  //   sec-118:       Malware removal — 7th step (educate end user)
+  //   sec-119–120:   UPnP primary purpose; content filtering definition
+  //   sec-121–122:   Disabling unused ports; disabling guest access
+  //   sec-123:       UPnP benefit — networking protocol framework
+  //   sec-124–126:   WPA3 most secure (×2); screened subnet for web server
+  //   sec-127–128:   Static WAN IP; screened subnet primary purpose
+  //   sec-129–130:   Port forwarding tenet; SSID change benefit
+  //   sec-131–133:   UPnP gaming scenario; SSID broadcast; Wi-Fi Analyzer
+  //   sec-134–135:   IP filtering definition (×2)
+  //   sec-136:       Do Not Track browser setting
+  //   sec-137:       Hashing — fixed-length output
+  // ══════════════════════════════════════════════════════════════════
+
+  {
+    id: "1202-sec-118",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "A cyber architect is removing malware per CompTIA's best practice procedure. Upon re-enabling system restore points in Windows, the architect closes the ticket and considers the task complete. What did the architect fail to complete?",
+    choices: [
+      { id: "a", text: "Second step",  correct: false },
+      { id: "b", text: "Fifth step",   correct: false },
+      { id: "c", text: "Sixth step",   correct: false },
+      { id: "d", text: "Seventh step", correct: true  },
+    ],
+    explanation: "CompTIA's 7-step malware removal process: (1) Investigate/verify symptoms → (2) Quarantine infected system → (3) Disable System Restore → (4) Remediate infected systems → (5) Schedule scans and run updates → (6) Enable System Restore and create restore point → (7) Educate end user. Re-enabling System Restore is Step 6. After that, Step 7 — educating the end user — must still be completed before closing the ticket.",
+    triggerPhrase: "Step 6 = Re-enable System Restore + create restore point. Step 7 = Educate end user. The ticket is NOT done at Step 6.",
+    weaknessTags: ["malware-removal"],
+  },
+
+  {
+    id: "1202-sec-119",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "What is the primary purpose of Universal Plug-and-Play (UPnP) in a SOHO network?",
+    choices: [
+      { id: "a", text: "To automatically configure devices to share data over the network.", correct: true  },
+      { id: "b", text: "To enhance the wireless signal strength of connected devices.",      correct: false },
+      { id: "c", text: "To enable remote access to the router's management interface.",      correct: false },
+      { id: "d", text: "To provide an additional layer of security for connected devices.",  correct: false },
+    ],
+    explanation: "UPnP (Universal Plug-and-Play) allows devices on a network to automatically discover each other and configure network services — such as opening firewall ports — without manual intervention. It enables smart devices, gaming consoles, and media players to communicate and share data automatically. UPnP does not enhance signal strength, does not provide remote management access, and is actually a security concern (not a security feature) because it allows devices to bypass firewall rules automatically.",
+    triggerPhrase: "UPnP = auto-discovery protocol for device configuration and data sharing. NOT security, NOT signal strength, NOT remote management.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-120",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "A cyber consultant assists a contracted employee with setting up their home router firewall. What occurs when the firewall downloads curated reputation databases that associate IP address ranges, fully-qualified domain names (FQDNs), and URL web addresses with sites that host various categories?",
+    choices: [
+      { id: "a", text: "Port forwarding",  correct: false },
+      { id: "b", text: "IP filtering",     correct: false },
+      { id: "c", text: "UPnP",             correct: false },
+      { id: "d", text: "Content filtering", correct: true },
+    ],
+    explanation: "Content filtering uses curated reputation databases that map IP address ranges, FQDNs, and URL web addresses to categories (adult content, gambling, malware, social media, etc.). The firewall consults these databases to block or allow traffic by category — not just raw IP addresses. Port forwarding routes external traffic to internal hosts. IP filtering allows/blocks by IP address only. UPnP is a device auto-discovery and configuration protocol; it does not use reputation databases.",
+    triggerPhrase: "Reputation databases for IP ranges + FQDNs + URLs + categories = Content filtering. IP filtering = IP addresses only. Port forwarding = route external request to internal host. UPnP = device auto-discovery.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-121",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "A cyber consultant is reviewing the organization's policy on home router port forwarding configurations. What is beneficial in disabling unused ports?",
+    choices: [
+      { id: "a", text: "It orients users to the correct network.",       correct: false },
+      { id: "b", text: "It disables unused access to/from the router.",  correct: true  },
+      { id: "c", text: "It masks the network from being seen.",          correct: false },
+      { id: "d", text: "It disables access from a visitor network.",     correct: false },
+    ],
+    explanation: "Disabling unused forwarded ports removes unnecessary pathways into or out of the router, reducing the attack surface. An open port that is not actively needed is an invitation for attackers to probe or exploit that service. Orienting users to the correct network is the purpose of changing the SSID. Masking the network from being seen is the purpose of disabling SSID broadcast. Disabling visitor network access is the purpose of disabling guest access.",
+    triggerPhrase: "Disable unused ports = removes unused router access pathways (reduces attack surface). SSID change = orient users. SSID broadcast off = hide network. Guest access off = block visitor network.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-122",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "Why is it important to disable guest access on a home router if it is not needed?",
+    choices: [
+      { id: "a", text: "To improve the wireless signal strength for connected devices.",          correct: false },
+      { id: "b", text: "To prevent unauthorized users from accessing the internal network.",      correct: true  },
+      { id: "c", text: "To allow more devices to connect to the main network.",                   correct: false },
+      { id: "d", text: "To reduce the router's power consumption.",                               correct: false },
+    ],
+    explanation: "Guest access creates a separate network segment on the router. If left enabled when not needed, it can be exploited by unauthorized users as a back door into or adjacent to the internal network. Disabling guest access when it is not required eliminates this unnecessary attack vector. Guest access has no effect on signal strength, main network device capacity, or power consumption.",
+    triggerPhrase: "Disable guest access = prevent unauthorized users from accessing the network via the guest segment. Guest access is a potential back door if enabled unnecessarily.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-123",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "A technician is working on the organization's network and connecting to corporate devices. What is a benefit of UPnP?",
+    choices: [
+      { id: "a", text: "It allows a user to control traffic within a network.",                                          correct: false },
+      { id: "b", text: "It takes a request from an internet host for a particular service.",                             correct: false },
+      { id: "c", text: "It provides a networking protocol framework, allowing networked devices to discover the network.", correct: true  },
+      { id: "d", text: "It downloads curated reputation databases that associate IP address ranges.",                     correct: false },
+    ],
+    explanation: "UPnP (Universal Plug-and-Play) provides a networking protocol framework that allows devices to discover each other on the network and automatically negotiate services — such as opening ports or sharing media — without manual setup. Controlling traffic by IP addresses describes IP filtering. Taking a request from an internet host for a specific service describes port forwarding. Downloading curated reputation databases for site categories describes content filtering.",
+    triggerPhrase: "UPnP = networking protocol framework for device discovery and auto-configuration. IP filtering = traffic control. Port forwarding = internet request to internal host. Content filtering = reputation databases.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-124",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "Which encryption setting should be used on a home router to provide the most secure wireless network?",
+    choices: [
+      { id: "a", text: "WEP (Wired Equivalent Privacy)",  correct: false },
+      { id: "b", text: "WPA (Wi-Fi Protected Access)",    correct: false },
+      { id: "c", text: "WPA3 (Wi-Fi Protected Access 3)", correct: true  },
+      { id: "d", text: "WPA2 (Wi-Fi Protected Access 2)", correct: false },
+    ],
+    explanation: "WPA3 is the most secure wireless encryption standard currently available. It uses SAE (Simultaneous Authentication of Equals) for key exchange, providing forward secrecy so that captured traffic cannot be decrypted later even if the password is later compromised. WPA3 also uses AES-GCMP for stronger encryption. WPA2 with AES-CCMP is still acceptable but lacks forward secrecy. WPA (original) uses TKIP/RC4, which has known vulnerabilities. WEP uses RC4 with weak key scheduling and is completely broken.",
+    triggerPhrase: "Most secure Wi-Fi ranking: WPA3 > WPA2 > WPA > WEP. WPA3 = SAE + AES-GCMP + forward secrecy. WPA2 = PSK + AES-CCMP. WPA = TKIP/RC4 (vulnerable). WEP = RC4 (broken).",
+    weaknessTags: ["soho-security", "wireless-security"],
+  },
+
+  {
+    id: "1202-sec-125",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "Your company is setting up a SOHO network for a small remote office. The office needs to host a web server that will be accessible to clients over the internet. At the same time, you want to ensure that the internal network remains secure. What is the BEST way to configure the network to meet these requirements?",
+    choices: [
+      { id: "a", text: "Place the web server in the internal network and use a VPN to allow external clients to connect.",     correct: false },
+      { id: "b", text: "Place the web server in a screened subnet and configure the firewall to allow external access.",      correct: true  },
+      { id: "c", text: "Place the web server in the internal network and disable the firewall to allow unrestricted access.", correct: false },
+      { id: "d", text: "Place the web server in the internal network and enable port forwarding to allow external access.",   correct: false },
+    ],
+    explanation: "A screened subnet (DMZ) is the correct solution for hosting a publicly accessible server while protecting the internal network. The web server is placed in the screened subnet — a segment between the internet-facing firewall and an internal firewall protecting the LAN. If the web server is compromised, the attacker only accesses the DMZ, not the internal network. VPN is for secure remote access, not public hosting. Disabling the firewall exposes the entire network. Port forwarding is simpler but puts the server inside the internal LAN — if compromised, the attacker is inside the network.",
+    triggerPhrase: "Public server + protect internal network = screened subnet (DMZ). Port forwarding = server stays inside LAN (less secure). VPN = remote access, not public hosting. Disable firewall = never correct.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-126",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "You are configuring the wireless settings for a SOHO router in a small office. The office handles sensitive client data, so securing the wireless network is a top priority. The router supports WEP, WPA, WPA2, and WPA3 encryption standards. Which encryption setting should you choose to ensure the highest level of security for the wireless network?",
+    choices: [
+      { id: "a", text: "Configure the router to use WPA3 encryption for the most secure wireless network.", correct: true  },
+      { id: "b", text: "Configure the router to use WEP encryption for compatibility with older devices.",   correct: false },
+      { id: "c", text: "Configure the router to use WPA2 encryption for strong security.",                  correct: false },
+      { id: "d", text: "Configure the router to use WPA encryption to balance security and compatibility.",  correct: false },
+    ],
+    explanation: "WPA3 provides the highest level of wireless security and should be selected when handling sensitive data. WPA3 uses SAE for authentication (replacing WPA2's vulnerable PSK handshake), provides individualized per-session encryption, and uses AES-GCMP for stronger encryption. WPA2 with AES is still acceptable but does not provide the same protection as WPA3. WPA (original) uses TKIP/RC4, which has known vulnerabilities. WEP is fundamentally broken and should never be used.",
+    triggerPhrase: "Sensitive data + highest security = WPA3. WPA2 = strong but not the strongest. WPA = legacy, vulnerable. WEP = completely broken, never use.",
+    weaknessTags: ["soho-security", "wireless-security"],
+  },
+
+  {
+    id: "1202-sec-127",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "A help center technician assists an employee set up a home network. What can be auto or manually configured to follow the service provider's instructions to configure the correct address on the router's interface?",
+    choices: [
+      { id: "a", text: "Port forwarding",    correct: false },
+      { id: "b", text: "Physical placement", correct: false },
+      { id: "c", text: "Screened subnet",    correct: false },
+      { id: "d", text: "Static WAN IP",      correct: true  },
+    ],
+    explanation: "The WAN IP address on the router's internet-facing interface can be configured in two ways: automatically via DHCP from the ISP, or manually (statically) by entering the IP address, subnet mask, gateway, and DNS values provided by the ISP. A static WAN IP is commonly required when hosting services or when the ISP assigns a fixed address per contract. Port forwarding routes traffic from external ports to internal hosts but does not configure the WAN address. Physical placement refers to the router's location. A screened subnet is a network security zone (DMZ).",
+    triggerPhrase: "WAN IP = configured auto (DHCP from ISP) or manually (Static WAN IP) per ISP instructions. Port forwarding ≠ WAN address configuration. Screened subnet = DMZ security zone.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-128",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "What is the primary purpose of a screened subnet in a SOHO network?",
+    choices: [
+      { id: "a", text: "To isolate and protect devices that need to be accessible from the internet.", correct: true  },
+      { id: "b", text: "To provide a backup internet connection in case of primary connection failure.", correct: false },
+      { id: "c", text: "To enhance the wireless signal strength throughout the network.",              correct: false },
+      { id: "d", text: "To allow unrestricted access to all devices on the internal network.",         correct: false },
+    ],
+    explanation: "A screened subnet (also called a DMZ or demilitarized zone) is a network segment that sits between the internet and the internal LAN. Its primary purpose is to isolate internet-facing servers (web, email, FTP) from the internal network. If a device in the screened subnet is compromised, the attacker cannot directly reach the internal LAN. It does not provide failover internet connections, signal boosting, or unrestricted internal access.",
+    triggerPhrase: "Screened subnet (DMZ) = isolates internet-facing servers from the internal LAN. If the DMZ is breached, the internal network is still protected. NOT backup connectivity, NOT signal strength.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-129",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "An employee is speaking with the help ticket office regarding their home router configurations for port forwarding. What is a tenet of port forwarding?",
+    choices: [
+      { id: "a", text: "It takes a request from an internet host for a particular service.",                           correct: true  },
+      { id: "b", text: "It allows a user to control traffic within a network.",                                        correct: false },
+      { id: "c", text: "It downloads curated reputation databases that associate IP address ranges.",                  correct: false },
+      { id: "d", text: "It provides a networking protocol framework to allow networked devices to discover the network.", correct: false },
+    ],
+    explanation: "Port forwarding takes an incoming request from an external internet host directed at a specific port on the router's public IP address and routes it to a designated internal host and port. This allows internal services (web servers, game servers, cameras) to be accessible from the internet. Controlling traffic within a network by IP address describes IP filtering. Downloading reputation databases describes content filtering. Providing a device-discovery protocol framework describes UPnP.",
+    triggerPhrase: "Port forwarding = external internet host request → routed to specific internal host:port. IP filtering = traffic control by IP. Content filtering = reputation databases. UPnP = device discovery framework.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-130",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "An engineer is revising the organization's policy on home router LAN and WAN configurations for employees that work from home. What is beneficial in changing the SSID?",
+    choices: [
+      { id: "a", text: "It disables access from a visitor network.",    correct: false },
+      { id: "b", text: "It masks the network from being seen.",         correct: false },
+      { id: "c", text: "It orients users to the correct network.",      correct: true  },
+      { id: "d", text: "It disables unused access to/from the router.", correct: false },
+    ],
+    explanation: "Changing the SSID (Service Set Identifier) from the router's default name to a meaningful custom name helps users identify and connect to the correct network — especially in environments with many nearby Wi-Fi networks. An SSID is broadcast in plaintext and does not provide security by itself. Disabling visitor network access is the purpose of disabling guest access. Hiding the network from device scans requires disabling SSID broadcast (not just changing the name). Removing unused router pathways is accomplished by disabling unused ports.",
+    triggerPhrase: "SSID change = orients users to the correct network (identification, not security). SSID broadcast off = hides network. Guest access off = removes visitor network. Disable unused ports = removes unused router access.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-131",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "You are setting up a SOHO network and notice that Universal Plug-and-Play (UPnP) is enabled on the router by default. A colleague suggests disabling it for security reasons. In which of the following scenarios would it be most appropriate to leave UPnP enabled?",
+    choices: [
+      { id: "a", text: "You are setting up a screened subnet for hosting public-facing servers.",          correct: false },
+      { id: "b", text: "You need to allow gaming consoles to automatically configure network settings.",   correct: true  },
+      { id: "c", text: "You need to secure the router's management interface from external access.",       correct: false },
+      { id: "d", text: "You want to prevent unauthorized devices from accessing the network.",             correct: false },
+    ],
+    explanation: "UPnP is most appropriate when devices like gaming consoles, media streaming devices, or smart home equipment need to automatically open firewall ports and configure network settings without manual intervention. Gaming consoles rely on UPnP for peer-to-peer online gaming connections. However, UPnP should be disabled in security-conscious environments because malware can abuse it to open ports from inside the network. Setting up a screened subnet, securing router management, and blocking unauthorized devices are all security goals that UPnP actively works against.",
+    triggerPhrase: "Leave UPnP enabled = gaming consoles and media devices needing auto port config. Otherwise disable UPnP — it bypasses firewall rules and is a security risk.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-132",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "A remote cyber architect is working on their home router wide area network (WAN) configuration. To assist in protecting the network, the architect configures the router not to be visible to any device that the cyber architect has not manually configured. What action has the architect taken in this instance?",
+    choices: [
+      { id: "a", text: "Disabling SSID broadcast", correct: true  },
+      { id: "b", text: "Changing the SSID",         correct: false },
+      { id: "c", text: "Disabling guest access",    correct: false },
+      { id: "d", text: "Disabling open ports",       correct: false },
+    ],
+    explanation: "Disabling SSID broadcast prevents the router from advertising its wireless network name, making it invisible to devices scanning for available networks. Only devices that have been manually configured with the exact SSID and passphrase can connect. Changing the SSID only renames the network — it is still visible to scanning devices. Disabling guest access removes the visitor network segment. Disabling open ports removes unused port forwarding rules.",
+    triggerPhrase: "Router hidden from unconfigured devices = Disable SSID broadcast. Changing SSID = rename (still visible). Guest access off = visitor segment removed. Open ports off = removes forwarding rules.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-133",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "A technician is working on Home Router WAN configurations. What can a Wi-Fi Analyzer do to assist in the configurations?",
+    choices: [
+      { id: "a", text: "Updating firmware",    correct: false },
+      { id: "b", text: "Screening the subnet", correct: false },
+      { id: "c", text: "Changing a channel",   correct: true  },
+      { id: "d", text: "Encryption settings",  correct: false },
+    ],
+    explanation: "A Wi-Fi Analyzer is a tool that scans the wireless spectrum and displays information about nearby networks — including which channels they occupy, signal strength, and interference levels. A technician uses a Wi-Fi Analyzer to identify congested or overlapping channels and then change the router to a less-congested channel for better performance and reduced interference. Firmware updates are performed through the router's admin interface. Screened subnets are network segmentation configurations. Encryption settings (WPA2/WPA3) are configured in the router's wireless security settings.",
+    triggerPhrase: "Wi-Fi Analyzer = identifies congested channels → change to a less-used channel for better performance. NOT firmware updates, NOT subnet screening, NOT encryption settings.",
+    weaknessTags: ["soho-security", "wireless-tshooting"],
+  },
+
+  {
+    id: "1202-sec-134",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "A remote employee is reviewing their home router firewall configuration. What protects a network by allowing users to control what traffic to permit in and out of the network?",
+    choices: [
+      { id: "a", text: "IP filtering",      correct: true  },
+      { id: "b", text: "UPnP",              correct: false },
+      { id: "c", text: "Port forwarding",   correct: false },
+      { id: "d", text: "Content filtering", correct: false },
+    ],
+    explanation: "IP filtering allows users or administrators to create rules that permit or deny traffic based on IP addresses — explicitly controlling what traffic is allowed in and out of the network. UPnP allows devices to configure ports automatically (reduces manual control, it does not increase it). Port forwarding directs incoming external traffic to a specific internal host — it does not provide bidirectional traffic control. Content filtering blocks traffic based on website categories using reputation databases, not by IP-based rules.",
+    triggerPhrase: "IP filtering = user-controlled rules permitting/denying traffic by IP address (bidirectional). Content filtering = blocks by URL/category. Port forwarding = routes external to internal. UPnP = auto (reduces manual control).",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-135",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "A remote associate attempts to configure their home router firewall. What is the benefit of using IP filtering?",
+    choices: [
+      { id: "a", text: "It takes a request from an internet host for a particular service.",                                      correct: false },
+      { id: "b", text: "It provides a framework in which networking protocols allow networked devices to discover the network.", correct: false },
+      { id: "c", text: "It allows a user to control traffic within a network.",                                                   correct: true  },
+      { id: "d", text: "It downloads curated reputation databases that associate IP address ranges.",                             correct: false },
+    ],
+    explanation: "The primary benefit of IP filtering is that it gives users explicit control over network traffic — specifying which IP addresses or IP ranges are permitted or denied. This is a manual, rule-based approach to network security. Taking requests from an internet host for a specific service describes port forwarding. Providing a device-discovery protocol framework describes UPnP. Downloading curated reputation databases for site categories describes content filtering.",
+    triggerPhrase: "IP filtering benefit = user controls traffic by IP address rules. Port forwarding = internet request routed to internal host. UPnP = device discovery framework. Content filtering = reputation DB for URLs/FQDNs.",
+    weaknessTags: ["soho-security"],
+  },
+
+  {
+    id: "1202-sec-136",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "You are configuring browser privacy settings for a user who wants to minimize the amount of personal data shared with websites while browsing. The user also wants to prevent websites from tracking their activity across multiple sessions. Which of the following actions should you take to meet the user's requirements?",
+    choices: [
+      { id: "a", text: "Enable browser sync to store settings and data across devices.",          correct: false },
+      { id: "b", text: "Disable private browsing mode to allow websites to track activity.",      correct: false },
+      { id: "c", text: "Disable JavaScript in the browser to block website tracking.",            correct: false },
+      { id: "d", text: "Enable \"Do Not Track\" in the browser's privacy settings.",             correct: true  },
+    ],
+    explanation: "The \"Do Not Track\" (DNT) setting sends a request to websites asking them not to track the user's activity across sessions. It is found in the browser's privacy or advanced settings and is designed to minimize personal data collection and cross-session tracking. Browser sync stores and shares settings across devices — a data-sharing feature, not a privacy one. Disabling private browsing mode does the opposite of what is requested. Disabling JavaScript is an overly aggressive approach that breaks most websites and is not a standard privacy recommendation.",
+    triggerPhrase: "Minimize data sharing + prevent cross-session tracking = Enable Do Not Track in browser privacy settings. Browser sync = shares data. Disable private browsing = more tracking. Disable JS = breaks sites.",
+    weaknessTags: ["browser-security"],
+  },
+
+  {
+    id: "1202-sec-137",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "A technician reviews possible methods of securing data through encryption and other processes. What function can take any amount of data as input and produce a fixed-length value as output?",
+    choices: [
+      { id: "a", text: "Hashing",           correct: true  },
+      { id: "b", text: "Password manager",  correct: false },
+      { id: "c", text: "Untrusted source",  correct: false },
+      { id: "d", text: "Trusted source",    correct: false },
+    ],
+    explanation: "A hash function accepts any amount of data as input and produces a fixed-length output called a hash, digest, or checksum. Common examples include MD5 (128-bit), SHA-1 (160-bit), and SHA-256 (256-bit). Hashing is one-way — the original data cannot be recovered from the hash — making it useful for verifying data integrity and storing passwords securely. A password manager stores and generates credentials but does not perform data transformation. Trusted and untrusted sources refer to the origin of software or data, not a data processing function.",
+    triggerPhrase: "Any input size → fixed-length output = Hashing (MD5/SHA-1/SHA-256). One-way function — cannot reverse. Used for integrity verification and password storage.",
+    weaknessTags: ["security-hardening"],
+  },
 ];
