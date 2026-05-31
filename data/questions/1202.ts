@@ -4922,4 +4922,48 @@ export const questions1202: Question[] = [
     triggerPhrase: "Any input size → fixed-length output = Hashing (MD5/SHA-1/SHA-256). One-way function — cannot reverse. Used for integrity verification and password storage.",
     weaknessTags: ["security-hardening"],
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // MALWARE REMOVAL — REMEDIATION TOOLS & ACTIONS  (sec-138–139)
+  //   sec-138: Tools synonymous with remediating infected systems
+  //            (antivirus + anti-malware; sandbox = quarantine, NOT remediation)
+  //   sec-139: What to DO while remediating = update anti-malware software
+  //            (step name ≠ the specific action taken during the step)
+  // ══════════════════════════════════════════════════════════════════
+
+  {
+    id: "1202-sec-138",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "multi",
+    source: "drill",
+    prompt: "A cyber technician follows the CompTIA best practice procedure on malware removal and is ready to remediate one of the company's infected systems. What tools are synonymous in remediating infected systems? (Select all that apply.)",
+    choices: [
+      { id: "a", text: "Sandbox",              correct: false },
+      { id: "b", text: "Antivirus software",   correct: true  },
+      { id: "c", text: "Anti-malware software", correct: true  },
+      { id: "d", text: "Quarantine",            correct: false },
+    ],
+    explanation: "Step 4 (Remediate infected systems) is carried out using antivirus software and anti-malware software — both perform scanning and removal of malicious code. They are synonymous in the context of remediation. A sandbox is used during Step 2 (Quarantine) to isolate the infected system in a controlled environment for safe analysis — it is NOT a remediation tool. Quarantine itself is Step 2, not Step 4. The key distinction: sandbox/quarantine = isolation tools; antivirus/anti-malware = detection and removal tools.",
+    triggerPhrase: "Remediation tools (Step 4) = Antivirus software + Anti-malware software. Sandbox = quarantine/isolation tool (Step 2). Do NOT confuse sandbox with remediation.",
+    weaknessTags: ["malware-removal"],
+  },
+
+  {
+    id: "1202-sec-139",
+    domain: "2.0-security",
+    difficulty: "hard",
+    type: "single",
+    source: "drill",
+    prompt: "A cyber technician removes malware from the organization's system and follows the guidance presented by CompTIA. While remediating the infected system, what should the technician be doing?",
+    choices: [
+      { id: "a", text: "Disable System Restore in Windows.",  correct: false },
+      { id: "b", text: "Remediate infected systems.",          correct: false },
+      { id: "c", text: "Update the anti-malware software.",   correct: true  },
+      { id: "d", text: "Quarantine the infected systems.",     correct: false },
+    ],
+    explanation: "Step 4 of the malware removal process is 'Remediate infected systems,' and it has two sub-steps: (4a) Update anti-malware software — before scanning, ensure the AV/AM definitions are current so it can detect the latest threats; (4b) Use scanning and removal techniques — run the scan with updated definitions. The question asks what you DO during remediation — the first specific action is updating the anti-malware software. 'Remediate infected systems' is the step label itself, not the action. Disabling System Restore = Step 3. Quarantine = Step 2.",
+    triggerPhrase: "While remediating (Step 4): First action = Update anti-malware software (Step 4a). Second = Scan and remove (Step 4b). 'Remediate' is the step NAME, not the specific action you take.",
+    weaknessTags: ["malware-removal"],
+  },
 ];
