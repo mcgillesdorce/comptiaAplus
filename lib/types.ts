@@ -146,14 +146,14 @@ export type WeaknessTag =
   | "windows-security"        // UAC, BitLocker, EFS, NTFS permissions, Active Directory
   | "wireless-security"       // WPA2/WPA3, TKIP/AES, RADIUS, TACACS+, EAP types
   | "malware-types"           // trojan, rootkit, ransomware, keylogger, fileless, spyware
-  | "malware-removal"         // 10-step malware removal process
+  | "malware-removal"         // 7-step malware removal process (CompTIA A+ 1102)
   | "social-engineering"      // phishing, vishing, smishing, tailgating, shoulder surfing
   | "attack-types"            // DoS/DDoS, evil twin, zero-day, on-path, XSS, SQLi
   | "security-hardening"      // password policy, account lockout, patching, encryption
   | "mobile-security"         // MDM, remote wipe, BYOD, config profiles, app vetting
   | "data-destruction"        // degaussing, shredding, low-level format, certificate of destruction
   | "soho-security"           // SSID, UPnP, screened subnet, firmware, guest networks
-  | "browser-security"        // extensions, certificate warnings, private mode, pop-up blockers
+  | "browser-security"        // extensions, certificates, private mode, pop-up blockers, ad blockers, Secure DNS (DoH), cache clearing
   // --- 3.0 Software Troubleshooting ---
   | "windows-tshooting"       // BSOD, startup repair, app crashes, slow performance
   | "mobile-app-tshooting"    // app crashes, OS updates, battery drain, connectivity
