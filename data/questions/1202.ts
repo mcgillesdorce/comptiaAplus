@@ -1723,4 +1723,290 @@ export const questions1202: Question[] = [
     explanation: "The GFS (Grandfather-Father-Son) rotation scheme: Son = daily backups (retained for 1 week), Father = weekly backups (retained for 1 month), Grandfather = monthly backups (retained for 1 year or longer). This balances storage costs with the ability to recover from various points in time. Some organizations add a 'great-grandfather' tier for annual backups.",
     weaknessTags: ["backup-recovery"],
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // DOMAIN 1 – OPERATING SYSTEMS — MISSED Q additions (exam misses)
+  // ══════════════════════════════════════════════════════════════════
+
+  {
+    id: "1202-os-28",
+    domain: "1.0-operating-systems",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Which of the following commands is used to edit a text file on a Linux server?",
+    choices: [
+      { id: "a", text: "pwd",  correct: false },
+      { id: "b", text: "grep", correct: false },
+      { id: "c", text: "cat",  correct: false },
+      { id: "d", text: "nano", correct: true  },
+    ],
+    explanation: "nano is a command-line text editor used to create and edit files on Linux/macOS. cat only DISPLAYS file contents (concatenate). grep SEARCHES file contents. pwd PRINTS the current working directory. Remember: if you need to EDIT, reach for nano (or vi/vim).",
+    triggerPhrase: "Edit a text file on Linux = nano (cat only displays)",
+    weaknessTags: ["linux-commands"],
+  },
+
+  {
+    id: "1202-os-29",
+    domain: "1.0-operating-systems",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Which of the following commands is used on a Linux system to change a user's password on the system?",
+    choices: [
+      { id: "a", text: "chown",  correct: false },
+      { id: "b", text: "chmod",  correct: false },
+      { id: "c", text: "passwd", correct: true  },
+      { id: "d", text: "pwd",    correct: false },
+    ],
+    explanation: "passwd is the Linux command to change a user's password. chmod changes file/directory PERMISSIONS (read/write/execute bits). chown changes file OWNERSHIP (which user/group owns it). pwd prints the WORKING DIRECTORY. The trap: chmod sounds like 'change password' but it is 'change mode' (permissions).",
+    triggerPhrase: "Change Linux password = passwd. chmod = permissions, chown = ownership",
+    weaknessTags: ["linux-commands"],
+  },
+
+  {
+    id: "1202-os-30",
+    domain: "1.0-operating-systems",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Which type of installation would require an answer file to install the operating system?",
+    choices: [
+      { id: "a", text: "Unattended", correct: true  },
+      { id: "b", text: "Clean",      correct: false },
+      { id: "c", text: "Upgrade",    correct: false },
+      { id: "d", text: "Repair",     correct: false },
+    ],
+    explanation: "An Unattended installation uses a pre-built answer file (e.g., unattend.xml for Windows, kickstart for Linux) that automatically responds to all installer prompts — no human interaction required. A Clean install is manual (interactive). An Upgrade preserves apps/data and upgrades in-place. A Repair fixes an existing installation without reinstalling fully.",
+    triggerPhrase: "Answer file = Unattended installation",
+    weaknessTags: ["os-install"],
+  },
+
+  {
+    id: "1202-os-31",
+    domain: "1.0-operating-systems",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Which of the following file types are commonly used to create applications that can be run on Linux, macOS, and Windows?",
+    choices: [
+      { id: "a", text: ".ps1", correct: false },
+      { id: "b", text: ".vbs", correct: false },
+      { id: "c", text: ".py",  correct: true  },
+      { id: "d", text: ".sh",  correct: false },
+    ],
+    explanation: ".py (Python) scripts run cross-platform on Linux, macOS, and Windows wherever the Python interpreter is installed. .sh (shell scripts) run on Linux/macOS but not natively on Windows. .ps1 (PowerShell) is primarily Windows (though PowerShell Core exists cross-platform, the exam context is Windows-centric). .vbs (VBScript) is Windows-only.",
+    triggerPhrase: "Cross-platform scripting (Linux + macOS + Windows) = .py (Python)",
+    weaknessTags: ["scripting"],
+  },
+
+  {
+    id: "1202-os-32",
+    domain: "1.0-operating-systems",
+    difficulty: "medium",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "You attempt to boot a Windows 10 laptop and receive an 'Operating System Not Found' error on the screen. You can see the hard disk listed in the EFI/BIOS of the system. Which of the following commands should you use to add the Windows installation to the boot manager?",
+    choices: [
+      { id: "a", text: "diskpart list",      correct: false },
+      { id: "b", text: "bootrec /fixmbr",    correct: false },
+      { id: "c", text: "bootrec /rebuildbcd", correct: true  },
+      { id: "d", text: "bootrec /fixboot",   correct: false },
+    ],
+    explanation: "bootrec /rebuildbcd scans all disks for Windows installations and adds them to the Boot Configuration Data (BCD) store — exactly what's needed when Windows is on the disk but missing from the boot manager. bootrec /fixmbr repairs the Master Boot Record (legacy BIOS/MBR disks, not UEFI). bootrec /fixboot rewrites the boot sector of the system partition. diskpart list only lists disks/partitions — it doesn't fix boot issues.",
+    triggerPhrase: "OS not found, disk visible in EFI/BIOS = bootrec /rebuildbcd (adds Windows to BCD)",
+    weaknessTags: ["boot-errors", "windows-cli"],
+  },
+
+  {
+    id: "1202-os-33",
+    domain: "1.0-operating-systems",
+    difficulty: "medium",
+    type: "multi",
+    source: "exam1-missed",
+    prompt: "The Group Policy Editor (gpedit.msc) is a Microsoft Windows tool providing a more robust means of configuring hundreds of networked Windows computer settings and policies in a Windows domain. Which editions of Microsoft Windows 10 offer the gpedit.msc tool? (Select all that apply.)",
+    choices: [
+      { id: "a", text: "Enterprise", correct: true  },
+      { id: "b", text: "Pro",        correct: true  },
+      { id: "c", text: "Home",       correct: false },
+      { id: "d", text: "Education",  correct: true  },
+    ],
+    explanation: "gpedit.msc (Local Group Policy Editor) is available on Windows 10/11 Pro, Enterprise, and Education. It is NOT included in Windows 10/11 Home. This is a common exam trap — Home is the stripped-down consumer edition that lacks domain tools like Group Policy. Remember: Home = no gpedit, no domain join, no BitLocker.",
+    triggerPhrase: "gpedit.msc = Pro, Enterprise, Education. NOT Home.",
+    weaknessTags: ["windows-editions", "windows-tools"],
+  },
+
+  {
+    id: "1202-os-34",
+    domain: "1.0-operating-systems",
+    difficulty: "medium",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "BitLocker is a full-disk encryption (FDE) feature available in all versions of Microsoft Windows 10 except for which edition?",
+    choices: [
+      { id: "a", text: "Pro",        correct: false },
+      { id: "b", text: "Home",       correct: true  },
+      { id: "c", text: "Education",  correct: false },
+      { id: "d", text: "Enterprise", correct: false },
+    ],
+    explanation: "BitLocker full-disk encryption is available in Windows 10/11 Pro, Enterprise, and Education — but NOT in Home. Home edition users can use Device Encryption (a limited version) if the hardware supports it (TPM 2.0, Modern Standby), but the full BitLocker management interface is absent. The exam trap: Education has BitLocker, Home does not.",
+    triggerPhrase: "BitLocker NOT available in = Home. Pro/Enterprise/Education all have it.",
+    weaknessTags: ["windows-editions", "windows-security"],
+  },
+
+  {
+    id: "1202-os-35",
+    domain: "1.0-operating-systems",
+    difficulty: "medium",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Windows 11 comes with a refreshed desktop-style user interface that can upgrade from Windows 10 with the in-place upgrade feature. What additional feature would an expanding business user gain when upgrading from Windows 10 Home to Windows 11 Pro for Workstations?",
+    choices: [
+      { id: "a", text: "Microsoft Desktop Optimization Pack",     correct: false },
+      { id: "b", text: "Device Manager",                         correct: false },
+      { id: "c", text: "Domain access / Centralized management", correct: true  },
+      { id: "d", text: "Task scheduling",                        correct: false },
+    ],
+    explanation: "Windows Home does NOT support joining an Active Directory domain. Upgrading to Pro (or Pro for Workstations) enables domain join, allowing the IT department to centrally manage the machine via Group Policy, SCCM, Intune, and other management tools. Device Manager and Task Scheduler are available in all editions. Microsoft Desktop Optimization Pack is an add-on for Enterprise Software Assurance customers.",
+    triggerPhrase: "Home → Pro upgrade key gain = Domain join / Centralized management",
+    weaknessTags: ["windows-editions", "windows-networking"],
+  },
+
+  {
+    id: "1202-os-36",
+    domain: "1.0-operating-systems",
+    difficulty: "medium",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Remote Desktop Protocol (RDP) allows users to connect to a machine and operate it over the network. What Microsoft Windows 10 edition does NOT support an RDP server (incoming connections)?",
+    choices: [
+      { id: "a", text: "Enterprise", correct: false },
+      { id: "b", text: "Home",       correct: true  },
+      { id: "c", text: "Education",  correct: false },
+      { id: "d", text: "Pro",        correct: false },
+    ],
+    explanation: "Windows 10/11 Home does NOT include the RDP server component — you cannot remotely connect INTO a Home machine using RDP. All other editions (Pro, Enterprise, Education) support incoming RDP connections. All editions can use the RDP CLIENT to connect to other machines. For Home, alternatives include third-party tools like TeamViewer, Chrome Remote Desktop, or upgrading to Pro.",
+    triggerPhrase: "RDP server (incoming) NOT supported = Windows Home. Pro/Enterprise/Education support it.",
+    weaknessTags: ["windows-editions", "remote-access"],
+  },
+
+  // ══════════════════════════════════════════════════════════════════
+  // DOMAIN 2 – SECURITY — MISSED Q additions
+  // ══════════════════════════════════════════════════════════════════
+
+  {
+    id: "1202-sec-25",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "What kind of attack is an example of IP spoofing?",
+    choices: [
+      { id: "a", text: "SQL injection",  correct: false },
+      { id: "b", text: "ARP poisoning",  correct: false },
+      { id: "c", text: "Cross-site scripting", correct: false },
+      { id: "d", text: "On-path attack", correct: true  },
+    ],
+    explanation: "IP spoofing — forging the source IP address of packets — is a core technique used in on-path (man-in-the-middle) attacks, where an attacker intercepts or impersonates communication between two parties. ARP poisoning is a LAYER 2 attack that forges MAC addresses (not IP addresses) to redirect traffic at the switch level. SQL injection and cross-site scripting are application-layer attacks unrelated to IP spoofing.",
+    triggerPhrase: "IP spoofing = On-path (MitM) attack. ARP poisoning = MAC forgery (Layer 2).",
+    weaknessTags: ["attack-types"],
+  },
+
+  {
+    id: "1202-sec-26",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "An attacker is using a word list that contains 1 million possible passwords as they attempt to crack your Windows password. What type of password attack is this?",
+    choices: [
+      { id: "a", text: "Rainbow table", correct: false },
+      { id: "b", text: "Hybrid",        correct: false },
+      { id: "c", text: "Dictionary",    correct: true  },
+      { id: "d", text: "Brute-force",   correct: false },
+    ],
+    explanation: "A Dictionary attack uses a pre-built list of common words and passwords (a 'dictionary') to try against the target. Brute-force tries EVERY possible combination of characters (no list needed — purely exhaustive). A Hybrid attack combines both: it takes dictionary words and applies brute-force mutations (adding numbers, symbols, etc.). A Rainbow table attack uses precomputed hash chains to reverse password hashes without cracking them live.",
+    triggerPhrase: "Word list of passwords = Dictionary attack. Every possible combination = Brute-force.",
+    weaknessTags: ["attack-types"],
+  },
+
+  {
+    id: "1202-sec-27",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Joanne is at a coffee shop and connects her Windows 10 laptop to the coffee shop's wireless network to check her email. Which type of network should she select to hide her computer from other devices on the network and prevent file sharing with other patrons?",
+    choices: [
+      { id: "a", text: "Work",    correct: false },
+      { id: "b", text: "Home",    correct: false },
+      { id: "c", text: "Public",  correct: true  },
+      { id: "d", text: "Private", correct: false },
+    ],
+    explanation: "Windows Public network profile is designed for untrusted networks (coffee shops, airports, hotels). It disables network discovery (hides your PC from other devices) and blocks file/printer sharing. Private (Home/Work) profiles enable discovery and sharing — appropriate only for trusted networks you control. Always select Public on any network you don't own.",
+    triggerPhrase: "Coffee shop / untrusted Wi-Fi = Public profile. Private = trusted home/work network.",
+    weaknessTags: ["windows-security"],
+  },
+
+  // ══════════════════════════════════════════════════════════════════
+  // DOMAIN 3 – SOFTWARE TROUBLESHOOTING — MISSED Q additions
+  // ══════════════════════════════════════════════════════════════════
+
+  {
+    id: "1202-sw-27",
+    domain: "3.0-software-troubleshooting",
+    difficulty: "medium",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "A user complains that when they access Google's homepage, it appears in a foreign language even though they are in the United States. They are not using a VPN, and a full anti-malware scan found nothing unusual. Which of the following actions should you attempt NEXT?",
+    choices: [
+      { id: "a", text: "Download the latest security updates for Windows",              correct: false },
+      { id: "b", text: "Remove any proxy servers configured in their web browser",      correct: true  },
+      { id: "c", text: "Verify the user's date and time zone are correctly set",        correct: false },
+      { id: "d", text: "Disable the Windows Firewall",                                  correct: false },
+    ],
+    explanation: "If Google (or any geo-aware site) appears in a foreign language, the site is detecting the user's apparent location as being in another country. A proxy server configured in the browser routes traffic through a server in another region, causing Google to respond in that region's language. The next step is to check the browser's proxy settings and remove any unauthorized proxy. Time zone affects system clock — not geographic routing. Windows Firewall and OS updates don't affect which language Google serves.",
+    triggerPhrase: "Google in foreign language, no VPN, no malware = Check and remove browser proxy settings",
+    weaknessTags: ["windows-tshooting", "proxy-server"],
+  },
+
+  // ══════════════════════════════════════════════════════════════════
+  // DOMAIN 4 – OPERATIONAL PROCEDURES — MISSED Q additions
+  // ══════════════════════════════════════════════════════════════════
+
+  {
+    id: "1202-ops-24",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "During a disaster recovery, which of the following statements is true regarding virtual machines compared to physical servers?",
+    choices: [
+      { id: "a", text: "Both a virtual machine and a physical server have the same downtime", correct: false },
+      { id: "b", text: "A virtual machine has more downtime than a physical server",           correct: false },
+      { id: "c", text: "A virtual machine has less downtime than a physical server",           correct: true  },
+      { id: "d", text: "A virtual machine cannot be used for redundancy or load balancing",    correct: false },
+    ],
+    explanation: "Virtual machines have significantly less downtime during disaster recovery because they can be snapshotted, backed up as files, live-migrated to other hosts, and restored rapidly — without being tied to specific hardware. Physical servers require hardware repair or replacement, which is far slower. VMs are also ideal for redundancy (clustering) and load balancing.",
+    triggerPhrase: "VM vs physical in disaster recovery = VM has LESS downtime (snapshots, live migration, hardware-independent)",
+    weaknessTags: ["backup-recovery", "virtualization-types"],
+  },
+
+  {
+    id: "1202-ops-25",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "exam1-missed",
+    prompt: "Jason checks the Dion Training server room and finds that it currently has over 80% humidity. Which of the following risks to the servers could occur due to this high humidity level?",
+    choices: [
+      { id: "a", text: "Corrosion of the servers",  correct: true  },
+      { id: "b", text: "An over-voltage event",     correct: false },
+      { id: "c", text: "An under-voltage event",    correct: false },
+      { id: "d", text: "Accidental static discharge", correct: false },
+    ],
+    explanation: "High humidity causes moisture to condense on metal surfaces, leading to oxidation and corrosion of circuit board traces, connectors, and component leads — ultimately causing failures. Over-voltage and under-voltage events are power quality issues unrelated to humidity. Static discharge (ESD) is actually more of a risk with LOW humidity (dry air builds up static charge). Ideal server room humidity: 45–55% RH.",
+    triggerPhrase: "High humidity = Corrosion. Low humidity = Static discharge (ESD). Voltage issues = Power problems.",
+    weaknessTags: ["environmental"],
+  },
 ];
