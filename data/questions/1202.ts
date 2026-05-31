@@ -4170,4 +4170,381 @@ export const questions1202: Question[] = [
     triggerPhrase: "Erasing/wiping = writes zeroes/random to EVERY sector. Standard format = new file system only. Degaussing = electromagnet. Low-level = factory reset.",
     weaknessTags: ["data-destruction"],
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // AMPLIFIRE BATCH — Browser Security, Boot Repair, Backup Types,
+  //   ESD & Electrical Safety
+  //   sec-98–102:  Browser privacy settings, extensions, certificates
+  //   sec-103–106: bootrec commands (fixmbr / fixboot), SFC, USB hub
+  //   sec-107–112: Backup requirements, types, GFS, 3-2-1, synthetic
+  //   sec-113–117: Ground/ESD/antistatic, CO2 fire extinguisher
+  // ══════════════════════════════════════════════════════════════════
+
+  // --- Browser Security & Privacy ---
+
+  {
+    id: "1202-sec-98",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "You are configuring browser privacy settings for a user who frequently accesses sensitive information online. The user is concerned about their internet service provider (ISP) potentially monitoring their browsing activity. Which of the following actions should you take to address the user's concern?",
+    choices: [
+      { id: "a", text: "Enable private browsing mode to hide browsing activity from the ISP",   correct: false },
+      { id: "b", text: "Disable browser cookies and cache to prevent tracking",                 correct: false },
+      { id: "c", text: "Enable Secure DNS settings in the browser to use a trusted DNS provider", correct: true  },
+      { id: "d", text: "Install a browser extension that blocks advertisements and trackers",   correct: false },
+    ],
+    explanation: "Secure DNS (DNS over HTTPS / DoH) encrypts DNS queries between the browser and the DNS resolver, preventing the ISP from seeing which domain names the user is looking up — the primary mechanism ISPs use to monitor browsing. Private browsing mode does not encrypt traffic and is visible to the ISP. Disabling cookies stops website tracking but has no effect on ISP visibility. Ad blocker extensions block third-party trackers on pages but do not prevent ISP-level DNS inspection of every site visited.",
+    triggerPhrase: "ISP monitors browsing via DNS lookups → Secure DNS (DoH) encrypts DNS queries, hiding visited domains from the ISP. Private mode ≠ ISP privacy.",
+    weaknessTags: ["browser-security"],
+  },
+
+  {
+    id: "1202-sec-99",
+    domain: "2.0-security",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "You are helping a colleague install a browser extension to improve productivity. The colleague found an extension on a third-party website that claims to offer the desired functionality but is not available in the browser's official extension store. What is the BEST course of action to ensure the extension is safe to use?",
+    choices: [
+      { id: "a", text: "Install the extension from the third-party website but disable it when not in use",                    correct: false },
+      { id: "b", text: "Download and install the extension from the third-party website after scanning it with antivirus software", correct: false },
+      { id: "c", text: "Contact the third-party website to verify the legitimacy of the extension before installing it",       correct: false },
+      { id: "d", text: "Search for a similar extension in the browser's official extension store and install it instead",      correct: true  },
+    ],
+    explanation: "Browser extensions in official stores (Chrome Web Store, Firefox Add-ons, Edge Add-ons) are reviewed and vetted by the browser vendor, providing a baseline security check and ongoing monitoring. Extensions from third-party websites bypass these controls. Disabling when not in use doesn't prevent a malicious extension from operating. AV scanning may miss browser-specific extension malware. Contacting the third party is meaningless — they created the potentially malicious extension and have a vested interest in claiming legitimacy.",
+    triggerPhrase: "Extension not in official store? → Find equivalent in the official extension store. Third-party extension sites bypass browser vendor vetting = high risk.",
+    weaknessTags: ["browser-security"],
+  },
+
+  {
+    id: "1202-sec-100",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "An engineer reviews the benefits of using secure connections. What validates the host's identity running a webpage and encrypts communications to protect against snooping?",
+    choices: [
+      { id: "a", text: "Password manager",              correct: false },
+      { id: "b", text: "Browser data synchronization",  correct: false },
+      { id: "c", text: "Site validation certificates",  correct: true  },
+      { id: "d", text: "Private-browsing mode",         correct: false },
+    ],
+    explanation: "Site validation certificates (TLS/SSL certificates) serve two critical functions: (1) they validate the web server's identity through a trusted Certificate Authority (CA) chain, and (2) they enable HTTPS encryption of all communications, protecting against eavesdropping (snooping). The padlock icon in the browser confirms both. Password managers store credentials but do not encrypt traffic. Browser sync shares data across devices. Private browsing hides local history but does not encrypt traffic or validate server identity.",
+    triggerPhrase: "Validates host identity + encrypts communications against snooping = Site validation certificates (TLS/SSL). This is what HTTPS provides.",
+    weaknessTags: ["browser-security"],
+  },
+
+  {
+    id: "1202-sec-101",
+    domain: "2.0-security",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "A technician prepares an organizational presentation on browser privacy settings and additional features that supplement cookie policy and tracking protection. What uses more sophisticated techniques to prevent displaying anything that does not seem to be part of the site's main content or functionality?",
+    choices: [
+      { id: "a", text: "Pop-up blocker",              correct: false },
+      { id: "b", text: "Ad blocker",                  correct: true  },
+      { id: "c", text: "Private-browsing mode",        correct: false },
+      { id: "d", text: "Browser data removal function", correct: false },
+    ],
+    explanation: "Ad blockers use sophisticated content analysis — filter lists, heuristics, and element hiding — to identify and suppress anything that does not appear to be part of a site's primary content or functionality (ads, tracking scripts, third-party widgets, sponsored content). This goes beyond cookie policy or simple pop-up blocking. Pop-up blockers only prevent new browser windows/tabs from opening. Private browsing hides local history but doesn't block content. Browser data removal clears cached/stored data but doesn't affect what is displayed.",
+    triggerPhrase: "Sophisticated content analysis to block non-main site content = Ad blocker. Pop-up blocker = only blocks new windows. Different scope, different technique.",
+    weaknessTags: ["browser-security"],
+  },
+
+  {
+    id: "1202-sec-102",
+    domain: "3.0-software-troubleshooting",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "You are troubleshooting a web application issue for a user in your organization. The application is not loading correctly, and you suspect that cached data or cookies might be causing the problem. What is the BEST course of action to resolve the issue while minimizing the impact on the user's browsing experience?",
+    choices: [
+      { id: "a", text: "Disable the browser's cache temporarily and reload the application",                      correct: false },
+      { id: "b", text: "Instruct the user to use a different browser to access the application",                  correct: false },
+      { id: "c", text: "Clear only the cached images and files, leaving cookies and other data intact",            correct: true  },
+      { id: "d", text: "Clear all browsing data, including cached images, cookies, history, and saved passwords", correct: false },
+    ],
+    explanation: "Clearing only cached images and files is the most targeted approach — it removes stale cached content that may be causing the rendering issue while preserving cookies (which maintain login sessions and user preferences), history, and saved passwords. This minimizes disruption. Disabling the cache doesn't remove already-cached stale content and is non-standard. Switching browsers is disruptive and doesn't diagnose the root cause. Clearing all browsing data (including passwords and cookies) is disproportionate and forces the user to log back into every website.",
+    triggerPhrase: "Web app not loading + suspect cache → Clear cached images/files ONLY, leave cookies intact. Minimizes impact; avoids logging user out of all sites.",
+    weaknessTags: ["browser-security", "windows-tshooting"],
+  },
+
+  // --- Boot Repair Commands & System File Tools ---
+
+  {
+    id: "1202-sec-103",
+    domain: "3.0-software-troubleshooting",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "A cyber architect troubleshoots a computer with the message that reflects 'OS not found.' What recovery mode command prompts repair of the master boot record (MBR)?",
+    choices: [
+      { id: "a", text: "bootrec/rebuildbcd", correct: false },
+      { id: "b", text: "NTUSER.DAT",         correct: false },
+      { id: "c", text: "bootrec/fixmbr",     correct: true  },
+      { id: "d", text: "bootrec/fixboot",    correct: false },
+    ],
+    explanation: "bootrec /fixmbr rewrites only the Master Boot Record code at the beginning of the physical disk without altering the partition table. It repairs MBR corruption caused by malware or disk errors. bootrec /fixboot repairs the volume boot record on the active partition (one step later in the boot chain). bootrec /rebuildbcd rebuilds the Boot Configuration Data store (BCD) — useful when Windows boot entries are missing. NTUSER.DAT is a registry hive file unrelated to boot repair.",
+    triggerPhrase: "MBR repair = bootrec /fixmbr. Boot sector repair = bootrec /fixboot. BCD rebuild = bootrec /rebuildbcd. Each targets a different part of the boot chain.",
+    weaknessTags: ["boot-errors", "windows-tshooting"],
+  },
+
+  {
+    id: "1202-sec-104",
+    domain: "3.0-software-troubleshooting",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "A software engineer troubleshoots an 'OS not found' issue on a company computer and wants to repair the boot sector. What recovery mode command prompt can the engineer use to accomplish this troubleshooting task?",
+    choices: [
+      { id: "a", text: "bootrec/fixboot",    correct: true  },
+      { id: "b", text: "bootrec/rebuildbcd", correct: false },
+      { id: "c", text: "bootrec/fixmbr",     correct: false },
+      { id: "d", text: "NTUSER.DAT",         correct: false },
+    ],
+    explanation: "bootrec /fixboot writes a new boot sector (Volume Boot Record) to the active system partition. This is different from the MBR: the MBR is at the start of the physical disk and launches the partition boot code; the boot sector is on the active partition and hands control to the OS bootloader (e.g., bootmgr). If the boot sector is corrupt, 'OS not found' or 'Missing operating system' errors appear. bootrec /fixmbr repairs the disk-level MBR code. bootrec /rebuildbcd repairs the BCD store (Windows boot menu entries).",
+    triggerPhrase: "Boot SECTOR repair = bootrec /fixboot (partition-level). MBR repair = bootrec /fixmbr (disk-level). These fix different parts of the boot chain — know the distinction.",
+    weaknessTags: ["boot-errors", "windows-tshooting"],
+  },
+
+  {
+    id: "1202-sec-105",
+    domain: "3.0-software-troubleshooting",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "A cyber architect analyzes a computer returned for application and performance issues. As part of their analysis, the architect uses a utility that has a manual interface to review system files and restores stored files if found to be corrupt or damaged. What is the architect using to test files?",
+    choices: [
+      { id: "a", text: "Windows repair",         correct: false },
+      { id: "b", text: "Time drift",             correct: false },
+      { id: "c", text: "Requirement verification", correct: false },
+      { id: "d", text: "SFC",                    correct: true  },
+    ],
+    explanation: "SFC (System File Checker — sfc /scannow) is a command-line utility with a manual interface that scans all protected Windows system files and replaces corrupt or damaged files with a cached copy from the Windows component store (%SystemRoot%\\System32\\dllcache or the CBS store). It is the standard tool for diagnosing and repairing corrupted system files causing application crashes or performance issues. 'Windows repair' is not a specific tool name. 'Time drift' refers to clock synchronization issues. 'Requirement verification' is not a Windows utility.",
+    triggerPhrase: "Manual interface, scans + restores corrupt/damaged system files = SFC (sfc /scannow). Command-line tool; part of Windows-CLI toolkit.",
+    weaknessTags: ["windows-cli", "windows-tshooting"],
+  },
+
+  {
+    id: "1202-sec-106",
+    domain: "3.0-software-troubleshooting",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "An employee reports an issue in which they state they cannot print. The help desk technician discovers that the employee uses a peripheral hub with four additional devices connected via a single connector to the computer. What is causing the issue with the printer?",
+    choices: [
+      { id: "a", text: "Time drift",                    correct: false },
+      { id: "b", text: "Low memory warning",            correct: false },
+      { id: "c", text: "USB controller resource warning", correct: true  },
+      { id: "d", text: "No OS found",                   correct: false },
+    ],
+    explanation: "A USB hub shares the bandwidth and power budget of a single USB controller port across all connected devices. When too many devices are connected to one hub, the USB controller may exceed its resource limits (power and/or bandwidth), triggering a 'USB controller resource warning' in Windows Device Manager. This can cause connected devices — such as a printer — to stop responding or fail to communicate. This is not a time-sync, memory, or boot issue.",
+    triggerPhrase: "Peripheral hub with multiple devices → USB controller resource warning. Hub shares one controller's bandwidth+power across all devices; too many can starve one device.",
+    weaknessTags: ["windows-tshooting"],
+  },
+
+  // --- Backup Types, Requirements & Strategy ---
+
+  {
+    id: "1202-sec-107",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "Technicians must manage two backup requirements against the capacity of the backup media and the time it takes to complete a backup job. One requirement is backup retention. What is the other requirement?",
+    choices: [
+      { id: "a", text: "Incremental backup", correct: false },
+      { id: "b", text: "Backup frequency",   correct: true  },
+      { id: "c", text: "Full backup",        correct: false },
+      { id: "d", text: "Backup chain",       correct: false },
+    ],
+    explanation: "When designing a backup strategy, technicians must balance two requirements against available storage capacity and backup window time: (1) Backup retention — how long backups are kept (longer retention = more storage needed) and (2) Backup frequency — how often backups run (more frequent = less potential data loss but more storage and longer aggregate backup time). Incremental and full are backup types, not requirements. 'Backup chain' refers to the relationship between a full and its dependents, not a planning requirement.",
+    triggerPhrase: "Two backup planning requirements: backup RETENTION (how long to keep) + backup FREQUENCY (how often to run). Both must be balanced against storage capacity and time.",
+    weaknessTags: ["backup-recovery"],
+  },
+
+  {
+    id: "1202-sec-108",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "What type of backup has a moderate backup time and only includes new files and files modified since the last full backup job?",
+    choices: [
+      { id: "a", text: "Incremental", correct: false },
+      { id: "b", text: "Full",        correct: false },
+      { id: "c", text: "Synthetic",   correct: false },
+      { id: "d", text: "Differential", correct: true },
+    ],
+    explanation: "A differential backup captures all changes (new + modified files) since the last full backup — regardless of how many differential backups have already run. The backup grows larger each day as more changes accumulate since the full. Restore requires only two items: the last full backup + the latest differential. Incremental captures changes since the last backup of any type (smaller/faster per job, but more complex restore). Full backs up everything every time. Synthetic full is assembled from previous full + incrementals without reading production data.",
+    triggerPhrase: "Differential = all changes since last FULL. Grows over time. Restore = full + 1 differential. Incremental = changes since last ANY backup. Smaller/faster, harder to restore.",
+    weaknessTags: ["backup-recovery"],
+  },
+
+  {
+    id: "1202-sec-109",
+    domain: "4.0-operational-procedures",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "Which type of backup has a low backup time but a high recovery complexity?",
+    choices: [
+      { id: "a", text: "Incremental", correct: true  },
+      { id: "b", text: "Full backup", correct: false },
+      { id: "c", text: "Synthetic",   correct: false },
+      { id: "d", text: "Differential", correct: false },
+    ],
+    explanation: "Incremental backups capture only changes since the last backup (of any type), making each individual backup fast and small (low backup time). However, restoring requires the last full backup plus every incremental backup run since then, applied in sequence — making recovery complex and time-consuming (high recovery complexity). Full backup = high backup time, low recovery complexity (one set). Differential = moderate backup time (grows), moderate recovery (full + 1 diff). Synthetic = assembled from existing backups, no production read time.",
+    triggerPhrase: "Incremental: LOW backup time, HIGH recovery complexity. Full: HIGH backup, LOW recovery. Differential: MODERATE both. Incremental = smallest/fastest per job, hardest to restore.",
+    weaknessTags: ["backup-recovery"],
+  },
+
+  {
+    id: "1202-sec-110",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "What type of backup occurs daily using the Grandfather-Father-Son (GFS) scheme?",
+    choices: [
+      { id: "a", text: "Incremental", correct: true  },
+      { id: "b", text: "Differential", correct: false },
+      { id: "c", text: "Synthetic",   correct: false },
+      { id: "d", text: "Full",        correct: false },
+    ],
+    explanation: "In the Grandfather-Father-Son (GFS) rotation scheme: Son = daily incremental backups (most frequent, smallest). Father = weekly full backups. Grandfather = monthly full backups. The daily 'Son' tier uses incremental backups to capture daily changes with minimal storage consumption and backup time. The weekly and monthly tiers use full backups for reliable, complete restore points. Differential and Synthetic are not standard GFS tier designations.",
+    triggerPhrase: "GFS daily tier (Son) = Incremental. Weekly (Father) = Full. Monthly (Grandfather) = Full. Remember: Son=daily incremental, Father=weekly full, Grandfather=monthly full.",
+    weaknessTags: ["backup-recovery"],
+  },
+
+  {
+    id: "1202-sec-111",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "The 3-2-1 backup rule is a best-practice maxim applied to backup procedures to verify that technicians are implementing a solution that can mitigate the widest possible range of disaster scenarios. How many copies of the technician's data, including the production copy, should the technician have?",
+    choices: [
+      { id: "a", text: "2",                   correct: false },
+      { id: "b", text: "As many as possible", correct: false },
+      { id: "c", text: "1",                   correct: false },
+      { id: "d", text: "3",                   correct: true  },
+    ],
+    explanation: "The 3-2-1 backup rule: Keep 3 total copies of data (including the live production copy), stored on 2 different types of storage media, with 1 copy stored offsite. The '3' explicitly includes the production data — so you need 2 backup copies + the original. Two different media types (e.g., HDD + tape, or local NAS + cloud) protects against media-specific failures. Offsite protects against site-wide disasters (fire, flood, theft).",
+    triggerPhrase: "3-2-1 rule: 3 copies total (including production) on 2 different media with 1 offsite. Production counts as the first copy.",
+    weaknessTags: ["backup-recovery"],
+  },
+
+  {
+    id: "1202-sec-112",
+    domain: "4.0-operational-procedures",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "Which type of backup assembles data from other backup jobs?",
+    choices: [
+      { id: "a", text: "Synthetic",    correct: true  },
+      { id: "b", text: "Incremental",  correct: false },
+      { id: "c", text: "Differential", correct: false },
+      { id: "d", text: "Full",         correct: false },
+    ],
+    explanation: "A synthetic full backup is created by the backup software combining an existing full backup with subsequent incremental backups into a new, complete full backup image — without reading any data directly from the production server. Because it 'assembles' (synthesizes) the new full from previous backup jobs, production systems experience no backup window load. This is ideal for environments where nightly full backups would impact performance. Incremental, differential, and full all read data from the live production source.",
+    triggerPhrase: "Synthetic backup = assembles/synthesizes a new full from existing backup jobs (no production read). Reduces production impact while maintaining fresh full backup.",
+    weaknessTags: ["backup-recovery"],
+  },
+
+  // --- ESD, Grounding & Electrical Safety ---
+
+  {
+    id: "1202-sec-113",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "Small electrical devices such as PCs and monitors connect to power via the power plug. What protects these devices via a path of least resistance for the electrical current to flow away harmlessly?",
+    choices: [
+      { id: "a", text: "Capacitor",         correct: false },
+      { id: "b", text: "Power supply unit", correct: false },
+      { id: "c", text: "Fuse",              correct: false },
+      { id: "d", text: "Ground",            correct: true  },
+    ],
+    explanation: "The ground (earth) wire in electrical systems provides a deliberate low-resistance path for fault current to flow safely away to earth ground rather than through electronic components or a person. In the event of a short circuit or surge, current follows this path of least resistance harmlessly. Capacitors store electrical charge; they don't provide a safe discharge path for fault current. The PSU converts AC to DC power. A fuse is a sacrificial overcurrent protection device — it interrupts the circuit when current exceeds a threshold, but does not actively redirect current away.",
+    triggerPhrase: "Path of least resistance for fault current to flow harmlessly = Ground (earth wire). Fuse = interrupts overcurrent. Capacitor = stores charge. PSU = power conversion.",
+    weaknessTags: ["safety-esd", "environmental"],
+  },
+
+  {
+    id: "1202-sec-114",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "Which of the following would a technician use to protect static-sensitive components during storage or travel?",
+    choices: [
+      { id: "a", text: "Antistatic bags",                     correct: true  },
+      { id: "b", text: "Dissipative packaging",               correct: false },
+      { id: "c", text: "Electrostatic discharge (ESD) mat",   correct: false },
+      { id: "d", text: "Surge suppressor",                    correct: false },
+    ],
+    explanation: "Antistatic bags (metallic Faraday bags) are designed specifically for storage and transport of static-sensitive components. They create a Faraday cage that prevents external static charges from reaching the component inside, and their surface dissipates any accumulated charge. ESD mats are bench-top work surfaces — they protect components during handling at a workstation, not during storage/transport. Surge suppressors protect against AC power line surges. Dissipative packaging is a broader category of materials; antistatic bags are the specific CompTIA-tested answer for storage/travel.",
+    triggerPhrase: "Storage or travel ESD protection = Antistatic bags (Faraday bags). ESD mat = work surface protection. ESD strap = worn by technician. Different tools for different ESD scenarios.",
+    weaknessTags: ["safety-esd"],
+  },
+
+  {
+    id: "1202-sec-115",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "Static electricity discharged into the delicate structure of electronic devices will flash over between the conductive tracks, damaging or even vaporizing them. Which can a technician wear to ground themselves to prevent a discharge?",
+    choices: [
+      { id: "a", text: "Grounding point",                       correct: false },
+      { id: "b", text: "Electrostatic discharge (ESD) mat",     correct: false },
+      { id: "c", text: "Common ground point",                   correct: false },
+      { id: "d", text: "Electrostatic discharge (ESD) straps",  correct: true  },
+    ],
+    explanation: "ESD wrist straps (anti-static wrist straps) are worn around the technician's wrist and connected via a coiled cord to a ground point. They continuously bleed off any static charge built up on the technician's body to ground before it can arc into and damage sensitive electronic components. ESD mats are placed on the work surface — they protect components resting on the mat but are not worn. A grounding point and common ground point are infrastructure elements that ESD straps connect to — they themselves are not wearable protective equipment.",
+    triggerPhrase: "Worn by technician to ground themselves = ESD strap (wrist strap). ESD mat = placed on work surface. Strap + mat work together for full ESD protection.",
+    weaknessTags: ["safety-esd"],
+  },
+
+  {
+    id: "1202-sec-116",
+    domain: "4.0-operational-procedures",
+    difficulty: "easy",
+    type: "single",
+    source: "drill",
+    prompt: "Which of the following is used as a safe place to organize sensitive components to prevent against electrical shock and damage?",
+    choices: [
+      { id: "a", text: "Electrostatic discharge (ESD) straps", correct: false },
+      { id: "b", text: "Electrostatic discharge (ESD) mat",    correct: true  },
+      { id: "c", text: "Grounding point",                      correct: false },
+      { id: "d", text: "Common ground point",                  correct: false },
+    ],
+    explanation: "An ESD mat (anti-static mat) is placed on the work bench and provides a grounded, static-dissipative surface for organizing and handling sensitive electronic components. Components placed on the mat are protected from static discharge because the mat safely bleeds off any charge to ground. ESD straps are worn on the technician's body — they protect the component from the technician's static, but are not a 'place' to organize components. Grounding points and common ground points are electrical infrastructure elements that both mats and straps connect to.",
+    triggerPhrase: "Safe surface to PLACE/ORGANIZE sensitive components = ESD mat. WORN by technician = ESD strap. Both connect to a grounding point for complete ESD protection.",
+    weaknessTags: ["safety-esd"],
+  },
+
+  {
+    id: "1202-sec-117",
+    domain: "4.0-operational-procedures",
+    difficulty: "medium",
+    type: "single",
+    source: "drill",
+    prompt: "What is the recommended type of fire extinguisher to use on an electrical fire?",
+    choices: [
+      { id: "a", text: "Dry powder",      correct: false },
+      { id: "b", text: "Carbon dioxide",  correct: true  },
+      { id: "c", text: "Foam",            correct: false },
+      { id: "d", text: "Water",           correct: false },
+    ],
+    explanation: "Carbon dioxide (CO2) extinguishers are the recommended choice for electrical fires in IT environments: CO2 is non-conductive (will not create a shock hazard), leaves no chemical residue (will not damage sensitive equipment), and suffocates the fire by displacing oxygen. Dry powder (ABC/BC) can extinguish electrical fires but leaves a corrosive powdery residue that damages electronic equipment — not suitable for server rooms or data centers. Water conducts electricity and creates a serious shock hazard. Foam also conducts electricity and is not safe for energized electrical equipment.",
+    triggerPhrase: "Electrical fire = Carbon dioxide (CO2). Non-conductive, no residue, displaces O2. Dry powder works but damages electronics. Water/foam = conduct electricity = shock hazard.",
+    weaknessTags: ["environmental", "safety-esd"],
+  },
 ];
