@@ -26,8 +26,10 @@ function WeaknessBar({
   accuracy,
   trend,
   tag,
+  domainQuery = "",
 }: {
   label: string;
+  domainQuery?: string;
   accuracy: number;
   trend?: WeaknessTrend;
   tag: WeaknessTag;
@@ -98,7 +100,7 @@ function WeaknessBar({
       {/* Drill link */}
       {isWeak && (
         <Link
-          href={`/quiz/session?weakness=${tag}`}
+          href={`/quiz/session?weakness=${tag}${domainQuery}`}
           className="mt-2 inline-block rounded-lg bg-red-50 px-3 py-1 font-mono text-xs font-medium text-red-700 hover:bg-red-100 transition-colors"
         >
           Drill this →
@@ -120,6 +122,18 @@ function ResultsContent() {
   const stats = useStudyStore((s) => s.questionStats);
 
   const session = sessions.find((s) => s.id === sessionId);
+
+  // Detect which cert this session belongs to so all nav links stay in scope.
+  const certParam = params.get("cert");
+  const is1202 =
+    certParam === "1202" ||
+    (session?.questionIds.some((id) => id.startsWith("1202-")) ?? false);
+  const CORE2_DOMAINS =
+    "1.0-operating-systems,2.0-security,3.0-software-troubleshooting,4.0-operational-procedures";
+  const certQuery = is1202
+    ? `&cert=1202&domains=${CORE2_DOMAINS}`
+    : "";
+  const quizHome = is1202 ? "/quiz?cert=1202" : "/quiz";
 
   if (!session) {
     return (
@@ -288,6 +302,7 @@ function ResultsContent() {
                 accuracy={w.accuracy}
                 trend={w.trend}
                 tag={w.tag}
+                domainQuery={certQuery}
               />
             ))}
           </div>
@@ -307,7 +322,7 @@ function ResultsContent() {
             You scored {weakestTag.accuracy}% on this topic. Get more reps in now.
           </p>
           <Link
-            href={`/quiz/session?weakness=${weakestTag.tag}&n=10`}
+            href={`/quiz/session?weakness=${weakestTag.tag}&n=10${certQuery}`}
             className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-white py-3 font-semibold text-slate-900 transition-all active:scale-[0.99]"
           >
             <Zap className="h-4 w-4" />
@@ -319,18 +334,18 @@ function ResultsContent() {
       {/* ── Action buttons ── */}
       <div className="space-y-3">
         <Link
-          href="/quiz/session?mode=weak&n=15"
+          href={`/quiz/session?mode=weak&n=15${certQuery}`}
           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-700 py-4 font-semibold text-white shadow-lg active:scale-[0.99]"
         >
           <Zap className="h-5 w-5" />
           Another smart quiz (weak areas)
         </Link>
         <Link
-          href="/"
+          href={quizHome}
           className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white py-4 font-semibold text-slate-900 active:scale-[0.99]"
         >
           <Home className="h-5 w-5" />
-          Back to home
+          Back to quiz menu
         </Link>
       </div>
     </div>

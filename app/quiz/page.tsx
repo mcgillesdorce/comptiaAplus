@@ -30,7 +30,7 @@ function QuizPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const is1202 = searchParams.get("cert") === "1202";
-  const domainQuery = is1202 ? `&domains=${CORE2_DOMAINS.join(",")}` : "";
+  const domainQuery = is1202 ? `&cert=1202&domains=${CORE2_DOMAINS.join(",")}` : "";
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(10);
   const stats = useStudyStore((s) => s.questionStats);
@@ -86,6 +86,7 @@ function QuizPageContent() {
 
   const startCustomQuiz = () => {
     const params = new URLSearchParams();
+    if (is1202) params.set("cert", "1202");
     if (selectedDomains.length > 0) {
       params.set("domains", selectedDomains.join(","));
     } else if (is1202) {

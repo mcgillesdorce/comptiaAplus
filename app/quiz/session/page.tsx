@@ -38,6 +38,7 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
   const weakness = params.get("weakness") as WeaknessTag | null;
   const domainsParam = params.get("domains");
   const count = Number(params.get("n") ?? 10);
+  const cert = params.get("cert"); // "1202" | null — used for back-nav and results routing
   const domainFilter = domainsParam?.split(",") as Domain[] | undefined;
 
   // Build the question set once for the current session query.
@@ -124,7 +125,7 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
             weaknessResults,
           });
           bumpStreak();
-          router.push(`/quiz/results?id=${sessionId}`);
+          router.push(`/quiz/results?id=${sessionId}${cert ? `&cert=${cert}` : ""}`);
         }}
         onRetry={() => {
           const retryParams = new URLSearchParams(window.location.search);
@@ -177,7 +178,7 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <button
-          onClick={() => router.push("/quiz")}
+          onClick={() => router.push(cert ? `/quiz?cert=${cert}` : "/quiz")}
           className="rounded-full bg-slate-100 p-2"
         >
           <X className="h-5 w-5 text-slate-700" />
