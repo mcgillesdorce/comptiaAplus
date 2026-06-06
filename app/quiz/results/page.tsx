@@ -127,13 +127,19 @@ function ResultsContent() {
   const certParam = params.get("cert");
   const is1202 =
     certParam === "1202" ||
-    (session?.questionIds.some((id) => id.startsWith("1202-")) ?? false);
-  const CORE2_DOMAINS =
-    "1.0-operating-systems,2.0-security,3.0-software-troubleshooting,4.0-operational-procedures";
+    (session?.questionIds.every((id) => id.startsWith("1202-")) ?? false);
+  const is1201 =
+    !is1202 &&
+    (certParam === "1201" ||
+      (session?.questionIds.every((id) => !id.startsWith("1202-")) ?? false));
+  const CORE1 = "1.0-mobile,2.0-networking,3.0-hardware,4.0-virtualization-cloud,5.0-troubleshooting";
+  const CORE2 = "1.0-operating-systems,2.0-security,3.0-software-troubleshooting,4.0-operational-procedures";
   const certQuery = is1202
-    ? `&cert=1202&domains=${CORE2_DOMAINS}`
+    ? `&cert=1202&domains=${CORE2}`
+    : is1201
+    ? `&cert=1201&domains=${CORE1}`
     : "";
-  const quizHome = is1202 ? "/quiz?cert=1202" : "/quiz";
+  const quizHome = is1202 ? "/quiz?cert=1202" : is1201 ? "/quiz?cert=1201" : "/quiz";
 
   if (!session) {
     return (

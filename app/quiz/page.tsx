@@ -11,6 +11,14 @@ import type { Domain } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Zap, Bookmark, RefreshCw, Filter, Target, BookOpen, ChevronRight } from "lucide-react";
 
+const CORE1_DOMAINS: Domain[] = [
+  "1.0-mobile",
+  "2.0-networking",
+  "3.0-hardware",
+  "4.0-virtualization-cloud",
+  "5.0-troubleshooting",
+];
+
 const CORE2_DOMAINS: Domain[] = [
   "1.0-operating-systems",
   "2.0-security",
@@ -29,53 +37,54 @@ export default function QuizPage() {
 function QuizPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const is1202 = searchParams.get("cert") === "1202";
-  const domainQuery = is1202 ? `&cert=1202&domains=${CORE2_DOMAINS.join(",")}` : "";
+  const cert = searchParams.get("cert"); // "1201" | "1202" | null
+  const is1202 = cert === "1202";
+  const is1201 = cert === "1201";
+  const activeDomains = is1202 ? CORE2_DOMAINS : is1201 ? CORE1_DOMAINS : null;
+  const domainQuery = activeDomains
+    ? `&cert=${cert}&domains=${activeDomains.join(",")}`
+    : "";
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(10);
   const stats = useStudyStore((s) => s.questionStats);
   const sessions = useStudyStore((s) => s.sessions);
 
-  const scopedStats = useMemo(
-    () =>
-      is1202
-        ? Object.fromEntries(Object.entries(stats).filter(([id]) => id.startsWith("1202-")))
-        : stats,
-    [is1202, stats]
-  );
+  const scopedStats = useMemo(() => {
+    if (is1202) return Object.fromEntries(Object.entries(stats).filter(([id]) => id.startsWith("1202-")));
+    if (is1201) return Object.fromEntries(Object.entries(stats).filter(([id]) => !id.startsWith("1202-")));
+    return stats;
+  }, [is1201, is1202, stats]);
 
-  const scopedSessions = useMemo(
-    () =>
-      is1202
-        ? sessions.filter((s) => s.questionIds.some((id) => id.startsWith("1202-")))
-        : sessions,
-    [is1202, sessions]
-  );
+  const scopedSessions = useMemo(() => {
+    if (is1202) return sessions.filter((s) => s.questionIds.some((id) => id.startsWith("1202-")));
+    if (is1201) return sessions.filter((s) => s.questionIds.some((id) => !id.startsWith("1202-")));
+    return sessions;
+  }, [is1201, is1202, sessions]);
 
-  const core2Tags = useMemo(() => {
-    if (!is1202) return null;
+  const certTags = useMemo(() => {
+    if (!activeDomains) return null;
     const tags = new Set<string>();
     for (const q of allQuestions) {
-      if (CORE2_DOMAINS.includes(q.domain)) {
+      if (activeDomains.includes(q.domain)) {
         for (const tag of q.weaknessTags) tags.add(tag);
       }
     }
     return tags;
-  }, [is1202]);
+  }, [activeDomains]);
 
   const flaggedCount = Object.entries(scopedStats).filter(([, s]) => s.markedForReview).length;
   const weaknessStats = computeWeaknessStats(scopedStats);
   const lowAccuracyTags = weaknessStats.filter((w) => w.attempted > 0 && w.accuracyPct < 70);
   const uncoveredTopics = useMemo(() => {
     const topics = computeUncoveredTopics(scopedSessions, 5);
-    if (!core2Tags) return topics;
-    return topics.filter((t) => core2Tags.has(t.tag));
-  }, [core2Tags, scopedSessions]);
+    if (!certTags) return topics;
+    return topics.filter((t) => certTags.has(t.tag));
+  }, [certTags, scopedSessions]);
   const [showAllUncovered, setShowAllUncovered] = useState(false);
   const visibleUncovered = showAllUncovered ? uncoveredTopics : uncoveredTopics.slice(0, 5);
   const visibleDomains = useMemo(
-    () => (is1202 ? CORE2_DOMAINS : (Object.keys(DOMAINS) as Domain[])),
-    [is1202]
+    () => activeDomains ?? (Object.keys(DOMAINS) as Domain[]),
+    [activeDomains]
   );
 
   const toggleDomain = (d: Domain) => {
@@ -86,11 +95,11 @@ function QuizPageContent() {
 
   const startCustomQuiz = () => {
     const params = new URLSearchParams();
-    if (is1202) params.set("cert", "1202");
+    if (cert) params.set("cert", cert);
     if (selectedDomains.length > 0) {
       params.set("domains", selectedDomains.join(","));
-    } else if (is1202) {
-      params.set("domains", CORE2_DOMAINS.join(","));
+    } else if (activeDomains) {
+      params.set("domains", activeDomains.join(","));
     }
     params.set("n", String(count));
     router.push(`/quiz/session?${params.toString()}`);

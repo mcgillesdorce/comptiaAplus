@@ -22,19 +22,27 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const CORE1_DOMAINS = [
+  "1.0-mobile",
+  "2.0-networking",
+  "3.0-hardware",
+  "4.0-virtualization-cloud",
+  "5.0-troubleshooting",
+].join(",");
+
 const TOOLS = [
   {
-    href: "/quiz/session?mode=weak",
+    href: `/quiz/session?mode=weak&domains=${CORE1_DOMAINS}&cert=1201`,
     icon: Brain,
     label: "Smart Quiz",
     sublabel: "Recommended",
     highlight: true,
   },
-  { href: "/quiz",        icon: Brain,        label: "Build a Quiz",   sublabel: "Custom" },
-  { href: "/flashcards",  icon: Layers,       label: "Flashcards",     sublabel: "Quick review" },
-  { href: "/videos",      icon: PlayCircle,   label: "Videos",         sublabel: "Prof. Messer" },
-  { href: "/reference",   icon: BookOpen,     label: "Reference",      sublabel: "Study notes" },
-  { href: "/progress",    icon: BarChart3,    label: "Progress",       sublabel: "Weak spot tracker" },
+  { href: "/quiz?cert=1201",        icon: Brain,        label: "Build a Quiz",   sublabel: "Custom" },
+  { href: "/flashcards",            icon: Layers,       label: "Flashcards",     sublabel: "Quick review" },
+  { href: "/videos",                icon: PlayCircle,   label: "Videos",         sublabel: "Prof. Messer" },
+  { href: "/reference",             icon: BookOpen,     label: "Reference",      sublabel: "Study notes" },
+  { href: "/progress",              icon: BarChart3,    label: "Progress",       sublabel: "Weak spot tracker" },
 ];
 
 export default function APlusHub() {
