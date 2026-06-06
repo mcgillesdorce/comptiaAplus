@@ -46,10 +46,15 @@ const TOOLS = [
 ];
 
 export default function APlusHub() {
-  const stats       = useStudyStore((s) => s.questionStats);
+  const allStats    = useStudyStore((s) => s.questionStats);
   const streakDays  = useStudyStore((s) => s.streakDays);
   const sessions    = useStudyStore((s) => s.sessions);
   const targetDate  = useStudyStore((s) => s.targetExamDate);
+
+  // Scope to 1201 questions only (exclude any id starting with '1202-')
+  const stats = Object.fromEntries(
+    Object.entries(allStats).filter(([id]) => !id.startsWith("1202-"))
+  );
 
   const readiness        = computeReadinessScore(stats);
   const weaknessStats    = computeWeaknessStats(stats);
@@ -151,7 +156,7 @@ export default function APlusHub() {
             {topWeaknesses.map((w) => (
               <Link
                 key={w.tag}
-                href={`/quiz/session?weakness=${w.tag}`}
+                href={`/quiz/session?weakness=${w.tag}&domains=${CORE1_DOMAINS}&cert=1201`}
                 className="flex items-center justify-between rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 transition-all hover:border-brand-300 hover:shadow-sm active:scale-[0.99]"
               >
                 <div className="flex-1 min-w-0">
@@ -202,7 +207,7 @@ export default function APlusHub() {
 
         {/* Smart Quiz hero */}
         <Link
-          href="/quiz/session?mode=weak"
+          href={`/quiz/session?mode=weak&domains=${CORE1_DOMAINS}&cert=1201`}
           className="flex items-center justify-between rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-5 text-white shadow-md transition-all active:scale-[0.99]"
         >
           <div>
