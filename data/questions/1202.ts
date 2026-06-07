@@ -6432,7 +6432,7 @@ export const questions1202: Question[] = [
     ],
     explanation: "Port 25 is SMTP (Simple Mail Transfer Protocol) — the standard port used for server-to-server email delivery (mail transfer agents sending mail between servers). When a mail server cannot send emails to another server, port 25 must be open in the outbound firewall rules. Port 143 is IMAP (Internet Message Access Protocol) — used by email clients to retrieve messages from a mail server (not server-to-server delivery). Port 22 is SSH (Secure Shell). Port 110 is POP3 (Post Office Protocol v3) — another client-to-server message retrieval protocol.",
     triggerPhrase: "Server-to-server email (SMTP outgoing) = port 25. Client retrieve mail = IMAP 143 / POP3 110.",
-    weaknessTags: ["ports-protocols"],
+    weaknessTags: ["port-numbers"],
   },
 
   {
