@@ -124,6 +124,18 @@ const TOPIC_STACKS_1202: Stack[] = [
     tags: ["backup-recovery"],
   },
   {
+    id: "network-commands",
+    label: "Network Commands",
+    emoji: "🌐",
+    tags: ["windows-cli", "wired-tshooting"],
+  },
+  {
+    id: "linux-commands",
+    label: "Linux Commands",
+    emoji: "🐧",
+    tags: ["linux-commands"],
+  },
+  {
     id: "all",
     label: "All Topics",
     emoji: "📚",
