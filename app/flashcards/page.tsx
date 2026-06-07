@@ -112,6 +112,18 @@ const TOPIC_STACKS_1202: Stack[] = [
     domains: ["4.0-operational-procedures"],
   },
   {
+    id: "data-types",
+    label: "Scripting Data Types",
+    emoji: "🔢",
+    tags: ["scripting"],
+  },
+  {
+    id: "backup-types",
+    label: "Backup Types",
+    emoji: "💾",
+    tags: ["backup-recovery"],
+  },
+  {
     id: "all",
     label: "All Topics",
     emoji: "📚",
