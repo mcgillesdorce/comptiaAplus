@@ -6342,7 +6342,7 @@ export const questions1202: Question[] = [
     ],
     explanation: "pathping combines the functionality of ping (connectivity test) and tracert (route tracing) and additionally collects latency and packet loss statistics at EACH hop between the source and destination. This makes it the ideal tool to identify which specific router or device along the path is causing latency. netstat displays current TCP/IP network connections and port statistics on the LOCAL machine — it does not trace the path to a remote host. ping tests basic connectivity to a destination but only shows overall round-trip time, not per-hop latency. net use maps or disconnects network drives — unrelated to latency diagnostics.",
     triggerPhrase: "Identify which hop has network latency = pathping (not tracert for per-hop stats, not netstat)",
-    weaknessTags: ["windows-cli", "network-tshooting"],
+    weaknessTags: ["windows-cli", "wired-tshooting"],
   },
 
   {
@@ -6468,7 +6468,7 @@ export const questions1202: Question[] = [
     ],
     explanation: "Unexplained data usage tripling is a classic indicator of a malicious or poorly behaved app consuming data in the background — often a recently installed app. The first step is to check per-app data usage in the phone's settings and cross-reference with apps installed within the last month. Mobile operating systems track data consumption per app, so this quickly identifies the culprit. Enabling biometrics prevents unauthorized physical access but doesn't explain background data usage. Configuring WiFi-only downloads is a mitigation, not a diagnosis. A factory restore is a last resort, not the first step.",
     triggerPhrase: "Smartphone data tripled = check network permissions + data usage of recently installed apps",
-    weaknessTags: ["mobile-security", "mobile-tshooting"],
+    weaknessTags: ["mobile-security", "mobile-app-tshooting"],
   },
 
   {
