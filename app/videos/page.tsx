@@ -157,7 +157,7 @@ function AllVideosTab({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function VideosPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-950" />}>
+    <Suspense fallback={<div className="min-h-dvh bg-gray-950" />}>
       <VideosPageContent />
     </Suspense>
   );
@@ -320,7 +320,7 @@ function VideosPageContent() {
     : "Professor Messer A+ Course";
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white pb-24">
+    <div className="min-h-dvh bg-gray-950 text-white pb-[calc(6rem+env(safe-area-inset-bottom))]">
       {/* ── Sticky player ─────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-20 bg-gray-950">
         <div className="relative w-full" style={{ paddingTop: "56.25%" }}>

@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="min-h-screen pb-24 antialiased">
+      <body className="min-h-dvh pb-[calc(6rem+env(safe-area-inset-bottom))] antialiased">
         <DarkModeToggle />
         <main className="mx-auto max-w-2xl px-4 pt-6">{children}</main>
         <Suspense fallback={null}>
