@@ -41,7 +41,7 @@ body {
     radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05), transparent 50%),
     #FAFAFC;
   color: #0F172A;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 html.dark body {

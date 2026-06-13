@@ -320,7 +320,7 @@ function VideosPageContent() {
     : "Professor Messer A+ Course";
 
   return (
-    <div className="min-h-dvh bg-gray-950 text-white pb-[calc(6rem+env(safe-area-inset-bottom))]">
+    <div className="min-h-dvh bg-gray-950 text-white pb-6">
       {/* ── Sticky player ─────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-20 bg-gray-950">
         <div className="relative w-full" style={{ paddingTop: "56.25%" }}>

@@ -37,9 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="min-h-dvh pb-[calc(6rem+env(safe-area-inset-bottom))] antialiased">
+      <body className="h-dvh overflow-hidden antialiased">
         <DarkModeToggle />
-        <main className="mx-auto max-w-2xl px-4 pt-6">{children}</main>
+        <div className="h-dvh overflow-y-auto overscroll-y-contain pb-[calc(6rem+env(safe-area-inset-bottom))]">
+          <main className="mx-auto max-w-2xl px-4 pt-6">{children}</main>
+        </div>
         <Suspense fallback={null}>
           <BottomNav />
         </Suspense>
