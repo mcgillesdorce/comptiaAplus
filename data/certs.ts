@@ -1,3 +1,5 @@
+import { AZURE_CERT_BUNDLES } from "./azure/certs";
+
 export interface CertBundle {
   id: string;
   name: string;
@@ -113,4 +115,6 @@ export const CERT_BUNDLES: CertBundle[] = [
     ],
     avgPay: { min: 60000, max: 92000 },
   },
+  // ── Microsoft Azure ────────────────────────────────────────────────
+  ...AZURE_CERT_BUNDLES,
 ];

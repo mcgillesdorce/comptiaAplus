@@ -18,10 +18,15 @@ import {
   getVideos1202ForTags,
   type MesserVideo1202,
 } from "@/data/videos/1202";
+import {
+  ALL_VIDEOS_AZ305,
+  PLAYLIST_ID_AZ305,
+  type AzureVideo,
+} from "@/data/azure/videos/1305";
 import type { WeaknessTag } from "@/lib/types";
 
 type Tab = "recommended" | "all";
-type AnyMesserVideo = MesserVideo | MesserVideo1202;
+type AnyMesserVideo = MesserVideo | MesserVideo1202 | AzureVideo;
 
 // ─── Video Card ──────────────────────────────────────────────────────────────
 function VideoCard({
@@ -160,9 +165,11 @@ export default function VideosPage() {
 
 function VideosPageContent() {
   const searchParams = useSearchParams();
-  const is1202 = searchParams.get("cert") === "1202";
+  const cert = searchParams.get("cert");
+  const is1202 = cert === "1202";
+  const isAZ305 = cert === "az305";
   const { questionStats, sessions } = useStudyStore();
-  const [activeTab, setActiveTab] = useState<Tab>("recommended");
+  const [activeTab, setActiveTab] = useState<Tab>(isAZ305 ? "all" : "recommended");
   const [selectedVideo, setSelectedVideo] = useState<AnyMesserVideo | null>(null);
 
   const scopedStats = useMemo(
@@ -222,6 +229,11 @@ function VideosPageContent() {
 
   // Compute recommended videos based on weak areas
   const recommendedVideos = useMemo(() => {
+    // AZ-305 has no questions/weakness data yet — just surface the full playlist.
+    if (isAZ305) {
+      return ALL_VIDEOS_AZ305.slice(0, 15);
+    }
+
     if (is1202) {
       if (recentWeakTags.length > 0) {
         const byRecent = getVideos1202ForTags(recentWeakTags);
@@ -267,31 +279,42 @@ function VideosPageContent() {
     }
 
     return getVideosForTags(weakTags).slice(0, 15);
-  }, [is1202, recentWeakTags, scopedStats]);
+  }, [is1202, isAZ305, recentWeakTags, scopedStats]);
 
   // Group all videos by section for the "All Videos" tab
   const videosBySection = useMemo(() => {
     const grouped = new Map<string, AnyMesserVideo[]>();
-    const source = is1202 ? ALL_VIDEOS_1202 : ALL_VIDEOS;
+    const source = isAZ305
+      ? ALL_VIDEOS_AZ305
+      : is1202
+      ? ALL_VIDEOS_1202
+      : ALL_VIDEOS;
     for (const video of source) {
       const list = grouped.get(video.section) ?? [];
       list.push(video);
       grouped.set(video.section, list);
     }
     return grouped;
-  }, [is1202]);
+  }, [is1202, isAZ305]);
 
   function handleSelect(video: AnyMesserVideo) {
     setSelectedVideo((prev) => (prev?.id === video.id ? null : video));
   }
 
   // The player src: selected video or the full playlist
+  const playlistId = isAZ305
+    ? PLAYLIST_ID_AZ305
+    : is1202
+    ? PLAYLIST_ID_1202
+    : PLAYLIST_ID;
   const playerSrc = selectedVideo
     ? `https://www.youtube-nocookie.com/embed/${selectedVideo.id}?autoplay=1&rel=0`
-    : `https://www.youtube-nocookie.com/embed/videoseries?list=${is1202 ? PLAYLIST_ID_1202 : PLAYLIST_ID}&rel=0`;
+    : `https://www.youtube-nocookie.com/embed/videoseries?list=${playlistId}&rel=0`;
 
   const playerTitle = selectedVideo
     ? selectedVideo.title
+    : isAZ305
+    ? "AZ-305 Design Azure Infrastructure Study Playlist"
     : is1202
     ? "Professor Messer A+ 220-1202 Course"
     : "Professor Messer A+ Course";

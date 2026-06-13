@@ -13,6 +13,10 @@ import {
 } from "lucide-react";
 import { CERT_BUNDLES, type CertBundle } from "@/data/certs";
 
+const AZURE_CERT_IDS = new Set(["az-305"]);
+const COMPTIA_CERTS = CERT_BUNDLES.filter((c) => !AZURE_CERT_IDS.has(c.id));
+const AZURE_CERTS = CERT_BUNDLES.filter((c) => AZURE_CERT_IDS.has(c.id));
+
 const HOW_IT_WORKS = [
   {
     step: "01",
@@ -94,15 +98,32 @@ export default function HomePage() {
       </section>
 
       {/* ── Cert catalog ──────────────────────────────────────────────────── */}
-      <section className="space-y-4">
-        <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-          Study bundles
-        </h2>
-        <div className="grid grid-cols-2 gap-3">
-          {CERT_BUNDLES.map((cert) => (
-            <CertCard key={cert.id} cert={cert} />
-          ))}
+      <section className="space-y-6">
+        {/* CompTIA */}
+        <div className="space-y-4">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+            CompTIA certifications
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            {COMPTIA_CERTS.map((cert) => (
+              <CertCard key={cert.id} cert={cert} />
+            ))}
+          </div>
         </div>
+
+        {/* Microsoft Azure */}
+        {AZURE_CERTS.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+              Azure certifications
+            </h2>
+            <div className="grid grid-cols-2 gap-3">
+              {AZURE_CERTS.map((cert) => (
+                <CertCard key={cert.id} cert={cert} />
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ── Career paths ──────────────────────────────────────────────────────────── */}
@@ -195,6 +216,7 @@ function CareerCard({ cert }: { cert: CertBundle }) {
     "a-plus-1202":   "bg-amber-500",
     "network-plus":  "bg-sky-500",
     "security-plus": "bg-rose-500",
+    "az-305":        "bg-blue-500",
   };
 
   return (
