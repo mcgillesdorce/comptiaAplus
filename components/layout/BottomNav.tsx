@@ -88,7 +88,7 @@ export function BottomNav() {
   const tabs = isHomePage ? homeTabs : inAZ305 ? az305Tabs : studyTabs;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_8px_rgba(0,0,0,0.04)] dark:border-slate-700 dark:bg-slate-900">
+    <nav className="shrink-0 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_8px_rgba(0,0,0,0.04)] dark:border-slate-700 dark:bg-slate-900">
       <ul className="mx-auto flex max-w-2xl">
         {tabs.map(({ id, href, label, icon: Icon, disabled }) => {
           const hrefPath = href.split("?")[0];
