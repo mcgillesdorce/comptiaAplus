@@ -11,6 +11,7 @@ import {
   Monitor,
   Shield,
   Network,
+  Cloud,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CERT_BUNDLES } from "@/data/certs";
@@ -21,6 +22,7 @@ export function BottomNav() {
 
   const inCore2Path = pathname.startsWith("/certs/a-plus-1202");
   const inCore1Path = pathname.startsWith("/certs/a-plus-1201");
+  const inAZ305Path = pathname.startsWith("/certs/az-305");
   const certParam = searchParams.get("cert");
   const domainsParam = searchParams.get("domains") ?? "";
   const hasCore2Domains = [
@@ -29,6 +31,8 @@ export function BottomNav() {
     "3.0-software-troubleshooting",
     "4.0-operational-procedures",
   ].every((d) => domainsParam.includes(d));
+
+  const inAZ305 = certParam === "az305" || inAZ305Path;
 
   const certContext = certParam === "1202" || inCore2Path
     ? "1202"
@@ -46,6 +50,7 @@ export function BottomNav() {
     "a-plus-1202": Shield,
     "network-plus": Network,
     "security-plus": Shield,
+    "az-305": Cloud,
   } as const;
 
   const labelByBundleId = {
@@ -53,6 +58,7 @@ export function BottomNav() {
     "a-plus-1202": "1202",
     "network-plus": "Net+",
     "security-plus": "Sec+",
+    "az-305": "AZ-305",
   } as const;
 
   const homeTabs = CERT_BUNDLES.map((cert) => ({
@@ -63,6 +69,13 @@ export function BottomNav() {
     disabled: !cert.active,
   }));
 
+  // AZ-305 is a separate module with only a course hub and videos for now.
+  const az305Tabs = [
+    { id: "home", href: "/", label: "Home", icon: Home, disabled: false },
+    { id: "course", href: "/certs/az-305", label: "AZ-305", icon: Cloud, disabled: false },
+    { id: "videos", href: "/videos?cert=az305", label: "Videos", icon: PlayCircle, disabled: false },
+  ];
+
   const studyTabs = [
     { id: "home", href: "/", label: "Home", icon: Home, disabled: false },
     { id: "quiz", href: `/quiz${query}`, label: "Quiz", icon: Brain, disabled: false },
@@ -72,13 +85,16 @@ export function BottomNav() {
     { id: "stats", href: `/progress${query}`, label: "Stats", icon: BarChart3, disabled: false },
   ];
 
-  const tabs = isHomePage ? homeTabs : studyTabs;
+  const tabs = isHomePage ? homeTabs : inAZ305 ? az305Tabs : studyTabs;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/80 bg-white/95 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/95">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/80 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/95">
       <ul className="mx-auto flex max-w-2xl">
         {tabs.map(({ id, href, label, icon: Icon, disabled }) => {
-          const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+          const hrefPath = href.split("?")[0];
+          const active =
+            pathname === hrefPath ||
+            (hrefPath !== "/" && pathname.startsWith(hrefPath));
           return (
             <li key={id} className="flex-1">
               {disabled ? (
