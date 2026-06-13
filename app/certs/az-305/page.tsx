@@ -6,9 +6,11 @@ import {
   Clock,
   ListVideo,
   PlayCircle,
-  Sparkles,
+  Brain,
+  Layers,
 } from "lucide-react";
 import { ALL_VIDEOS_AZ305 } from "@/data/azure/videos/1305";
+import { questionsAZ305 } from "@/data/azure/questions/1305";
 
 const SECTIONS = Array.from(
   ALL_VIDEOS_AZ305.reduce((map, v) => {
@@ -19,6 +21,7 @@ const SECTIONS = Array.from(
 
 export default function AZ305Hub() {
   const totalVideos = ALL_VIDEOS_AZ305.length;
+  const totalQuestions = questionsAZ305.length;
 
   return (
     <div className="space-y-6">
@@ -66,20 +69,52 @@ export default function AZ305Hub() {
         </Link>
       </div>
 
-      {/* Questions coming soon */}
-      <div className="flex items-center gap-3 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/40 p-4">
-        <div className="rounded-xl bg-sky-50 dark:bg-sky-900/30 p-2">
-          <Sparkles className="h-5 w-5 text-sky-600 dark:text-sky-400" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-            Quizzes &amp; flashcards coming soon
-          </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Practice questions will be added to this module shortly.
-          </p>
-        </div>
-      </div>
+      {/* Practice: quizzes & flashcards */}
+      <section className="grid grid-cols-2 gap-3">
+        <Link
+          href="/certs/az-305/quiz"
+          className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 transition-all hover:border-sky-300 hover:shadow-sm active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800"
+        >
+          <div className="flex items-center justify-between">
+            <div className="rounded-xl bg-sky-50 p-2 dark:bg-sky-900/30">
+              <Brain className="h-5 w-5 text-sky-600 dark:text-sky-400" />
+            </div>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+              {totalQuestions}
+            </span>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              Quiz
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Practice by objective
+            </p>
+          </div>
+        </Link>
+
+        <Link
+          href="/certs/az-305/flashcards"
+          className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 transition-all hover:border-sky-300 hover:shadow-sm active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800"
+        >
+          <div className="flex items-center justify-between">
+            <div className="rounded-xl bg-sky-50 p-2 dark:bg-sky-900/30">
+              <Layers className="h-5 w-5 text-sky-600 dark:text-sky-400" />
+            </div>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+              {totalQuestions}
+            </span>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              Flashcards
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Sorted by exam objective
+            </p>
+          </div>
+        </Link>
+      </section>
 
       {/* Curriculum overview */}
       <section className="space-y-3">
