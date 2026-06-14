@@ -401,4 +401,197 @@ export const questionsAZ305: AZ305Question[] = [
     explanation:
       "Azure App Configuration is a single place to update application configuration (including connection strings) without redeploying or restarting the service, and it integrates with Azure Key Vault for sensitive values. Updating web.config on each server is IIS-only, doesn't help SQL databases, and interrupts user connections. Key Vault alone securely stores secrets but, without App Configuration, still requires significant administrative and development effort across 20 apps.",
   },
+
+  // ════════════════════════════════════════════════════════════════
+  // 1.0 — Identity, Governance & Monitoring (additional)
+  // ════════════════════════════════════════════════════════════════
+  {
+    id: "az305-igm-05",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "Your company has an on-premises Active Directory (AD) domain that uses AD Connect to access Microsoft Entra ID. Employees use single sign-on (SSO) from corporate or personal devices. IT reported that the Remote Desktop Protocol (RDP) port of the on-premises AD server was left open after a one-time administrative task. After reports of identity theft at a partner company, management is concerned about identity security. You must strengthen your security policy to mitigate risks associated with identity compromise. Which two actions should you perform? (Each correct answer presents part of the solution.)",
+    choices: [
+      { id: "a", text: "Require strong passwords that expire each month.", correct: false },
+      { id: "b", text: "Enable Microsoft Entra conditional access.", correct: true },
+      { id: "c", text: "Close Remote Desktop Protocol (RDP) ports on the on-premises AD server.", correct: true },
+      { id: "d", text: "Disable password hash synchronization.", correct: false },
+    ],
+    explanation:
+      "Microsoft Entra conditional access ensures users gain access to corporate resources only from devices that meet your security standards. Closing the RDP ports prevents unauthorized remote access to the AD server — only the ports required for the AD-to-AD-Connect connection should be open. You should NOT disable password hash synchronization (it lets AD Connect compare passwords against known-compromised credentials), and frequent forced password expiration encourages users to choose weaker, easy-to-guess passwords.",
+  },
+  {
+    id: "az305-igm-06",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You work for a global company operating in East US, Central US, North Europe, West Europe, East Asia, and Southeast Asia. The company plans to use Azure Monitor to centralize log storage. Requirements: minimize administrative overhead, minimize costs, conform to specific regional compliance requirements, and provide regional data sovereignty. What is the minimum number of Log Analytics workspaces you should identify?",
+    choices: [
+      { id: "a", text: "Five", correct: false },
+      { id: "b", text: "One", correct: false },
+      { id: "c", text: "Three", correct: true },
+      { id: "d", text: "Six", correct: false },
+    ],
+    explanation:
+      "A Log Analytics workspace aggregates and stores data, provides administrative boundaries (data sovereignty), and defines a geographic location for storage (regional compliance). The company's regions span three Azure geographies — United States, Europe, and Asia Pacific — so you need three workspaces, one per geography. One workspace would minimize cost but fails sovereignty/compliance; five or six workspaces would increase cost and administrative overhead unnecessarily.",
+  },
+  {
+    id: "az305-igm-07",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your company has a Microsoft Entra ID P2 environment that hosts over 10,000 licensed users and supports over 100 business-critical applications. The company is concerned about its ability to recognize and respond to external threats for the applications. You need to recommend a solution that supports identifying sign-in risks and provides remediation strategies. What should you recommend?",
+    choices: [
+      { id: "a", text: "Microsoft Entra ID Protection", correct: true },
+      { id: "b", text: "Microsoft Entra Connect Health", correct: false },
+      { id: "c", text: "Microsoft Entra Privileged Identity Management (PIM)", correct: false },
+      { id: "d", text: "Azure Policies", correct: false },
+    ],
+    explanation:
+      "Microsoft Entra ID Protection automates detection and remediation of identity-based risks (such as anonymous IP address use or leaked credentials), lets you investigate risks via portal data, and can export risk data for further analysis — full implementation requires a P2 license. PIM manages just-in-time privileged access but does not provide threat detection/remediation. Connect Health monitors on-premises identity infrastructure performance, not security threats. Azure Policy enforces compliance with defined standards, not sign-in risk remediation.",
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // 2.0 — Data Storage (additional)
+  // ════════════════════════════════════════════════════════════════
+  {
+    id: "az305-data-09",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "You are designing a storage solution that will facilitate the migration of on-premises data to the Azure cloud, consolidating resources to minimize costs while still providing the required features and performance. Requirements: data must be accessible via SMB or a REST API; the solution must be optimized for random-access workloads; and affordability should be prioritized over low latency or support for heavy workloads. Which storage technology and storage tier should you include? (Each correct answer presents part of the solution.)",
+    choices: [
+      { id: "a", text: "Storage technology: Azure Files", correct: true },
+      { id: "b", text: "Storage tier: Transaction optimized", correct: true },
+      { id: "c", text: "Storage technology: Azure Blob Storage", correct: false },
+      { id: "d", text: "Storage tier: Premium", correct: false },
+      { id: "e", text: "Storage tier: Hot", correct: false },
+    ],
+    explanation:
+      "Azure Files is the primary file storage and sharing solution on Azure, optimized for random-access workloads and accessible via SMB and the Azure Files REST API. The Transaction optimized tier is not HDD-backed but is relatively cheaper than premium while still giving good performance for random-access workloads. Azure Blob Storage would suit read-heavy analytical datasets but does not support SMB; Premium file shares are SSD-backed (higher performance, higher cost); the Hot tier targets general-purpose file sharing rather than this cost-prioritized scenario.",
+  },
+  {
+    id: "az305-data-10",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company is enabling its engineers to adopt Azure for a multi-tenant Software-as-a-Service (SaaS) product that will require lots of databases for each tenant. You need to recommend a relational database solution that is cost-efficient, keeps management overhead to a minimum (the team has no database administrator), and supports geo-replication and auto-failovers. Which database solution should you recommend?",
+    choices: [
+      { id: "a", text: "SQL Server on Azure virtual machines", correct: false },
+      { id: "b", text: "An Azure SQL Database single database", correct: false },
+      { id: "c", text: "An Azure SQL Database elastic pool", correct: true },
+      { id: "d", text: "Azure SQL Managed Instance", correct: false },
+    ],
+    explanation:
+      "An Azure SQL Database elastic pool is a fully managed PaaS option that lets multiple databases share resources on one logical SQL server — cost-efficient because resources are shared with no underutilization, and it supports geo-replication and auto-failover. A single database is not cost-efficient when you create one per tenant; SQL Server on VMs is IaaS and needs a DBA; SQL Managed Instance is PaaS but provides no auto-failover and costs more than an elastic pool.",
+  },
+  {
+    id: "az305-data-11",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You work for a consumer sales company that has gathered market data from a variety of sources. You have noticed that data from some sources has schema-drift issues. You need to recommend a data-preparation solution to prepare the data for analysis, and the solution must minimize development effort. Which Azure service should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Stream Analytics", correct: false },
+      { id: "b", text: "Azure Data Factory", correct: true },
+      { id: "c", text: "Azure Functions", correct: false },
+      { id: "d", text: "Azure Logic Apps", correct: false },
+    ],
+    explanation:
+      "Azure Data Factory lets you develop graphical data-transformation logic without writing code and can protect against schema drift, minimizing development effort. Azure Functions would require changing function code for every schema change; Azure Stream Analytics would require changing the job's code for each schema change; Azure Logic Apps would require changing the application structure whenever the input schema changes.",
+  },
+  {
+    id: "az305-data-12",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "Your company is developing a new data-intensive application. The initial database will contain approximately 1 TB of data and is projected to grow by 300 to 500 GB per year after release. All development takes place in Azure. You need an Azure database solution that provides Microsoft SQL Server compatibility, minimal management requirements, minimal cost, support for the DTU-based purchasing model, and support for widely varying processing requirements during development. Which storage solution should you recommend?",
+    choices: [
+      { id: "a", text: "SQL Server on Azure VM", correct: false },
+      { id: "b", text: "Azure SQL Database single database", correct: true },
+      { id: "c", text: "Azure SQL managed instance", correct: false },
+      { id: "d", text: "Azure SQL Database elastic pool", correct: false },
+    ],
+    explanation:
+      "An Azure SQL Database single database meets all the requirements — it is SQL Server compatible, fully managed, low cost, supports the DTU-based purchasing model, and can scale to handle widely varying processing during development. If needed later, a database can be added to an elastic pool. An elastic pool is only beneficial with multiple databases; SQL Managed Instance supports only vCore pricing (no DTU model); SQL Server on a VM has the highest management overhead since you manage the OS and database engine.",
+  },
+  {
+    id: "az305-data-13",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You are designing a data-migration project that will move 1 TB of data from multiple on-premises servers (FILESRV_HR and ARCHIVE_SRV1) to Azure Storage using Azure Data Factory with self-hosted integration runtimes (SHIRs). Which statement about the self-hosted integration runtime requirements is TRUE?",
+    choices: [
+      { id: "a", text: "You must configure two self-hosted integration runtimes, one each for FILESRV_HR and ARCHIVE_SRV1.", correct: false },
+      { id: "b", text: "You must install each self-hosted integration runtime on a separate Windows machine.", correct: true },
+      { id: "c", text: "You must install a self-hosted integration runtime on FILESRV_HR and on ARCHIVE_SRV1.", correct: false },
+      { id: "d", text: "A self-hosted integration runtime can only connect to a single data source at a time.", correct: false },
+    ],
+    explanation:
+      "The self-hosted integration runtime only runs on Windows-based computers, and you can run only a single runtime on each machine — so each SHIR must be installed on a separate Windows machine. You are NOT required to configure two SHIRs (a single runtime can service multiple data sources), and the runtime does NOT need to reside on the data source itself; it can live on any on-premises Windows server.",
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // 3.0 — Business Continuity (additional)
+  // ════════════════════════════════════════════════════════════════
+  {
+    id: "az305-bc-03",
+    objective: "3.0-business-continuity",
+    difficulty: "hard",
+    type: "multi",
+    prompt:
+      "Your company builds a demo environment in Azure by using an Azure Resource Manager (ARM) template. The demo environment includes three VMs that use general-purpose v2 storage accounts. You plan to implement a disaster-recovery solution that must be able to recover from a failure in a single Azure data center, meet a recovery time objective (RTO) of 96 hours, and minimize cost. Which three recommendations should you make? (Each correct answer presents part of the solution.)",
+    choices: [
+      { id: "a", text: "Use zone-redundant storage (ZRS).", correct: true },
+      { id: "b", text: "You should NOT include Azure Site Recovery.", correct: true },
+      { id: "c", text: "If an outage occurs, use ARM templates to re-create the VMs.", correct: true },
+      { id: "d", text: "Use geo-redundant storage (GRS).", correct: false },
+      { id: "e", text: "Use locally redundant storage (LRS).", correct: false },
+    ],
+    explanation:
+      "ZRS protects data from a single Azure data-center failure and is less expensive than GRS. Because the RTO is a long 96 hours, you should NOT include Azure Site Recovery — re-creating the VMs from the existing ARM templates in the secondary location is feasible and cheaper. LRS only protects against single-server failure (not a data-center outage), and GRS is more expensive than ZRS. A manual failover is unnecessary since there is no secondary region in this single-data-center scenario.",
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // 4.0 — Infrastructure (additional)
+  // ════════════════════════════════════════════════════════════════
+  {
+    id: "az305-infra-07",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "You are designing an auditing application built as multiple Azure Functions that will subscribe to events from other resources across an Azure subscription (such as storage account key rotation and virtual machine creation), receive events from those resources as soon as they happen, and deploy all resources related to the application using Infrastructure as Code (IaC). Which two Azure features or services should you recommend? (Each correct answer presents part of the solution.)",
+    choices: [
+      { id: "a", text: "Azure Event Grid", correct: true },
+      { id: "b", text: "Azure Bicep", correct: true },
+      { id: "c", text: "Azure Automation", correct: false },
+      { id: "d", text: "Azure Queue Storage", correct: false },
+      { id: "e", text: "Azure Service Bus", correct: false },
+    ],
+    explanation:
+      "Azure Event Grid lets you build event-based applications with built-in integration across Azure services — you create an Event Grid topic to subscribe to events of interest, and the Function handler executes as soon as the event happens (for example, when a storage account key is rotated). Azure Bicep is a declarative IaC abstraction over ARM templates used to deploy all application resources, including the Azure Functions. Service Bus and Queue Storage are for message delivery (guaranteed/FIFO processing), not real-time events; Azure Automation runs runbooks/DSC, not event subscriptions.",
+  },
+  {
+    id: "az305-infra-08",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A startup is launching an online retail platform that must provide a seamless shopping experience while efficiently managing unpredictable traffic spikes during promotions, and the platform requires control over the server resources. You need a solution so the system can automatically handle significantly increased traffic during Black Friday sales in the most efficient way. Proposed solution: you recommend serverless computing. Does this solution meet the goal?",
+    choices: [
+      { id: "a", text: "Yes", correct: false },
+      { id: "b", text: "No", correct: true },
+    ],
+    explanation:
+      "No. Serverless computing lets developers run code without managing the underlying infrastructure, and the cloud provider handles provisioning, scaling, and managing compute. While serverless can automatically scale to handle traffic spikes, it does NOT provide control over the server resources, which is an explicit requirement in this scenario — so the proposed solution does not meet the goal.",
+  },
 ];
