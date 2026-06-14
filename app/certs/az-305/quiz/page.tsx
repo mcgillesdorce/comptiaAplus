@@ -9,6 +9,8 @@ import {
   type AZ305Objective,
   type AZ305Question,
 } from "@/data/azure/questions/1305";
+import { useAZ305Store, useAZ305Hydrated } from "@/lib/azure/az305-store";
+import { pickSmartQuestions, getWeakItems } from "@/lib/azure/az305-analytics";
 import {
   ChevronLeft,
   CheckCircle2,
@@ -16,11 +18,18 @@ import {
   RotateCcw,
   ArrowRight,
   Trophy,
+  Target,
 } from "lucide-react";
 
-type Filter = AZ305Objective | "all";
+type Filter = AZ305Objective | "all" | "smart";
+
+const SMART_COUNT = 15;
 
 export default function AZ305QuizPage() {
+  const cardStats = useAZ305Store((s) => s.cardStats);
+  const recordQuizAnswer = useAZ305Store((s) => s.recordQuizAnswer);
+  const hydrated = useAZ305Hydrated();
+
   const [started, setStarted] = useState(false);
   const [filter, setFilter] = useState<Filter>("all");
   const [order, setOrder] = useState<AZ305Question[]>([]);
@@ -30,9 +39,15 @@ export default function AZ305QuizPage() {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
+  const weakRemaining = useMemo(
+    () => (hydrated ? getWeakItems(cardStats).length : 0),
+    [hydrated, cardStats]
+  );
+
   const counts = useMemo(() => {
     const c: Record<Filter, number> = {
       all: questionsAZ305.length,
+      smart: questionsAZ305.length,
       "1.0-identity-governance-monitoring": 0,
       "2.0-data-storage": 0,
       "3.0-business-continuity": 0,
@@ -43,9 +58,16 @@ export default function AZ305QuizPage() {
   }, []);
 
   function start(f: Filter) {
-    const pool = f === "all" ? questionsAZ305 : questionsAZ305.filter((q) => q.objective === f);
+    let next: AZ305Question[];
+    if (f === "smart") {
+      next = pickSmartQuestions(cardStats, Math.min(SMART_COUNT, questionsAZ305.length));
+    } else if (f === "all") {
+      next = shuffle(questionsAZ305);
+    } else {
+      next = shuffle(questionsAZ305.filter((q) => q.objective === f));
+    }
     setFilter(f);
-    setOrder(shuffle(pool));
+    setOrder(next);
     setIndex(0);
     setSelected([]);
     setChecked(false);
@@ -74,6 +96,7 @@ export default function AZ305QuizPage() {
       correctIds.length === selected.length &&
       correctIds.every((id) => selected.includes(id));
     if (isCorrect) setScore((s) => s + 1);
+    recordQuizAnswer(current.id, isCorrect);
     setChecked(true);
   }
 
@@ -109,6 +132,37 @@ export default function AZ305QuizPage() {
             Questions are shuffled. Answer, check, and review the explanation.
           </p>
         </header>
+
+        {/* Smart quiz — adaptive weak-area targeting */}
+        <button
+          onClick={() => start("smart")}
+          className="flex w-full items-center justify-between gap-3 rounded-2xl border border-amber-300 bg-gradient-to-br from-amber-400 to-orange-500 p-4 text-left text-white shadow-sm transition-all hover:shadow-md active:scale-[0.99] dark:border-amber-700"
+        >
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-white/20 p-2">
+              <Target className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-semibold">🎯 Smart quiz</p>
+              <p className="text-xs text-amber-50">
+                Adapts to attack your weak areas first
+              </p>
+            </div>
+          </div>
+          {hydrated && weakRemaining > 0 && (
+            <span className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-semibold">
+              {weakRemaining} weak
+            </span>
+          )}
+        </button>
+
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+          <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+            or pick a topic
+          </span>
+          <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+        </div>
 
         <div className="space-y-2">
           <button
@@ -162,12 +216,25 @@ export default function AZ305QuizPage() {
           <p className="text-sm text-slate-500 dark:text-slate-400">
             You got {score} of {order.length} correct
           </p>
+          {hydrated && (
+            <p className="text-xs text-slate-400">
+              {weakRemaining === 0
+                ? "🎉 No weak areas left — great work!"
+                : `${weakRemaining} weak ${weakRemaining === 1 ? "area" : "areas"} still to target`}
+            </p>
+          )}
         </header>
 
         <div className="flex flex-col gap-2">
           <button
+            onClick={() => start("smart")}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-md active:scale-[0.99]"
+          >
+            <Target className="h-4 w-4" /> Keep targeting weak areas
+          </button>
+          <button
             onClick={() => start(filter)}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-md active:scale-[0.99]"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
           >
             <RotateCcw className="h-4 w-4" /> Retake this set
           </button>

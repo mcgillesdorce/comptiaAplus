@@ -69,13 +69,14 @@ export function BottomNav() {
     disabled: !cert.active,
   }));
 
-  // AZ-305 is a separate module with its own course hub, quiz, cards and videos.
+  // AZ-305 is a separate module with its own course hub, quiz, cards and stats.
+  // (Videos remain reachable from the AZ-305 hub.)
   const az305Tabs = [
     { id: "home", href: "/", label: "Home", icon: Home, disabled: false },
     { id: "course", href: "/certs/az-305", label: "AZ-305", icon: Cloud, disabled: false },
     { id: "quiz", href: "/certs/az-305/quiz", label: "Quiz", icon: Brain, disabled: false },
     { id: "cards", href: "/certs/az-305/flashcards", label: "Cards", icon: Layers, disabled: false },
-    { id: "videos", href: "/videos?cert=az305", label: "Videos", icon: PlayCircle, disabled: false },
+    { id: "stats", href: "/certs/az-305/stats", label: "Stats", icon: BarChart3, disabled: false },
   ];
 
   const studyTabs = [
