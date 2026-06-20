@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { cn, shuffle } from "@/lib/utils";
+import { cn, sanitizeChoiceText, shuffle } from "@/lib/utils";
 import {
   questionsAZ305,
   AZ305_OBJECTIVES,
@@ -23,8 +23,6 @@ import {
 
 type Filter = AZ305Objective | "all" | "smart";
 
-const SMART_COUNT = 15;
-
 export default function AZ305QuizPage() {
   const cardStats = useAZ305Store((s) => s.cardStats);
   const recordQuizAnswer = useAZ305Store((s) => s.recordQuizAnswer);
@@ -32,6 +30,7 @@ export default function AZ305QuizPage() {
 
   const [started, setStarted] = useState(false);
   const [filter, setFilter] = useState<Filter>("all");
+  const [smartCount, setSmartCount] = useState(15);
   const [order, setOrder] = useState<AZ305Question[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
@@ -60,7 +59,7 @@ export default function AZ305QuizPage() {
   function start(f: Filter) {
     let next: AZ305Question[];
     if (f === "smart") {
-      next = pickSmartQuestions(cardStats, Math.min(SMART_COUNT, questionsAZ305.length));
+      next = pickSmartQuestions(cardStats, Math.min(smartCount, questionsAZ305.length));
     } else if (f === "all") {
       next = shuffle(questionsAZ305);
     } else {
@@ -88,6 +87,10 @@ export default function AZ305QuizPage() {
   }
 
   const current = order[index];
+  const shuffledChoices = useMemo(
+    () => (current ? shuffle(current.choices) : []),
+    [current?.id]
+  );
 
   function check() {
     if (!current || selected.length === 0) return;
@@ -133,6 +136,28 @@ export default function AZ305QuizPage() {
           </p>
         </header>
 
+        <div>
+          <p className="mb-2 font-mono text-xs uppercase tracking-wider text-slate-500">
+            Smart quiz length
+          </p>
+          <div className="flex gap-2">
+            {[10, 15, 20, 30].map((n) => (
+              <button
+                key={`smart-${n}`}
+                onClick={() => setSmartCount(n)}
+                className={cn(
+                  "flex-1 rounded-xl border py-2 text-xs font-semibold transition-all",
+                  smartCount === n
+                    ? "border-amber-500 bg-amber-500 text-white"
+                    : "border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Smart quiz — adaptive weak-area targeting */}
         <button
           onClick={() => start("smart")}
@@ -145,7 +170,7 @@ export default function AZ305QuizPage() {
             <div>
               <p className="font-semibold">🎯 Smart quiz</p>
               <p className="text-xs text-amber-50">
-                Adapts to attack your weak areas first
+                {smartCount} questions · adapts to attack your weak areas first
               </p>
             </div>
           </div>
@@ -300,7 +325,7 @@ export default function AZ305QuizPage() {
 
       {/* Choices */}
       <div className="space-y-2">
-        {current.choices.map((choice) => {
+        {shuffledChoices.map((choice) => {
           const isSelected = selected.includes(choice.id);
           const isCorrect = choice.correct;
           let state: "idle" | "correct" | "wrong" | "missed" = "idle";
@@ -337,7 +362,7 @@ export default function AZ305QuizPage() {
                   checked && state === "idle" && "text-slate-500 dark:text-slate-400"
                 )}
               >
-                {choice.text}
+                  {sanitizeChoiceText(choice.text)}
               </span>
             </button>
           );

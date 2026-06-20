@@ -46,6 +46,7 @@ function QuizPageContent() {
     : "";
   const [selectedDomains, setSelectedDomains] = useState<Domain[]>([]);
   const [count, setCount] = useState(10);
+  const [smartCount, setSmartCount] = useState(20);
   const stats = useStudyStore((s) => s.questionStats);
   const sessions = useStudyStore((s) => s.sessions);
 
@@ -116,15 +117,37 @@ function QuizPageContent() {
 
       {/* Smart Modes */}
       <section className="space-y-3">
+        <div>
+          <p className="mb-2 text-xs font-medium uppercase tracking-wider text-slate-500">
+            Smart quiz length
+          </p>
+          <div className="flex gap-2">
+            {[10, 15, 20, 30].map((n) => (
+              <button
+                key={`smart-${n}`}
+                onClick={() => setSmartCount(n)}
+                className={cn(
+                  "flex-1 rounded-lg border py-2 text-xs font-mono font-medium transition-all",
+                  smartCount === n
+                    ? "border-brand-700 bg-brand-700 text-white"
+                    : "border-slate-200 bg-white text-slate-700"
+                )}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <Link
-          href={`/quiz/session?mode=weak&n=20${domainQuery}`}
+          href={`/quiz/session?mode=weak&n=${smartCount}${domainQuery}`}
           className="flex items-center gap-4 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-5 text-white shadow-md transition-all active:scale-[0.99]"
         >
           <Zap className="h-8 w-8 flex-shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-lg">Smart Quiz</p>
             <p className="text-sm text-brand-100">
-              20 questions · auto-picks your weakest areas
+              {smartCount} questions · auto-picks your weakest areas
             </p>
           </div>
         </Link>
@@ -158,14 +181,14 @@ function QuizPageContent() {
         </Link>
 
         <Link
-          href={`/quiz/session?mode=weak&n=20${domainQuery}`}
+          href={`/quiz/session?mode=weak&n=${smartCount}${domainQuery}`}
           className="flex items-center gap-4 rounded-2xl border border-red-200 bg-red-50 p-5 transition-all active:scale-[0.99]"
         >
           <Target className="h-7 w-7 flex-shrink-0 text-red-600" />
           <div className="flex-1">
             <p className="font-bold text-slate-900">Weak Areas Bootcamp</p>
             <p className="text-sm text-slate-600">
-              20 questions targeting only your weakest topics
+              {smartCount} questions targeting only your weakest topics
             </p>
           </div>
         </Link>

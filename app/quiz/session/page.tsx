@@ -9,7 +9,7 @@ import {
   getReviewQuestions,
   computeSessionWeaknessResults,
 } from "@/lib/analytics";
-import { shuffle, cn } from "@/lib/utils";
+import { shuffle, cn, sanitizeChoiceText } from "@/lib/utils";
 import type { Question, Domain, WeaknessTag } from "@/lib/types";
 import {
   X,
@@ -288,7 +288,7 @@ function QuizSessionContent({ searchKey }: { searchKey: string }) {
                       <div className="h-2 w-2 rounded-full bg-white" />
                     )}
                   </div>
-                  <span className="flex-1 text-slate-900">{choice.text}</span>
+                  <span className="flex-1 text-slate-900">{sanitizeChoiceText(choice.text)}</span>
                 </div>
               </button>
             );

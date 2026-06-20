@@ -23,3 +23,15 @@ export function formatRelativeTime(timestamp: number): string {
   if (diffDay < 7) return `${diffDay}d ago`;
   return new Date(timestamp).toLocaleDateString();
 }
+
+export function sanitizeChoiceText(text: string): string {
+  let cleaned = text.trim();
+
+  // Remove obvious giveaway markers accidentally left in source data.
+  cleaned = cleaned
+    .replace(/^\s*(?:✅|✔️|☑️)\s*/u, "")
+    .replace(/^\s*(?:correct\s*answer|answer)\s*[:\-]\s*/i, "")
+    .replace(/\s*\((?:correct(?:\s*answer)?|this\s+is\s+correct)\)\s*$/i, "");
+
+  return cleaned || text;
+}
