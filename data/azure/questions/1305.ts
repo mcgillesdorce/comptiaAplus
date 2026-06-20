@@ -935,4 +935,86 @@ export const questionsAZ305: AZ305Question[] = [
     explanation:
       "Azure Migrate is a centralized hub of tools to assess and migrate on-premises resources. Server Migration moves Hyper-V VMs, physical servers, public cloud VMs (and VMware VMs) to Azure VMs; the Azure Database Migration Service migrates SQL Server databases to Azure SQL Database/Managed Instance/SQL on a VM; and the Web app migration assistant migrates web apps. However, Azure Migrate provides NO tool for migrating non-relational databases, so the statement that you can migrate non-relational databases is false.",
   },
+  {
+    id: "az305-infra-15",
+    objective: "4.0-infrastructure",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "An application was originally developed and deployed on-premises for its pilot release. You determined it would be more cost-effective and easier to scale in Azure with minimal application changes. Requirements: scale up to 300 instances across a region, load-balance traffic, and use a customized Windows Server 2019 VM image. You need to minimize costs and management overhead. What should you do?",
+    choices: [
+      { id: "a", text: "Package the application as a container and deploy it to Azure Container Instances (ACI).", correct: false },
+      { id: "b", text: "Create the deployment as a VM scale set.", correct: true },
+      { id: "c", text: "Package the application as a container and deploy it to an AKS cluster.", correct: false },
+      { id: "d", text: "Use an ARM template and PowerShell script to deploy individual VMs as needed.", correct: false },
+    ],
+    explanation:
+      "Use a VM scale set. VMSS supports autoscaling and load balancing for large VM fleets while using a custom Windows image, which matches the requirement to keep application changes minimal. ACI and AKS assume containerization (a larger app change path), and scripted individual VM deployment increases operational overhead.",
+  },
+  {
+    id: "az305-infra-16",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company is modernizing workloads (VMs, databases, and applications) by moving to the cloud. You need to identify the correct migration phases in sequence. Which sequence is correct?",
+    choices: [
+      { id: "a", text: "Plan -> Ready -> Deploy", correct: false },
+      { id: "b", text: "Assess -> Deploy -> Release", correct: true },
+      { id: "c", text: "Assess -> Ready -> Release", correct: false },
+      { id: "d", text: "Plan -> Deploy -> Release", correct: false },
+    ],
+    explanation:
+      "The correct sequence is Assess, then Deploy, then Release. First assess workloads and migration effort, then deploy/migrate workloads, and finally validate and release them into production operations.",
+  },
+  {
+    id: "az305-data-17",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "You plan to use an Azure Blob storage account to let external partners access technical videos. Partners do not have accounts in your Microsoft Entra tenant and must not be able to modify the storage account. What should you do?",
+    choices: [
+      { id: "a", text: "Create a shared access signature (SAS).", correct: true },
+      { id: "b", text: "Create a role assignment.", correct: false },
+      { id: "c", text: "Provide the secondary access key.", correct: false },
+      { id: "d", text: "Provide the primary access key.", correct: false },
+    ],
+    explanation:
+      "Use SAS to grant scoped, time-limited access to specific blobs/containers without tenant user accounts and without granting full account administration. RBAC role assignments typically require Entra identities, and sharing account keys grants excessive privilege.",
+  },
+  {
+    id: "az305-data-18",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "multi",
+    prompt:
+      "You have an Azure Synapse Analytics solution. The AI engineering team implemented Apache Spark and wants to query external Spark tables from the Synapse workspace using T-SQL, without deploying or managing extra clusters/infrastructure. Which two recommendations should you include? (Each correct answer presents part of the solution.)",
+    choices: [
+      { id: "a", text: "Use the built-in serverless SQL pool for T-SQL analysis.", correct: true },
+      { id: "b", text: "Create and manage a dedicated SQL pool for this requirement.", correct: false },
+      { id: "c", text: "Configure Private Link for secure workspace connectivity to the Spark data path.", correct: true },
+      { id: "d", text: "Use Azure Synapse Link to query Apache Spark external tables.", correct: false },
+      { id: "e", text: "Use PolyBase as the primary integration approach for Spark tables.", correct: false },
+    ],
+    explanation:
+      "Use the built-in serverless SQL pool to run T-SQL without provisioning extra compute infrastructure. For the workspace connectivity model in this scenario, configure Private Link. Dedicated SQL pools add management overhead, and Synapse Link/PolyBase are not the intended path for this Spark-table access pattern in the given context.",
+  },
+  {
+    id: "az305-infra-17",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "You are designing an auditing application as multiple Azure Functions that must subscribe to events across an Azure subscription, receive those events as soon as they occur, and deploy all related resources using Infrastructure as Code (IaC). Which two Azure services/features should you recommend? (Each correct answer presents part of the solution.)",
+    choices: [
+      { id: "a", text: "Azure Service Bus", correct: false },
+      { id: "b", text: "Azure Event Grid", correct: true },
+      { id: "c", text: "Azure Automation", correct: false },
+      { id: "d", text: "Azure Bicep", correct: true },
+      { id: "e", text: "Azure Queue Storage", correct: false },
+    ],
+    explanation:
+      "Use Azure Event Grid for near real-time event routing from Azure services to functions, and Azure Bicep for declarative IaC deployment of all application resources. Service Bus/Queue Storage are message queues rather than native event-subscription services for this scenario, and Azure Automation runbooks are not the right IaC/eventing mechanism here.",
+  },
 ];
