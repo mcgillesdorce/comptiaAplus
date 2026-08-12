@@ -1017,4 +1017,102 @@ export const questionsAZ305: AZ305Question[] = [
     explanation:
       "Use Azure Event Grid for near real-time event routing from Azure services to functions, and Azure Bicep for declarative IaC deployment of all application resources. Service Bus/Queue Storage are message queues rather than native event-subscription services for this scenario, and Azure Automation runbooks are not the right IaC/eventing mechanism here.",
   },
+  {
+    id: "az305-data-19",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "A company needs a data store created in Azure for an application. The data store must be able to store JSON-based items, allow SQL-like queries against the data store, and provide low-latency access to data items. Which of the following would you consider as the data store?",
+    choices: [
+      { id: "a", text: "Azure BLOB storage", correct: false },
+      { id: "b", text: "Azure Cosmos DB", correct: true },
+      { id: "c", text: "Azure HDInsight", correct: false },
+      { id: "d", text: "Azure Redis", correct: false },
+    ],
+    explanation:
+      "Azure Cosmos DB stores JSON documents, supports SQL API queries over that data, and delivers guaranteed single-digit-millisecond low-latency access. Blob storage is object storage without SQL query support, HDInsight is a big-data analytics platform (not a low-latency operational store), and Redis is an in-memory key-value cache rather than a queryable JSON document store.",
+  },
+  {
+    id: "az305-data-20",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "Your organization has multiple Azure Cosmos DB accounts. You need to recommend which API to use for application functionality. Which of the following APIs would you use to host a JSON document? (Choose two.)",
+    choices: [
+      { id: "a", text: "SQL (Core)", correct: true },
+      { id: "b", text: "Table", correct: false },
+      { id: "c", text: "Gremlin", correct: false },
+      { id: "d", text: "Cassandra", correct: false },
+      { id: "e", text: "MongoDB", correct: true },
+    ],
+    explanation:
+      "The SQL (Core) API and the MongoDB API both store data as JSON documents. The Table API stores key/value entities, Gremlin is for graph data, and Cassandra uses a column-family (wide-column) model — none of which are JSON-document stores.",
+  },
+  {
+    id: "az305-data-21",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "A company uses Azure SQL Managed Instance for the application data. What two parameters would you set up to ensure that the instance will scale to meet the workload demands? (Choose two.)",
+    choices: [
+      { id: "a", text: "Define the maximum of CPU cores", correct: true },
+      { id: "b", text: "Define the maximum of the allocated storage", correct: true },
+      { id: "c", text: "Define the maximum of the resources per database", correct: false },
+      { id: "d", text: "Define the maximum resource limit per group of databases", correct: false },
+    ],
+    explanation:
+      "Azure SQL Managed Instance is based only on the vCore purchasing model, which lets you select two scalability parameters: the maximum number of CPU (vCore) cores and the maximum allocated storage. Per-database and per-group resource limits are Elastic Pool concepts, not Managed Instance scaling parameters.",
+  },
+  {
+    id: "az305-data-22",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You have been asked to suggest Azure SQL DB purchasing options, service tiers, and hardware choices for the following requirements: (1) select compute and storage options independently; (2) select the amount of data and log storage; (3) select backup storage replication options — LRS, ZRS and RA-GRS; (4) save costs by selecting the reservation option to purchase; (5) utilize the Azure Hybrid Benefit. Which of the following models will you select to meet all the above requirements?",
+    choices: [
+      { id: "a", text: "vCore Model", correct: true },
+      { id: "b", text: "DTU model", correct: false },
+      { id: "c", text: "Serverless Model", correct: false },
+      { id: "d", text: "Elastic Pools", correct: false },
+    ],
+    explanation:
+      "Only the vCore purchasing model lets you scale compute and storage independently, choose data/log storage sizing and backup storage redundancy (LRS/ZRS/RA-GRS), purchase Reserved Capacity for savings, and apply the Azure Hybrid Benefit. The DTU model bundles compute/storage together and offers none of these; Serverless auto-scales compute (not independent selection) and Elastic Pools share resources across databases rather than meeting these specific requirements.",
+  },
+  {
+    id: "az305-infra-18",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your company has two Azure virtual machines deployed in different regions. Each VM has a public IP address assigned to its network interface, and an application is installed on the VMs. You need to implement Azure Front Door-based load balancing across the virtual machines and ensure the application only accepts traffic that is routed from Azure Front Door. Which of the following can be implemented for this requirement?",
+    choices: [
+      { id: "a", text: "Azure Private Link", correct: false },
+      { id: "b", text: "Service Endpoints", correct: false },
+      { id: "c", text: "Network Security Groups with service tags", correct: true },
+      { id: "d", text: "Network Security Groups with application security groups", correct: false },
+    ],
+    explanation:
+      "Use an NSG with the AzureFrontDoor.Backend service tag to allow inbound traffic only from Front Door's backend IP ranges (and validate the X-Azure-FDID header) so the VMs reject direct internet traffic. Private Link and Service Endpoints secure access to PaaS services, and application security groups group VM NICs but do not identify Front Door's source ranges.",
+  },
+  {
+    id: "az305-infra-19",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "You have to implement an Azure Logic App to perform the following task: \"Notify an administrator when the settings of a virtual machine in a resource group are changed.\" Which of the following components would you create in the Logic Apps Designer? (Choose three.)",
+    choices: [
+      { id: "a", text: "A condition control", correct: true },
+      { id: "b", text: "An action", correct: true },
+      { id: "c", text: "A variable", correct: false },
+      { id: "d", text: "An Azure Event Grid trigger", correct: true },
+      { id: "e", text: "An Azure Service Bus trigger", correct: false },
+    ],
+    explanation:
+      "First create an Azure Event Grid trigger to listen for resource-change events from the resource group. Then add a condition control to evaluate whether the relevant setting changed, and finally an action to alert the administrator. A variable is not required, and a Service Bus trigger is not how you subscribe to Azure resource change events.",
+  },
 ];
