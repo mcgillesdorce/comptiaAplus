@@ -1115,4 +1115,129 @@ export const questionsAZ305: AZ305Question[] = [
     explanation:
       "First create an Azure Event Grid trigger to listen for resource-change events from the resource group. Then add a condition control to evaluate whether the relevant setting changed, and finally an action to alert the administrator. A variable is not required, and a Service Bus trigger is not how you subscribe to Azure resource change events.",
   },
+  {
+    id: "az305-data-23",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "The vCore purchase model for Azure SQL Database provides three service tiers. Which of the following tiers will you select to ensure that it uses in-memory OLTP computing to improve performance?",
+    choices: [
+      { id: "a", text: "General Purpose", correct: false },
+      { id: "b", text: "Business Critical", correct: true },
+      { id: "c", text: "Hyperscale", correct: false },
+      { id: "d", text: "Premium", correct: false },
+    ],
+    explanation:
+      "In the vCore model the three tiers are General Purpose, Business Critical, and Hyperscale. Business Critical provides in-memory OLTP (memory-optimized tables) along with high-IOPS local SSD and read replicas for the highest performance. Premium is a DTU-model tier (not vCore), General Purpose has no in-memory OLTP, and Hyperscale targets very large databases rather than in-memory OLTP.",
+  },
+  {
+    id: "az305-data-24",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You are developing a cloud-based OTT application on Azure to host movies and web shows online. Each video file is between 100 MB and 10 GB. The application needs certificate-based authentication and must stream to all users over the Internet. You need an Azure storage option that provides the fastest read performance while keeping storage costs low. Which storage solution would you recommend?",
+    choices: [
+      { id: "a", text: "Azure Files", correct: false },
+      { id: "b", text: "Azure SQL Database", correct: false },
+      { id: "c", text: "Azure Data Lake Storage Gen2", correct: false },
+      { id: "d", text: "Azure Blob Storage", correct: true },
+    ],
+    explanation:
+      "Azure Blob Storage is purpose-built for storing and streaming large unstructured media files (100 MB–10 GB) at low cost, delivers high read throughput (and can be fronted by a CDN), and supports secure access. Azure Files targets SMB file shares, Azure SQL Database is a relational store (not for large binary streaming), and Data Lake Gen2 is optimized for analytics rather than cost-efficient public media streaming.",
+  },
+  {
+    id: "az305-data-25",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You are developing an online retail application on Azure that needs to handle dynamic product schemas. The database solution must: store semi-structured data without a predefined schema; support SQL-like querying; maintain ACID compliance within individual partitions; and facilitate global data replication. Which database solution would you recommend?",
+    choices: [
+      { id: "a", text: "Azure Cosmos DB for NoSQL", correct: true },
+      { id: "b", text: "Azure Blob Storage", correct: false },
+      { id: "c", text: "Azure SQL Database Hyperscale", correct: false },
+      { id: "d", text: "Azure Cosmos DB for Apache Cassandra", correct: false },
+    ],
+    explanation:
+      "Azure Cosmos DB for NoSQL stores schema-free JSON documents, supports a SQL-like query language, guarantees ACID transactions within a logical partition, and offers turnkey global distribution/replication. Blob Storage has no SQL querying, SQL Database Hyperscale requires a fixed relational schema, and the Cassandra API uses CQL (a column-family model) rather than the SQL/document model described.",
+  },
+  {
+    id: "az305-data-26",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "Contoso Ltd. needs to retain large volumes of historical inventory data exported from the \"Contoso_Inventory\" database. The data is accessed infrequently but must remain immediately available when requested without requiring offline rehydration. The company wants to reduce storage costs compared with storing frequently accessed data while maintaining online access. Which Azure storage option should they select?",
+    choices: [
+      { id: "a", text: "Azure Premium SSD Managed Disks", correct: false },
+      { id: "b", text: "Azure Blob Storage with Hot Access Tier", correct: false },
+      { id: "c", text: "Azure Blob Storage with Cool Access Tier", correct: true },
+      { id: "d", text: "Azure Blob Storage with Archive Access Tier", correct: false },
+    ],
+    explanation:
+      "The Cool tier lowers storage cost for infrequently accessed data while keeping it online and immediately available. The Archive tier is cheapest but is offline and requires rehydration before access (which the requirement forbids). The Hot tier costs more for storage, and Premium SSD Managed Disks are for VM disks, not archival blob data.",
+  },
+  {
+    id: "az305-data-27",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "An IoT startup needs to store massive amounts of sensor data generated from its devices. The data should be stored in a way that optimizes write performance and allows for efficient batch processing at a later time. The startup also needs to consider cost management. Proposed solution: The startup should use Azure Data Lake Storage Gen2 to store the sensor data, optimizing for write performance and cost-effective batch processing. Is this proposed solution correct?",
+    choices: [
+      { id: "a", text: "Yes", correct: true },
+      { id: "b", text: "No", correct: false },
+    ],
+    explanation:
+      "Yes. Azure Data Lake Storage Gen2 provides high-throughput, low-latency data ingestion ideal for massive sensor data, integrates natively with Azure Data Factory, Databricks, and HDInsight for efficient batch processing, and uses pay-as-you-go pricing to help manage costs — meeting all stated requirements.",
+  },
+  {
+    id: "az305-data-28",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Contoso's e-commerce platform, running on Azure, requires a storage solution to balance high performance, feature richness, and cost efficiency for its product catalog. The catalog experiences fluctuating read and write operations and needs to handle large, unstructured data alongside structured metadata. Which storage solution should you recommend?",
+    choices: [
+      { id: "a", text: "Azure SQL Database with In-Memory OLTP", correct: false },
+      { id: "b", text: "Azure Cosmos DB with Provisioned Throughput", correct: true },
+      { id: "c", text: "Azure Blob Storage with Premium Performance Tier", correct: false },
+      { id: "d", text: "Azure SQL Managed Instance with Elastic Pools", correct: false },
+    ],
+    explanation:
+      "Azure Cosmos DB is a globally distributed, multi-model database that delivers high availability and fast, consistent performance. Provisioned throughput lets you allocate resources for fluctuating read/write demand, and its multi-model support (document, key-value, graph, column-family) handles both unstructured data and structured metadata. The SQL-based options are relational-only, and Blob Storage cannot query structured metadata the way this catalog needs.",
+  },
+  {
+    id: "az305-data-29",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "multi",
+    prompt:
+      "Your client, a financial services firm, requires a data analysis solution for processing large volumes of transactional data. The solution must support complex queries and provide insights using machine learning models. It should also be integrated with their existing on-premises SQL Server. Which of the following three components should you use in your design? (Choose three.)",
+    choices: [
+      { id: "a", text: "Azure Data Factory", correct: true },
+      { id: "b", text: "Azure Machine Learning", correct: true },
+      { id: "c", text: "Azure Cosmos DB", correct: false },
+      { id: "d", text: "Azure Synapse Link", correct: false },
+      { id: "e", text: "Azure SQL Managed Instance", correct: true },
+    ],
+    explanation:
+      "Azure Data Factory orchestrates ETL and moves large volumes of transactional data from on-premises SQL Server into Azure. Azure SQL Managed Instance provides near-100% SQL Server compatibility for seamless integration and complex querying. Azure Machine Learning builds and serves the predictive models. Cosmos DB (NoSQL) and Synapse Link do not fit the relational, on-premises-SQL-integration requirement here.",
+  },
+  {
+    id: "az305-data-30",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Contoso Ltd. requires a solution to perform batch processing of large datasets stored in Azure Data Lake Storage. They need the solution to integrate with their existing Hadoop ecosystem and provide cost-effective scaling. Proposed solution: They should use Azure Databricks to perform batch processing on the datasets stored in Azure Data Lake Storage, leveraging its compatibility with the Hadoop ecosystem and scalability. Is this proposed solution correct?",
+    choices: [
+      { id: "a", text: "Yes", correct: true },
+      { id: "b", text: "No", correct: false },
+    ],
+    explanation:
+      "Yes. Azure Databricks is a unified analytics platform natively integrated with Azure Data Lake Storage and built on Apache Spark, so it is compatible with existing Hadoop-based workflows. It offers scalable compute for cost-effective batch processing, meeting all of Contoso's requirements.",
+  },
 ];
