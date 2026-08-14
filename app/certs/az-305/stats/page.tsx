@@ -10,7 +10,9 @@ import { useAZ305Store, useAZ305Hydrated } from "@/lib/azure/az305-store";
 import {
   computeObjectiveStats,
   computeAZ305Readiness,
+  computeTagStats,
   getWeakItems,
+  WEAK_THRESHOLD,
 } from "@/lib/azure/az305-analytics";
 import {
   ChevronLeft,
@@ -39,6 +41,11 @@ export default function AZ305StatsPage() {
   const readiness = useMemo(() => computeAZ305Readiness(cardStats), [cardStats]);
   const objectiveStats = useMemo(() => computeObjectiveStats(cardStats), [cardStats]);
   const weakItems = useMemo(() => getWeakItems(cardStats), [cardStats]);
+  const tagStats = useMemo(() => computeTagStats(cardStats), [cardStats]);
+  const weakTags = useMemo(
+    () => tagStats.filter((t) => t.avgMastery < WEAK_THRESHOLD).slice(0, 8),
+    [tagStats]
+  );
 
   // Skeleton until persisted store rehydrates (avoids SSR/client mismatch).
   if (!hydrated) {
@@ -177,6 +184,53 @@ export default function AZ305StatsPage() {
           })}
         </div>
       </section>
+
+      {/* Weakest concepts */}
+      {weakTags.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Brain className="h-5 w-5 text-rose-500" />
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              Weakest concepts
+            </h2>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Ranked by your demonstrated performance. The smart quiz boosts every
+            question that touches these concepts.
+          </p>
+          <div className="space-y-2">
+            {weakTags.map((t) => (
+              <div
+                key={t.tag}
+                className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="min-w-0 truncate text-sm font-medium text-slate-900 dark:text-slate-100">
+                    {t.name}
+                  </p>
+                  <span className="ml-3 flex-shrink-0 font-mono text-xs text-slate-400">
+                    {Math.round(t.avgMastery * 100)}%
+                  </span>
+                </div>
+                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
+                  <div
+                    className={cn("h-full rounded-full transition-all", masteryBar(t.avgMastery))}
+                    style={{ width: `${Math.round(t.avgMastery * 100)}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                  {t.attempted}/{t.total} questions attempted
+                  {t.weakCount > 0 && (
+                    <span className="font-medium text-rose-600 dark:text-rose-400">
+                      {" "}· {t.weakCount} weak
+                    </span>
+                  )}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Weak areas list */}
       <section className="space-y-3">

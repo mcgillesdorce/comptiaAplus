@@ -37,6 +37,7 @@ export default function AZ305QuizPage() {
   const [checked, setChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [missed, setMissed] = useState<AZ305Question[]>([]);
 
   const weakRemaining = useMemo(
     () => (hydrated ? getWeakItems(cardStats).length : 0),
@@ -72,6 +73,20 @@ export default function AZ305QuizPage() {
     setChecked(false);
     setScore(0);
     setFinished(false);
+    setMissed([]);
+    setStarted(true);
+  }
+
+  /** Restart with only the questions missed in the finished session. */
+  function startRedrill() {
+    if (missed.length === 0) return;
+    setOrder(shuffle(missed));
+    setIndex(0);
+    setSelected([]);
+    setChecked(false);
+    setScore(0);
+    setFinished(false);
+    setMissed([]);
     setStarted(true);
   }
 
@@ -99,6 +114,7 @@ export default function AZ305QuizPage() {
       correctIds.length === selected.length &&
       correctIds.every((id) => selected.includes(id));
     if (isCorrect) setScore((s) => s + 1);
+    else setMissed((m) => [...m, current]);
     recordQuizAnswer(current.id, isCorrect);
     setChecked(true);
   }
@@ -251,6 +267,15 @@ export default function AZ305QuizPage() {
         </header>
 
         <div className="flex flex-col gap-2">
+          {missed.length > 0 && (
+            <button
+              onClick={startRedrill}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-md active:scale-[0.99]"
+            >
+              <RotateCcw className="h-4 w-4" /> Re-drill your {missed.length}{" "}
+              {missed.length === 1 ? "miss" : "misses"}
+            </button>
+          )}
           <button
             onClick={() => start("smart")}
             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-md active:scale-[0.99]"
@@ -276,6 +301,38 @@ export default function AZ305QuizPage() {
             Back to AZ-305
           </Link>
         </div>
+
+        {/* Review your misses */}
+        {missed.length > 0 && (
+          <section className="space-y-3">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              Review your misses
+            </h2>
+            {missed.map((q) => (
+              <div
+                key={q.id}
+                className="space-y-2 rounded-2xl border border-rose-200 bg-white p-4 dark:border-rose-900 dark:bg-slate-800"
+              >
+                <span className="inline-block rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-semibold text-sky-700 dark:bg-sky-900/40 dark:text-sky-300">
+                  {AZ305_OBJECTIVES[q.objective].emoji} {AZ305_OBJECTIVES[q.objective].short}
+                </span>
+                <p className="text-sm font-medium leading-relaxed text-slate-900 dark:text-slate-100">
+                  {q.prompt}
+                </p>
+                <p className="text-sm text-emerald-700 dark:text-emerald-400">
+                  <CheckCircle2 className="mr-1 inline h-4 w-4" />
+                  {q.choices
+                    .filter((c) => c.correct)
+                    .map((c) => sanitizeChoiceText(c.text))
+                    .join(" • ")}
+                </p>
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  {q.explanation}
+                </p>
+              </div>
+            ))}
+          </section>
+        )}
       </div>
     );
   }

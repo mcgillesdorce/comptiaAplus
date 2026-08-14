@@ -2045,4 +2045,886 @@ export const questionsAZ305: AZ305Question[] = [
     explanation:
       "Azure ML's security integrations include VNets and NSGs, Key Vault for secrets, Container Registry behind a VNet, and Azure RBAC. An Azure DNS Zone endpoint is a storage-account networking concept, not an Azure ML security integration.",
   },
+  // ── Blueprint rebalance: Identity, Governance & Monitoring ─────
+  {
+    id: "az305-igm-17",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your company has 40 Azure subscriptions across four departments. You must apply a common set of security policies to all subscriptions, allow each department to add its own policies, and minimize administrative effort as new subscriptions are added. What should you recommend?",
+    choices: [
+      { id: "a", text: "Assign policies individually to each subscription", correct: false },
+      { id: "b", text: "A management group hierarchy: a root-level group for common policies and child groups per department", correct: true },
+      { id: "c", text: "A single resource group per department with policies assigned to it", correct: false },
+      { id: "d", text: "Azure Blueprints assigned per subscription", correct: false },
+    ],
+    explanation:
+      "Management groups let you organize subscriptions into a hierarchy where policy and RBAC assignments inherit downward. Common policies go on a top-level group; each department's group adds its own. New subscriptions placed into a group automatically inherit everything — no per-subscription work. Per-subscription assignment doesn't scale, resource groups can't contain subscriptions, and Blueprints is deprecated in favor of template specs and deployment stacks.",
+  },
+  {
+    id: "az305-igm-18",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "An Azure App Service web app must read secrets from Azure Key Vault. Credentials must not be stored in code or configuration, and there must be nothing to rotate. Several other apps will need the same pattern with their own identities managed automatically alongside each app's lifecycle. What should you recommend?",
+    choices: [
+      { id: "a", text: "A service principal with a client secret stored in app settings", correct: false },
+      { id: "b", text: "A system-assigned managed identity for each app, granted access to Key Vault", correct: true },
+      { id: "c", text: "A shared user-assigned managed identity stored in code", correct: false },
+      { id: "d", text: "A SAS token for Key Vault", correct: false },
+    ],
+    explanation:
+      "A system-assigned managed identity is created and deleted with the resource, requires no credentials in code, and has nothing to rotate — Azure manages the lifecycle. Grant it Key Vault access via RBAC. A client secret is exactly the credential-in-config problem you're avoiding. User-assigned identities are valid when identities must be shared or pre-provisioned, but the per-app lifecycle requirement points to system-assigned. Key Vault doesn't use SAS tokens.",
+  },
+  {
+    id: "az305-igm-19",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You need to recommend when to use a user-assigned managed identity instead of a system-assigned managed identity. Which scenario fits a user-assigned identity best?",
+    choices: [
+      { id: "a", text: "The identity must be deleted automatically when the resource is deleted", correct: false },
+      { id: "b", text: "Many VMs in a scale set must share one identity with pre-configured permissions before the VMs exist", correct: true },
+      { id: "c", text: "Only one resource will ever use the identity", correct: false },
+      { id: "d", text: "The workload needs to authenticate users interactively", correct: false },
+    ],
+    explanation:
+      "A user-assigned managed identity is a standalone Azure resource: you create it first, grant it permissions, then assign it to any number of resources — ideal for fleets that share one identity and for pre-provisioning permissions before resources exist. System-assigned is tied 1:1 to a resource and dies with it. Managed identities authenticate workloads, not interactive users.",
+  },
+  {
+    id: "az305-igm-20",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A company needs to grant an operations team the ability to restart virtual machines in specific resource groups, but no existing built-in role matches (Contributor is too broad, Reader is too narrow). The permission set must be reusable across the company's 12 subscriptions, which all sit under one management group. What should you recommend?",
+    choices: [
+      { id: "a", text: "Create a custom RBAC role with Microsoft.Compute/virtualMachines/restart/action, with the management group as assignable scope", correct: true },
+      { id: "b", text: "Assign Contributor at each resource group and document that only restart should be used", correct: false },
+      { id: "c", text: "Create an Azure Policy with a restart effect", correct: false },
+      { id: "d", text: "Add the team to the Virtual Machine Administrator Login role", correct: false },
+    ],
+    explanation:
+      "Custom RBAC roles let you compose exactly the actions needed (here the restart action) and define assignable scopes — setting the management group as assignable scope makes the role usable in all 12 subscriptions. Over-granting Contributor violates least privilege, Azure Policy governs resource configuration (it has no restart effect), and VM Administrator Login controls OS sign-in, not the Azure restart operation.",
+  },
+  {
+    id: "az305-igm-21",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "You are designing Key Vault protection for production secrets. A recent incident involved a departing employee deleting a vault. You must ensure deleted vaults and secrets are recoverable for 90 days and that nobody — including administrators — can permanently purge them during that window. Which two settings should you require? (Choose two.)",
+    choices: [
+      { id: "a", text: "Soft delete with a 90-day retention period", correct: true },
+      { id: "b", text: "Purge protection", correct: true },
+      { id: "c", text: "A CanNotDelete resource lock on each secret", correct: false },
+      { id: "d", text: "Geo-replication of the vault", correct: false },
+    ],
+    explanation:
+      "Soft delete keeps deleted vaults/objects recoverable for a configurable retention period (up to 90 days). Purge protection prevents anyone — even administrators — from permanently purging soft-deleted items until retention expires. Resource locks apply to Azure resources, not individual secrets inside a vault, and geo-replication is about availability, not delete protection.",
+  },
+  {
+    id: "az305-igm-22",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your company must collaborate with an external consulting firm. Consultants must use their own organizational credentials to access your Azure DevOps and SharePoint resources, and your team must not manage their passwords or lifecycle manually. What should you recommend?",
+    choices: [
+      { id: "a", text: "Create member accounts in your tenant for each consultant", correct: false },
+      { id: "b", text: "Microsoft Entra B2B collaboration (guest users)", correct: true },
+      { id: "c", text: "Microsoft Entra B2C", correct: false },
+      { id: "d", text: "A site-to-site VPN to the consulting firm", correct: false },
+    ],
+    explanation:
+      "Entra B2B invites external users as guests who authenticate with their home organization's credentials — you never manage their passwords, and their home org controls their lifecycle. Member accounts mean you own credential management (what you're avoiding). B2C is for customer-facing applications with social/local identities, not workforce collaboration. A VPN is network connectivity, not identity.",
+  },
+  {
+    id: "az305-igm-23",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A retailer is building a consumer mobile app where millions of customers should sign up and sign in using local email accounts or social identities such as Google and Facebook, with fully customizable branded sign-in pages. Which identity solution should you recommend?",
+    choices: [
+      { id: "a", text: "Microsoft Entra B2B", correct: false },
+      { id: "b", text: "Microsoft Entra B2C", correct: true },
+      { id: "c", text: "Microsoft Entra Domain Services", correct: false },
+      { id: "d", text: "Active Directory Federation Services (AD FS)", correct: false },
+    ],
+    explanation:
+      "Entra B2C is the customer identity and access management (CIAM) solution: it scales to millions of consumer identities, supports social and local accounts, and offers fully customizable user journeys and branding. B2B is for business partner collaboration in your workforce tenant, Entra Domain Services provides legacy domain services (LDAP/Kerberos), and AD FS is legacy on-premises federation.",
+  },
+  {
+    id: "az305-igm-24",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "You are migrating a legacy application to an Azure VM. The application requires domain join, LDAP reads, and Kerberos authentication, but the company does not want to deploy or manage domain controllers in Azure. What should you recommend?",
+    choices: [
+      { id: "a", text: "Microsoft Entra ID with seamless SSO", correct: false },
+      { id: "b", text: "Microsoft Entra Domain Services", correct: true },
+      { id: "c", text: "Microsoft Entra B2C", correct: false },
+      { id: "d", text: "Extend on-premises AD DS with domain controller VMs in Azure", correct: false },
+    ],
+    explanation:
+      "Entra Domain Services provides managed domain services — domain join, group policy, LDAP, Kerberos/NTLM — without deploying or patching domain controllers. Plain Entra ID doesn't speak Kerberos/LDAP for legacy apps. Deploying DC VMs works but violates the 'no domain controllers to manage' requirement. B2C is consumer identity.",
+  },
+  {
+    id: "az305-igm-25",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company is synchronizing its on-premises Active Directory to Microsoft Entra ID. The design must allow users to sign in with the same password, keep working if the on-premises network is down, and enable Entra ID to detect leaked credentials. Which authentication method should you recommend?",
+    choices: [
+      { id: "a", text: "Pass-through authentication (PTA)", correct: false },
+      { id: "b", text: "Federation with AD FS", correct: false },
+      { id: "c", text: "Password hash synchronization (PHS)", correct: true },
+      { id: "d", text: "Certificate-based authentication only", correct: false },
+    ],
+    explanation:
+      "PHS syncs password hashes to Entra ID, so cloud authentication works even if on-premises is completely down, and it's what enables leaked-credential detection in Entra ID Protection. PTA and federation both depend on on-premises infrastructure being reachable at sign-in time — an on-premises outage breaks cloud sign-in. PHS is also Microsoft's recommended default for hybrid identity.",
+  },
+  {
+    id: "az305-igm-26",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Remote employees must access an internal on-premises web application from the internet. The solution must not require inbound firewall ports to be opened, must pre-authenticate users with Microsoft Entra ID, and should support conditional access. What should you recommend?",
+    choices: [
+      { id: "a", text: "A point-to-site VPN for each employee", correct: false },
+      { id: "b", text: "Microsoft Entra application proxy", correct: true },
+      { id: "c", text: "Publishing the app through Azure Front Door", correct: false },
+      { id: "d", text: "An NSG rule allowing HTTPS from the internet", correct: false },
+    ],
+    explanation:
+      "Entra application proxy publishes on-premises web apps externally via an outbound-only connector — no inbound ports — with Entra pre-authentication and full conditional access support. VPNs grant network-level access and don't pre-authenticate at the app layer. Front Door fronts internet-reachable endpoints; it can't reach into a private network. Opening HTTPS inbound directly exposes the app.",
+  },
+  {
+    id: "az305-igm-27",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your security team requires that access to the Azure portal be blocked for all users connecting from outside specific countries, with an exception for the break-glass account. Which feature should the design use?",
+    choices: [
+      { id: "a", text: "Azure Policy with a location condition", correct: false },
+      { id: "b", text: "Conditional access with named locations", correct: true },
+      { id: "c", text: "NSG rules based on country IP ranges", correct: false },
+      { id: "d", text: "Microsoft Entra ID Protection sign-in risk policy", correct: false },
+    ],
+    explanation:
+      "Conditional access named locations define country/IP-based locations that policies can include or exclude; the policy targets the Azure portal app, blocks non-approved locations, and excludes the break-glass account. Azure Policy governs resources, not sign-ins. NSGs filter network traffic to your resources, not Entra authentication. Sign-in risk policies react to detected risk, not fixed geography rules.",
+  },
+  {
+    id: "az305-igm-28",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "You must design privileged access for the subscription so that admin roles are only active when needed, all activations require approval and MFA, and unused role eligibility is removed automatically over time. Which two features should the design combine? (Choose two.)",
+    choices: [
+      { id: "a", text: "PIM role eligibility with activation requiring approval and MFA", correct: true },
+      { id: "b", text: "Recurring access reviews of privileged roles", correct: true },
+      { id: "c", text: "Permanent Owner assignments with strong passwords", correct: false },
+      { id: "d", text: "A ReadOnly lock on the subscription", correct: false },
+    ],
+    explanation:
+      "PIM makes roles eligible instead of permanently active, with activation gated by approval and MFA (just-in-time access). Recurring access reviews automatically remove eligibility from users who no longer need it. Permanent Owner assignments are the anti-pattern PIM replaces, and resource locks protect resources from changes — they don't govern role assignments.",
+  },
+  {
+    id: "az305-igm-29",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "External partners regularly need a bundle of access — two groups, one enterprise app, and a SharePoint site — for 90-day project engagements. Access must be requestable via self-service, approved by a project sponsor, and expire automatically. What should you recommend?",
+    choices: [
+      { id: "a", text: "Entitlement management access packages", correct: true },
+      { id: "b", text: "Manually adding guests to each resource per project", correct: false },
+      { id: "c", text: "Dynamic groups keyed on a partner attribute", correct: false },
+      { id: "d", text: "Conditional access with sign-in frequency of 90 days", correct: false },
+    ],
+    explanation:
+      "Entitlement management bundles groups, apps, and SharePoint sites into an access package with self-service requests, approval workflows, and automatic expiration — exactly the repeatable, time-boxed external access lifecycle described. Manual assignment doesn't scale or expire, dynamic groups don't do approval or expiry, and sign-in frequency controls re-authentication, not access lifecycle.",
+  },
+  {
+    id: "az305-igm-30",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You are designing monitoring for a business-critical API hosted in Azure App Service. The operations team must be alerted when the API becomes unreachable from multiple geographic locations, and they need end-to-end distributed traces to diagnose slow dependencies. Which service should be at the core of the design?",
+    choices: [
+      { id: "a", text: "Azure Service Health", correct: false },
+      { id: "b", text: "Application Insights (availability tests + distributed tracing)", correct: true },
+      { id: "c", text: "Azure Advisor", correct: false },
+      { id: "d", text: "Network Watcher", correct: false },
+    ],
+    explanation:
+      "Application Insights availability tests probe your endpoint from multiple Azure locations and alert on failures, while its distributed tracing (application map, end-to-end transaction views) shows exactly which downstream dependency is slow. Service Health reports Azure platform issues (not your app's reachability), Advisor gives recommendations, and Network Watcher diagnoses network-level issues, not application transactions.",
+  },
+  {
+    id: "az305-igm-31",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A Log Analytics workspace ingests large volumes of verbose debug logs that are queried only during incident investigations, plus critical security logs queried constantly. You must minimize ingestion cost for the debug logs while keeping full KQL analytics on the security logs. What should you recommend?",
+    choices: [
+      { id: "a", text: "Send debug logs to Basic/Auxiliary table plans and keep security logs on the Analytics plan", correct: true },
+      { id: "b", text: "Shorten the workspace retention to 7 days for everything", correct: false },
+      { id: "c", text: "Send everything to a storage account and query with AzCopy", correct: false },
+      { id: "d", text: "Create a second workspace in a cheaper region", correct: false },
+    ],
+    explanation:
+      "Log Analytics table plans let you mix tiers in one workspace: Basic/Auxiliary plans have much lower ingestion cost with limited query capability (fine for rarely queried debug logs), while the Analytics plan keeps full KQL power for the security tables. Cutting retention doesn't reduce ingestion cost (the dominant cost), storage accounts aren't queryable with KQL, and region choice barely moves the price.",
+  },
+  {
+    id: "az305-igm-32",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Compliance requires Azure Activity Log events to be retained for 3 years and be queryable. By default, how long does Azure retain Activity Log data, and what should you recommend?",
+    choices: [
+      { id: "a", text: "90 days by default; create a diagnostic setting to send the Activity Log to a Log Analytics workspace with extended retention/archive", correct: true },
+      { id: "b", text: "1 year by default; nothing further is required", correct: false },
+      { id: "c", text: "30 days by default; export to Event Hubs and retain there for 3 years", correct: false },
+      { id: "d", text: "Indefinitely by default", correct: false },
+    ],
+    explanation:
+      "The Activity Log is retained for 90 days by default. For 3-year queryable retention, create a diagnostic setting that routes it to a Log Analytics workspace and configure long-term retention/archive there. Event Hubs is a streaming pipe with days of retention, not an archive, and default retention is neither 1 year nor indefinite.",
+  },
+  {
+    id: "az305-igm-33",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "An alert rule for CPU over 90% must notify the on-call team by SMS and trigger an Azure Function to auto-remediate, and the same notification set will be reused by dozens of other alert rules. Which Azure Monitor component holds the notification and action configuration?",
+    choices: [
+      { id: "a", text: "An action group", correct: true },
+      { id: "b", text: "A diagnostic setting", correct: false },
+      { id: "c", text: "A data collection rule", correct: false },
+      { id: "d", text: "A workbook", correct: false },
+    ],
+    explanation:
+      "Action groups are reusable collections of notification preferences (SMS, email, push, voice) and actions (Functions, Logic Apps, webhooks, ITSM, runbooks) referenced by any number of alert rules. Diagnostic settings route platform logs, data collection rules define what agents collect, and workbooks are interactive reports.",
+  },
+  {
+    id: "az305-igm-34",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A metric alert on a seasonal e-commerce workload keeps false-alarming during nightly low-traffic periods when static thresholds are used. The team wants alerting that learns the workload's historical patterns. What should you recommend?",
+    choices: [
+      { id: "a", text: "Dynamic thresholds on the metric alert rule", correct: true },
+      { id: "b", text: "A log search alert with a fixed count", correct: false },
+      { id: "c", text: "Duplicate alert rules per time-of-day", correct: false },
+      { id: "d", text: "Increasing the static threshold to 99%", correct: false },
+    ],
+    explanation:
+      "Dynamic thresholds use machine learning over the metric's historical behavior — including seasonality — to compute an expected band and alert on deviations, eliminating time-of-day false alarms. Fixed-count log alerts and higher static thresholds still ignore seasonality, and per-time-of-day rule duplication is brittle maintenance overhead.",
+  },
+  {
+    id: "az305-igm-35",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You need to enforce that every new resource is deployed only to the West Europe region, and existing non-compliant resources should be identified but not deleted. Which Azure Policy design accomplishes this?",
+    choices: [
+      { id: "a", text: "A policy with the Deny effect for new deployments; existing resources are reported as non-compliant automatically", correct: true },
+      { id: "b", text: "A policy with the DeleteIfNotExists effect", correct: false },
+      { id: "c", text: "An RBAC deny assignment scoped to other regions", correct: false },
+      { id: "d", text: "A ReadOnly lock on all resource groups", correct: false },
+    ],
+    explanation:
+      "A Deny policy on allowed locations blocks new non-compliant deployments, and Azure Policy automatically evaluates and flags existing resources as non-compliant in compliance reports — it never deletes them. DeleteIfNotExists doesn't exist as an effect, RBAC controls who can act (not where resources go), and locks block all changes rather than enforcing location.",
+  },
+  {
+    id: "az305-igm-36",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "Every VM in the subscription must have the Azure Monitor Agent installed automatically, including VMs created in the future, without any manual step. Which Azure Policy effect should the design use?",
+    choices: [
+      { id: "a", text: "Deny", correct: false },
+      { id: "b", text: "Audit", correct: false },
+      { id: "c", text: "DeployIfNotExists with a remediation task", correct: true },
+      { id: "d", text: "Append", correct: false },
+    ],
+    explanation:
+      "DeployIfNotExists deploys the specified resource (the AMA extension) when it's missing — new VMs get it automatically at creation, and a remediation task retrofits existing VMs. Deny blocks deployments, Audit only reports, and Append adds properties to a resource during creation (like tags or IP rules), not sub-resource deployments.",
+  },
+  {
+    id: "az305-igm-37",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Department heads must be notified before their Azure spending exceeds monthly limits, and the finance team wants forecasted overspend alerts too — without any resources being shut down automatically. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Cost Management budgets with actual and forecasted alert thresholds tied to action groups", correct: true },
+      { id: "b", text: "An Azure Policy that denies deployments after the limit is reached", correct: false },
+      { id: "c", text: "Resource locks applied when spend is high", correct: false },
+      { id: "d", text: "Azure Advisor cost recommendations", correct: false },
+    ],
+    explanation:
+      "Budgets in Cost Management alert on actual and forecasted spend at configurable thresholds via action groups — they notify without taking destructive action. Budgets don't stop resources by themselves, which matches the requirement. Policy/locks would block work rather than warn, and Advisor recommends optimizations but has no threshold alerting.",
+  },
+  {
+    id: "az305-igm-38",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your CISO wants a consolidated view of the security posture of all Azure subscriptions, measured against regulatory standards like PCI DSS and ISO 27001, with prioritized hardening recommendations. Which service provides this?",
+    choices: [
+      { id: "a", text: "Microsoft Sentinel", correct: false },
+      { id: "b", text: "Microsoft Defender for Cloud (secure score + regulatory compliance dashboard)", correct: true },
+      { id: "c", text: "Azure Monitor", correct: false },
+      { id: "d", text: "Microsoft Entra ID Protection", correct: false },
+    ],
+    explanation:
+      "Defender for Cloud is the cloud security posture management (CSPM) service: secure score quantifies posture, the regulatory compliance dashboard maps your environment against standards like PCI DSS/ISO 27001, and recommendations prioritize hardening. Sentinel is the SIEM/SOAR for threat detection and response, Monitor is observability, and ID Protection covers identity risk only.",
+  },
+  {
+    id: "az305-igm-39",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A security operations center needs to collect security events from Azure, Microsoft 365, AWS, and on-premises firewalls into one place, correlate them with built-in analytics and threat intelligence, and run automated response playbooks. What should you recommend?",
+    choices: [
+      { id: "a", text: "Microsoft Defender for Cloud", correct: false },
+      { id: "b", text: "Azure Monitor alerts with action groups", correct: false },
+      { id: "c", text: "Microsoft Sentinel", correct: true },
+      { id: "d", text: "Azure Event Grid", correct: false },
+    ],
+    explanation:
+      "Sentinel is the cloud-native SIEM/SOAR: connectors ingest from Azure, M365, AWS, and syslog/CEF sources; analytics rules and threat intelligence correlate incidents; and playbooks (Logic Apps) automate response. Defender for Cloud is posture management and workload protection, Monitor alerts lack cross-source correlation and SOAR, and Event Grid is an event router.",
+  },
+  {
+    id: "az305-igm-40",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "Application teams must query only the monitoring logs of resources they own, which live in a centralized Log Analytics workspace shared by the whole company. You want to avoid creating separate workspaces. What should you recommend?",
+    choices: [
+      { id: "a", text: "Resource-context access: grant teams read access on their resources and let them query logs scoped to those resources", correct: true },
+      { id: "b", text: "Grant all teams the Log Analytics Reader role on the workspace", correct: false },
+      { id: "c", text: "Export each team's logs nightly to team-owned storage accounts", correct: false },
+      { id: "d", text: "Give teams the workspace key", correct: false },
+    ],
+    explanation:
+      "Resource-context RBAC means users with read access to a resource can query that resource's logs in the central workspace without workspace-level rights — logs are automatically filtered to their resources. Log Analytics Reader on the workspace exposes everyone's logs. Nightly exports add cost and lag, and workspace keys are for agent ingestion, not user queries.",
+  },
+  {
+    id: "az305-igm-41",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "The operations team wants proactive notification when Azure itself has an outage, planned maintenance, or health advisories affecting the specific regions and services your company uses. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Service Health alerts scoped to your subscriptions, services, and regions", correct: true },
+      { id: "b", text: "Application Insights availability tests", correct: false },
+      { id: "c", text: "The Azure status page checked manually", correct: false },
+      { id: "d", text: "Resource health on each VM blade", correct: false },
+    ],
+    explanation:
+      "Service Health provides a personalized view of Azure platform incidents, planned maintenance, and advisories for exactly the services/regions you use, and its alerts push notifications through action groups. Availability tests monitor your app (not the platform), the status page is global and manual, and per-resource health blades don't proactively notify.",
+  },
+  {
+    id: "az305-igm-42",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "You are designing emergency (break-glass) access for a Microsoft Entra tenant. Which two practices should the design include? (Choose two.)",
+    choices: [
+      { id: "a", text: "Cloud-only accounts excluded from conditional access policies and MFA requirements that could lock them out", correct: true },
+      { id: "b", text: "Monitoring and alerting on any sign-in by the break-glass accounts", correct: true },
+      { id: "c", text: "Synchronizing break-glass accounts from on-premises AD", correct: false },
+      { id: "d", text: "Sharing the break-glass credentials with all Global Administrators", correct: false },
+    ],
+    explanation:
+      "Break-glass accounts must be cloud-only (so an on-premises or federation outage can't lock them out) and excluded from conditional access/MFA policies that could block emergency use — with sign-ins monitored and alerted since use should be rare and audited. Syncing from AD reintroduces the dependency you're protecting against, and credential sharing destroys accountability.",
+  },
+  {
+    id: "az305-igm-43",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company wants users to register for self-service password reset and MFA in one combined experience, and requires that password changes made in the cloud flow back to on-premises Active Directory. Which feature must be enabled for the write-back requirement?",
+    choices: [
+      { id: "a", text: "Password writeback in Microsoft Entra Connect", correct: true },
+      { id: "b", text: "Password hash synchronization", correct: false },
+      { id: "c", text: "Seamless SSO", correct: false },
+      { id: "d", text: "Group writeback", correct: false },
+    ],
+    explanation:
+      "Password writeback (an Entra Connect / cloud sync capability) writes cloud password changes and resets back to on-premises AD in real time — required for SSPR in hybrid environments. PHS flows passwords the other direction (on-premises to cloud), seamless SSO is about silent sign-in on domain-joined devices, and group writeback handles groups, not passwords.",
+  },
+  {
+    id: "az305-igm-44",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Auditors require an immutable, tamper-proof record proving who approved and activated privileged roles over the past year. Where does the design get this data, and how should it be retained?",
+    choices: [
+      { id: "a", text: "Microsoft Entra audit logs (including PIM events), routed via diagnostic settings to a Log Analytics workspace or immutable storage for long-term retention", correct: true },
+      { id: "b", text: "The Azure Activity Log alone, which keeps PIM data for one year", correct: false },
+      { id: "c", text: "Screenshots of the PIM portal taken monthly", correct: false },
+      { id: "d", text: "Sign-in logs, which include approvals by default", correct: false },
+    ],
+    explanation:
+      "PIM activations and approvals land in the Entra audit logs, which retain data for a limited period by default (30 days at P2), so long-term/audit needs require routing them via diagnostic settings to Log Analytics or to immutable storage. The Azure Activity Log covers ARM operations, not Entra role activations; sign-in logs record authentications, not approvals.",
+  },
+  {
+    id: "az305-igm-45",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your organization has three environments — production, staging, and development — in separate subscriptions. Governance requires stricter policies in production and looser ones in development, with common baseline policies everywhere. Which management group design should you recommend?",
+    choices: [
+      { id: "a", text: "One management group per environment under a shared parent that holds the baseline policies", correct: true },
+      { id: "b", text: "One management group containing all three subscriptions with all policies assigned to it", correct: false },
+      { id: "c", text: "No management groups; assign every policy per subscription", correct: false },
+      { id: "d", text: "One management group per region", correct: false },
+    ],
+    explanation:
+      "A parent group carries the baseline policies (inherited by all), and child groups per environment layer on stricter production policies and looser development ones. A single group can't differentiate environments, per-subscription assignment duplicates effort, and regions are irrelevant to this policy hierarchy.",
+  },
+  {
+    id: "az305-igm-46",
+    objective: "1.0-identity-governance-monitoring",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "An AKS-hosted microservice must authenticate to Azure Key Vault and Azure Storage without any stored secrets. The platform team wants the Kubernetes-native approach currently recommended by Microsoft. What should you recommend?",
+    choices: [
+      { id: "a", text: "Storing a service principal secret in a Kubernetes secret", correct: false },
+      { id: "b", text: "Microsoft Entra Workload ID (federated identity between the Kubernetes service account and a managed identity)", correct: true },
+      { id: "c", text: "Enabling anonymous access on the storage account", correct: false },
+      { id: "d", text: "Hardcoding a SAS token in the container image", correct: false },
+    ],
+    explanation:
+      "Entra Workload ID federates a Kubernetes service account with a user-assigned managed identity via OIDC — pods exchange their service account token for Entra tokens, with no stored secrets anywhere. It replaces the deprecated pod-identity approach. Service principal secrets in K8s secrets are exactly the stored-credential problem, and anonymous access/hardcoded SAS destroy security.",
+  },
+  // ── Blueprint rebalance: Infrastructure ────────────────────────
+  {
+    id: "az305-infra-20",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A team is deploying a containerized microservices application. They want event-driven autoscaling (including scale to zero), built-in Dapr integration for service-to-service calls, and no Kubernetes cluster to manage. Which compute service should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Kubernetes Service (AKS)", correct: false },
+      { id: "b", text: "Azure Container Apps", correct: true },
+      { id: "c", text: "Azure Container Instances (ACI)", correct: false },
+      { id: "d", text: "App Service for Containers", correct: false },
+    ],
+    explanation:
+      "Container Apps is the serverless container platform built on Kubernetes/KEDA/Dapr — event-driven scaling with scale-to-zero and native Dapr support, without exposing the cluster to you. AKS gives full Kubernetes control but you manage the cluster. ACI runs single container groups without orchestration or KEDA scaling. App Service scales web workloads but has no Dapr/KEDA model.",
+  },
+  {
+    id: "az305-infra-21",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A nightly job needs to run one container for about 20 minutes to process a file, then stop. There is no orchestration requirement, and cost must be minimal — paying only for the seconds the container runs. What should you recommend?",
+    choices: [
+      { id: "a", text: "An AKS cluster with one node pool", correct: false },
+      { id: "b", text: "Azure Container Instances (ACI)", correct: true },
+      { id: "c", text: "A dedicated D-series VM running Docker", correct: false },
+      { id: "d", text: "App Service Premium plan", correct: false },
+    ],
+    explanation:
+      "ACI is per-second billed, serverless container execution with no cluster or VM to keep running — perfect for short-lived, simple container tasks. AKS and a dedicated VM both bill for idle infrastructure around the 20-minute window, and an App Service plan runs continuously.",
+  },
+  {
+    id: "az305-infra-22",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "An Azure Functions app must access resources inside a virtual network, must never experience cold starts, and needs to run beyond the 10-minute execution limit of the Consumption plan. Which hosting plan should you recommend?",
+    choices: [
+      { id: "a", text: "Consumption plan", correct: false },
+      { id: "b", text: "Functions Premium (Elastic Premium) plan", correct: true },
+      { id: "c", text: "Free App Service plan", correct: false },
+      { id: "d", text: "Azure Container Instances", correct: false },
+    ],
+    explanation:
+      "The Premium plan provides VNet integration, pre-warmed instances that eliminate cold starts, and much longer (effectively unbounded) execution durations, while still scaling elastically. The Consumption plan has cold starts, a 10-minute cap, and no VNet integration. Free App Service plans don't support these features, and ACI isn't a Functions hosting plan.",
+  },
+  {
+    id: "az305-infra-23",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A workflow implemented in Azure Functions must chain several functions: the output of one feeds the next (function chaining), a fan-out/fan-in step processes items in parallel, and the workflow must survive process recycles while waiting days for human approval. What should you recommend?",
+    choices: [
+      { id: "a", text: "Durable Functions", correct: true },
+      { id: "b", text: "A timer-triggered function polling a database", correct: false },
+      { id: "c", text: "Stateless functions passing data via query strings", correct: false },
+      { id: "d", text: "WebJobs on an App Service plan", correct: false },
+    ],
+    explanation:
+      "Durable Functions adds stateful orchestrations to Functions: function chaining, fan-out/fan-in, and human-interaction patterns with durable timers that survive restarts and can wait days. Polling and query-string state are fragile workarounds, and WebJobs lack the orchestration/checkpointing model.",
+  },
+  {
+    id: "az305-infra-24",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A business process must integrate SaaS systems (Salesforce, Office 365, SAP) with conditional approval steps. The integration team prefers a visual designer with hundreds of prebuilt connectors and minimal custom code. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Functions", correct: false },
+      { id: "b", text: "Azure Logic Apps", correct: true },
+      { id: "c", text: "Azure Event Grid", correct: false },
+      { id: "d", text: "Azure Service Bus", correct: false },
+    ],
+    explanation:
+      "Logic Apps is the designer-first integration service with 1,000+ connectors (Salesforce, Office 365, SAP), approval actions, and conditional control flow — code-light by design. Functions is code-first, Event Grid routes events but has no workflow/connectors, and Service Bus is messaging transport.",
+  },
+  {
+    id: "az305-infra-25",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your company exposes 30 internal REST APIs to external partners. The design must add per-partner rate limiting, subscription keys, request/response transformation, and a developer portal with API documentation — without changing the backend APIs. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure API Management", correct: true },
+      { id: "b", text: "Azure Application Gateway", correct: false },
+      { id: "c", text: "Azure Front Door", correct: false },
+      { id: "d", text: "Azure Load Balancer", correct: false },
+    ],
+    explanation:
+      "API Management is the API façade layer: policies handle rate limiting/quotas per subscription key, inbound/outbound transformation, and it ships a developer portal with interactive docs. Application Gateway and Front Door route and protect HTTP traffic but have no API products, keys, quotas, or portal; Load Balancer is layer 4.",
+  },
+  {
+    id: "az305-infra-26",
+    objective: "4.0-infrastructure",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A global HTTP application runs in three Azure regions. You need a single anycast entry point with TLS termination at Microsoft edge locations, URL-path-based routing, WAF protection, and automatic failover between regions with the lowest possible latency for users worldwide. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Traffic Manager", correct: false },
+      { id: "b", text: "Azure Front Door (with WAF policy)", correct: true },
+      { id: "c", text: "One Application Gateway per region with DNS round-robin", correct: false },
+      { id: "d", text: "Azure Load Balancer (Standard, global tier)", correct: false },
+    ],
+    explanation:
+      "Front Door is the global layer 7 entry point: anycast at Microsoft edge, TLS offload, path-based routing, integrated WAF, and health-probe-driven regional failover with latency-based routing. Traffic Manager is DNS-only (no TLS termination or WAF), per-region App Gateways with DNS round-robin lack edge acceleration and unified failover, and global Load Balancer is layer 4.",
+  },
+  {
+    id: "az305-infra-27",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You must choose a load-balancing service for a non-HTTP workload: TCP traffic on port 1433 to a group of VMs within one region, with ultra-low latency and port forwarding. Which service fits?",
+    choices: [
+      { id: "a", text: "Azure Application Gateway", correct: false },
+      { id: "b", text: "Azure Front Door", correct: false },
+      { id: "c", text: "Azure Load Balancer (Standard)", correct: true },
+      { id: "d", text: "Azure Traffic Manager", correct: false },
+    ],
+    explanation:
+      "Azure Load Balancer is the layer 4 (TCP/UDP) regional load balancer — pass-through, ultra-low latency, port forwarding, ideal for non-HTTP protocols like SQL on 1433. Application Gateway and Front Door only handle HTTP/HTTPS (layer 7), and Traffic Manager is DNS-based global routing, not a data-path balancer.",
+  },
+  {
+    id: "az305-infra-28",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company connects its datacenter to Azure. Requirements: predictable latency, a connection SLA, bandwidth up to 10 Gbps, and traffic must not traverse the public internet. Cost is secondary. What should you recommend?",
+    choices: [
+      { id: "a", text: "Site-to-site VPN over the internet", correct: false },
+      { id: "b", text: "ExpressRoute", correct: true },
+      { id: "c", text: "Point-to-site VPN", correct: false },
+      { id: "d", text: "Azure Bastion", correct: false },
+    ],
+    explanation:
+      "ExpressRoute is a private circuit through a connectivity provider: it bypasses the public internet, offers an SLA, predictable latency, and bandwidths up to 10 Gbps (100 Gbps with Direct). S2S VPN rides the public internet (no latency SLA), P2S is per-device, and Bastion is browser-based VM access, not connectivity between networks.",
+  },
+  {
+    id: "az305-infra-29",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your network design has 25 spoke VNets that all need shared services (firewall, DNS, ExpressRoute gateway) from a central VNet, with spokes isolated from each other by default. Which topology should you recommend?",
+    choices: [
+      { id: "a", text: "Full mesh peering between all 25 VNets", correct: false },
+      { id: "b", text: "Hub-and-spoke topology with VNet peering to a central hub", correct: true },
+      { id: "c", text: "One giant VNet with 25 subnets", correct: false },
+      { id: "d", text: "Site-to-site VPNs between every VNet pair", correct: false },
+    ],
+    explanation:
+      "Hub-and-spoke centralizes shared services (firewall, gateways, DNS) in a hub VNet, with each spoke peered only to the hub — spokes are isolated from one another by default since peering isn't transitive. Full mesh is 300 peerings of unmanageable sprawl, one giant VNet destroys isolation and subscription boundaries, and VPNs between VNets add cost and latency over native peering.",
+  },
+  {
+    id: "az305-infra-30",
+    objective: "4.0-infrastructure",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A global company has 60 branch offices that need connectivity to Azure and to each other, mixing SD-WAN, VPN, and ExpressRoute. Managing individual hub VNets and gateways has become unmanageable. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Virtual WAN", correct: true },
+      { id: "b", text: "One VPN gateway per branch VNet", correct: false },
+      { id: "c", text: "Azure Front Door", correct: false },
+      { id: "d", text: "Peering every branch VNet to every other", correct: false },
+    ],
+    explanation:
+      "Virtual WAN is the managed global transit network: Microsoft-managed hubs per region, unified branch connectivity (VPN, ExpressRoute, SD-WAN partners), branch-to-branch and branch-to-VNet routing at scale. Manual per-branch gateways is exactly the operational burden being escaped, Front Door is for HTTP apps, and mesh peering doesn't connect on-premises branches at all.",
+  },
+  {
+    id: "az305-infra-31",
+    objective: "4.0-infrastructure",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "An Azure SQL Database must be reachable only from your VNet via a private IP address, with no exposure on any public endpoint, and on-premises clients connected via ExpressRoute private peering must also reach it. What should you recommend?",
+    choices: [
+      { id: "a", text: "A virtual network service endpoint for Microsoft.Sql", correct: false },
+      { id: "b", text: "A private endpoint (Private Link) for the SQL server with public network access disabled", correct: true },
+      { id: "c", text: "A firewall rule allowing the VNet's IP range", correct: false },
+      { id: "d", text: "An NSG on the SQL Database", correct: false },
+    ],
+    explanation:
+      "A private endpoint gives the SQL server a private IP inside your VNet, works from on-premises over ExpressRoute private peering, and lets you disable public network access entirely. Service endpoints keep traffic on the Azure backbone but the resource still resolves to a public endpoint and they don't work from on-premises. Firewall rules still use the public endpoint, and you can't attach NSGs to a PaaS database.",
+  },
+  {
+    id: "az305-infra-32",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "After creating private endpoints for several PaaS services, applications inside the VNet still resolve the services to their public IP addresses. What must the design include so the private IPs are returned inside the VNet?",
+    choices: [
+      { id: "a", text: "Azure Private DNS zones (e.g., privatelink.database.windows.net) linked to the VNet", correct: true },
+      { id: "b", text: "Custom hosts file entries on every VM", correct: false },
+      { id: "c", text: "A public DNS CNAME change", correct: false },
+      { id: "d", text: "An NSG rule redirecting DNS", correct: false },
+    ],
+    explanation:
+      "Private endpoints rely on privatelink.* Private DNS zones linked to the VNet so name resolution returns the private IP inside the network while the public name keeps working externally. Hosts files don't scale and break on IP changes, public DNS changes would affect everyone, and NSGs filter traffic — they can't rewrite DNS answers.",
+  },
+  {
+    id: "az305-infra-33",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "VMs in a subnet make massive numbers of outbound connections to internet APIs and suffer SNAT port exhaustion. The design must provide scalable, predictable outbound connectivity with a static egress IP range. What should you recommend?",
+    choices: [
+      { id: "a", text: "An Azure Load Balancer with default outbound rules", correct: false },
+      { id: "b", text: "NAT Gateway (Azure Virtual Network NAT) with public IP prefixes", correct: true },
+      { id: "c", text: "Instance-level public IPs on every VM", correct: false },
+      { id: "d", text: "Increasing the VM size", correct: false },
+    ],
+    explanation:
+      "Azure NAT Gateway is the purpose-built answer: it provides on-demand SNAT port allocation at massive scale, static predictable egress via public IP prefixes, and attaches to the subnet. Load Balancer outbound rules pre-allocate a fixed SNAT port budget per VM, which is exactly what exhausts under heavy egress. Per-VM public IPs multiply attack surface and management, and VM size doesn't change SNAT allocation.",
+  },
+  {
+    id: "az305-infra-34",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Security requires centralized, FQDN-based outbound filtering (e.g., allow *.microsoft.com), threat-intelligence-based blocking, and forced tunneling of all spoke VNet egress through one inspection point. NSGs alone cannot do this. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Firewall in the hub VNet with user-defined routes from the spokes", correct: true },
+      { id: "b", text: "More granular NSG rules on every subnet", correct: false },
+      { id: "c", text: "Azure DDoS Protection", correct: false },
+      { id: "d", text: "Web Application Firewall on Application Gateway", correct: false },
+    ],
+    explanation:
+      "Azure Firewall is the managed stateful firewall with FQDN/application rules, threat-intelligence filtering, and centralized egress when spokes' UDRs point 0.0.0.0/0 at it in the hub. NSGs match IP/port/tag only — no FQDN or TI. DDoS Protection defends against volumetric inbound attacks, and WAF inspects inbound HTTP to your apps, not general egress.",
+  },
+  {
+    id: "az305-infra-35",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Administrators need RDP/SSH access to production VMs. Security prohibits public IPs on VMs and requires access through the Azure portal over TLS without managing jump-box VMs. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Bastion", correct: true },
+      { id: "b", text: "Public IPs with NSG source restrictions", correct: false },
+      { id: "c", text: "A self-managed jump-box VM with a public IP", correct: false },
+      { id: "d", text: "Azure Front Door", correct: false },
+    ],
+    explanation:
+      "Bastion is the managed jump service: browser-based (or native client) RDP/SSH over TLS 443 via the portal, with VMs keeping only private IPs. Public IPs with NSG restrictions still expose RDP/SSH to the internet, a self-managed jump box is the management burden being avoided, and Front Door is for HTTP applications.",
+  },
+  {
+    id: "az305-infra-36",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A fault-tolerant rendering farm can checkpoint and resume work at any time. The company wants the deepest possible compute discount and accepts that Azure may reclaim the capacity with 30 seconds' notice. Which option should you recommend?",
+    choices: [
+      { id: "a", text: "Reserved instances (3-year)", correct: false },
+      { id: "b", text: "Azure Spot VMs in a VM scale set", correct: true },
+      { id: "c", text: "Azure Dedicated Host", correct: false },
+      { id: "d", text: "Pay-as-you-go VMs", correct: false },
+    ],
+    explanation:
+      "Spot VMs offer up to ~90% discounts on unused capacity in exchange for eviction on 30 seconds' notice — a perfect match for interruptible, checkpointing batch/render workloads, especially in a scale set that replenishes evicted instances. Reservations discount steady-state committed usage, Dedicated Host is for isolation/compliance, and PAYG has no discount.",
+  },
+  {
+    id: "az305-infra-37",
+    objective: "4.0-infrastructure",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A company runs a steady 24/7 production workload on D-series VMs and wants the largest cost reduction, but finance wants flexibility to change VM sizes and regions over the commitment period. Which purchasing option should you recommend?",
+    choices: [
+      { id: "a", text: "Reserved VM instances for a specific size and region", correct: false },
+      { id: "b", text: "An Azure savings plan for compute", correct: true },
+      { id: "c", text: "Spot VMs", correct: false },
+      { id: "d", text: "Azure Hybrid Benefit alone", correct: false },
+    ],
+    explanation:
+      "Savings plans commit to an hourly spend for 1 or 3 years and apply across VM sizes, families, and regions — the flexibility finance asked for, with discounts approaching (though usually slightly below) reservations. Reservations lock size/region for the deepest discount but no flexibility. Spot is for interruptible workloads, and Hybrid Benefit only removes the Windows/SQL license cost — it's complementary, not the commitment discount.",
+  },
+  {
+    id: "az305-infra-38",
+    objective: "4.0-infrastructure",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "An order-processing system requires messages for the same order to be processed strictly in the order they were sent, one at a time, while orders themselves process in parallel. Duplicate submissions must also be detected automatically. Which messaging design should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Service Bus queues with sessions (session ID = order ID) and duplicate detection", correct: true },
+      { id: "b", text: "Azure Queue Storage with multiple consumers", correct: false },
+      { id: "c", text: "Azure Event Grid with retry policies", correct: false },
+      { id: "d", text: "Azure Event Hubs with a random partition key", correct: false },
+    ],
+    explanation:
+      "Service Bus sessions guarantee FIFO ordered, exclusive processing of all messages sharing a session ID (the order ID), while different sessions process in parallel — and Service Bus offers built-in duplicate detection. Queue Storage has no ordering guarantee or dedup, Event Grid is push-based eventing without FIFO, and a random Event Hubs partition key explicitly destroys per-order ordering.",
+  },
+  {
+    id: "az305-infra-39",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You are designing an AKS cluster for production. The design must keep system pods isolated from application workloads, and must automatically add nodes when pods can't be scheduled and remove them when unneeded. Which two-part configuration should you recommend?",
+    choices: [
+      { id: "a", text: "A single node pool with manual scaling", correct: false },
+      { id: "b", text: "Separate system and user node pools, with the cluster autoscaler enabled", correct: true },
+      { id: "c", text: "One large node pool with the horizontal pod autoscaler only", correct: false },
+      { id: "d", text: "Virtual nodes only", correct: false },
+    ],
+    explanation:
+      "Dedicated system node pools isolate critical system pods (CoreDNS, metrics-server) from application workloads in user pools, and the cluster autoscaler adds/removes nodes based on pending pods. The HPA scales pods, not nodes — it can't fix unschedulable pods when nodes are full. Virtual nodes (ACI burst) complement but don't replace node pool design.",
+  },
+  {
+    id: "az305-infra-40",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A marketing site is a pre-rendered JavaScript single-page application with a small serverless API. The team wants global static content hosting, integrated CI/CD from GitHub, free TLS certificates, and managed API integration — with minimal cost and zero servers to manage. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Static Web Apps", correct: true },
+      { id: "b", text: "AKS with an NGINX ingress", correct: false },
+      { id: "c", text: "A Windows VM running IIS", correct: false },
+      { id: "d", text: "Azure App Service Premium v3", correct: false },
+    ],
+    explanation:
+      "Static Web Apps is purpose-built for SPAs: globally distributed static hosting, GitHub Actions CI/CD out of the box, free certificates, and integrated Azure Functions APIs — on a free or low-cost tier. AKS and IIS VMs are radically over-provisioned for static content, and full App Service costs more than needed for a static site with a small API.",
+  },
+  {
+    id: "az305-infra-41",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A solution must react to blob-created events in a storage account by invoking an Azure Function within seconds. Requirements: push delivery (no polling), pay only per event, and support for filtering events by blob path prefix. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Event Grid with a subscription filtered on the blob path", correct: true },
+      { id: "b", text: "A timer-triggered Function that lists the container each minute", correct: false },
+      { id: "c", text: "Azure Event Hubs", correct: false },
+      { id: "d", text: "Azure Service Bus topics", correct: false },
+    ],
+    explanation:
+      "Event Grid natively publishes Blob Storage events (BlobCreated), pushes to Function handlers in near real time, bills per operation, and supports subject/prefix filtering (e.g., only /container/uploads/). Polling with a timer adds latency and wasted list transactions. Event Hubs is stream ingestion (your app would have to produce events), and Service Bus doesn't natively receive storage events.",
+  },
+  {
+    id: "az305-infra-42",
+    objective: "4.0-infrastructure",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A trading platform ingests two million telemetry events per second from market feeds. Events must be retained for 24 hours so multiple independent consumer groups can replay the stream from any offset. Which service is designed for this?",
+    choices: [
+      { id: "a", text: "Azure Service Bus queues", correct: false },
+      { id: "b", text: "Azure Event Hubs", correct: true },
+      { id: "c", text: "Azure Event Grid", correct: false },
+      { id: "d", text: "Azure Queue Storage", correct: false },
+    ],
+    explanation:
+      "Event Hubs is the big-data streaming platform: millions of events per second, partitioned log with time-based retention, offset-based replay, and independent consumer groups. Service Bus and Queue Storage are destructive-read message queues (no replay), and Event Grid is discrete event routing, not a high-throughput retained stream.",
+  },
+  {
+    id: "az305-infra-43",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A legacy client-server application must move to Azure unchanged. Compliance requires that its VMs run on physical servers dedicated to your company only — no other tenant's workloads may share the hardware. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Dedicated Host", correct: true },
+      { id: "b", text: "Availability zones", correct: false },
+      { id: "c", text: "Azure Spot VMs", correct: false },
+      { id: "d", text: "Proximity placement groups", correct: false },
+    ],
+    explanation:
+      "Azure Dedicated Host provides physical servers reserved for your organization — single-tenant hardware isolation for compliance — while still running standard Azure VMs on them. Availability zones address resiliency, Spot is discounted evictable capacity, and proximity placement groups co-locate resources for latency; none provide hardware tenancy isolation.",
+  },
+  {
+    id: "az305-infra-44",
+    objective: "4.0-infrastructure",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You must recommend a compute option for a public web application with these needs: deploy from Git, custom domains and managed TLS, autoscale on a schedule and on CPU, deployment slots for zero-downtime releases, and no OS management. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure App Service (Standard or higher)", correct: true },
+      { id: "b", text: "Virtual machine scale sets", correct: false },
+      { id: "c", text: "Azure Container Instances", correct: false },
+      { id: "d", text: "Azure Batch", correct: false },
+    ],
+    explanation:
+      "App Service checks every box: Git-based deployment, custom domains with managed certificates, schedule- and metric-based autoscale, deployment slots with slot swap for zero-downtime releases, and a fully managed OS. VMSS makes you manage the OS image and has no slots, ACI has no slots/custom domain autoscale story for web apps, and Batch is for parallel compute jobs.",
+  },
 ];
