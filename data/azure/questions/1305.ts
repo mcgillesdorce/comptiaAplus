@@ -1240,4 +1240,809 @@ export const questionsAZ305: AZ305Question[] = [
     explanation:
       "Yes. Azure Databricks is a unified analytics platform natively integrated with Azure Data Lake Storage and built on Apache Spark, so it is compatible with existing Hadoop-based workflows. It offers scalable compute for cost-effective batch processing, meeting all of Contoso's requirements.",
   },
+  // ── Weak-topic series: SQL family ──────────────────────────────
+  {
+    id: "az305-data-31",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company is migrating an on-premises application to Azure. The application uses SQL Server Agent jobs, cross-database queries, and linked servers. The company wants a PaaS solution with minimal application changes. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure SQL Database (single database)", correct: false },
+      { id: "b", text: "Azure SQL Database elastic pool", correct: false },
+      { id: "c", text: "Azure SQL Managed Instance", correct: true },
+      { id: "d", text: "SQL Server on an Azure Virtual Machine", correct: false },
+    ],
+    explanation:
+      "SQL Server Agent, cross-database queries, and linked servers are instance-scoped features that Azure SQL Database doesn't provide, but Managed Instance does (near 100% SQL Server compatibility, PaaS). SQL Server on a VM would work technically but is IaaS — you manage OS/patching/backups — so it fails the minimal-effort PaaS requirement.",
+  },
+  {
+    id: "az305-data-32",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "You need to migrate a mission-critical on-premises SQL Server database to the Business Critical tier of Azure SQL Managed Instance. The migration must be a true online migration with minimal downtime. What should you recommend?",
+    choices: [
+      { id: "a", text: "Native backup and restore to Azure Blob Storage", correct: false },
+      { id: "b", text: "Azure Database Migration Service (offline mode)", correct: false },
+      { id: "c", text: "Managed Instance link", correct: true },
+      { id: "d", text: "Transactional replication", correct: false },
+    ],
+    explanation:
+      "Managed Instance link uses distributed availability group technology to replicate in near real time and is the only solution enabling a true online migration to the Business Critical tier. Backup/restore and DMS offline both require downtime, and transactional replication is a scenario enabler, not the documented online migration path to BC.",
+  },
+  {
+    id: "az305-data-33",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A dev/test database is used heavily during business hours but sits idle overnight and on weekends. You must minimize compute costs. Which Azure SQL Database configuration should you recommend?",
+    choices: [
+      { id: "a", text: "Provisioned compute, Business Critical tier", correct: false },
+      { id: "b", text: "Serverless compute, General Purpose tier, Standard-series (Gen5)", correct: true },
+      { id: "c", text: "Serverless compute, Business Critical tier", correct: false },
+      { id: "d", text: "Provisioned compute, Hyperscale tier", correct: false },
+    ],
+    explanation:
+      "Serverless auto-scales and bills per second only for the compute used, ideal for intermittent usage. Serverless is only supported on Standard-series (Gen5) hardware in the General Purpose tier — it is not available for Business Critical (so C is invalid) — and provisioned tiers bill continuously.",
+  },
+  {
+    id: "az305-data-34",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "An application's database is expected to grow to 30 TB. The workload is modern OLTP and needs fast scaling without copying data to new nodes. Which service tier should you recommend?",
+    choices: [
+      { id: "a", text: "General Purpose", correct: false },
+      { id: "b", text: "Business Critical", correct: false },
+      { id: "c", text: "Hyperscale", correct: true },
+      { id: "d", text: "Premium (DTU)", correct: false },
+    ],
+    explanation:
+      "Hyperscale supports up to 128 TB, is the recommended default for new/modern OLTP workloads, and scales quickly because new compute nodes don't copy data locally (page-server architecture). General Purpose and Business Critical cap at 4 TB.",
+  },
+  {
+    id: "az305-data-35",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A workload requires I/O latency of 1–2 ms, In-Memory OLTP, and a free read-only replica for reporting queries. Which service tier meets all three requirements?",
+    choices: [
+      { id: "a", text: "General Purpose", correct: false },
+      { id: "b", text: "Business Critical", correct: true },
+      { id: "c", text: "Hyperscale", correct: false },
+      { id: "d", text: "Standard (DTU)", correct: false },
+    ],
+    explanation:
+      "Business Critical delivers 1–2 ms local SSD latency, is the only vCore tier with In-Memory OLTP, and provides a free read scale-out replica from its secondary replicas. Hyperscale has 1–2 ms cached latency and read replicas but no In-Memory OLTP.",
+  },
+  {
+    id: "az305-bc-06",
+    objective: "3.0-business-continuity",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your company runs several Azure SQL Databases in the Business Critical tier. A new requirement states the databases must remain available if an entire Azure availability zone fails, with zero data loss and no increase in cost. What should you recommend?",
+    choices: [
+      { id: "a", text: "Configure active geo-replication to a second region", correct: false },
+      { id: "b", text: "Enable zone redundancy on the existing Business Critical databases", correct: true },
+      { id: "c", text: "Migrate the databases to Hyperscale", correct: false },
+      { id: "d", text: "Configure geo-redundant (GRS) backup storage", correct: false },
+    ],
+    explanation:
+      "For Premium/Business Critical, enabling zone redundancy redistributes the existing replicas across availability zones at no extra cost. Active geo-replication adds cost and is region-level DR (not zone HA), and GRS backup storage protects backups, not the running database.",
+  },
+  {
+    id: "az305-bc-07",
+    objective: "3.0-business-continuity",
+    difficulty: "hard",
+    type: "multi",
+    prompt:
+      "You plan to deploy a new Hyperscale database that must be zone redundant. Which two statements are true? (Choose two.)",
+    choices: [
+      { id: "a", text: "Zone redundancy can be enabled at any time after creation", correct: false },
+      { id: "b", text: "Zone redundancy must be specified during database creation", correct: true },
+      { id: "c", text: "It requires at least one HA compute replica and zone-redundant (or geo-zone-redundant) backup storage", correct: true },
+      { id: "d", text: "Zone redundancy on Hyperscale removes the 128 TB storage limit", correct: false },
+    ],
+    explanation:
+      "Hyperscale zone redundancy is a creation-time-only setting (existing databases need a database copy, PITR, or geo-replica workaround), and it requires at least one HA compute replica plus zone-redundant or geo-zone-redundant backup storage. It does not change the 128 TB maximum.",
+  },
+  {
+    id: "az305-bc-08",
+    objective: "3.0-business-continuity",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A database uses the Standard (DTU) purchasing model. The business now requires the database to survive an availability-zone outage. What should you recommend?",
+    choices: [
+      { id: "a", text: "Enable zone redundancy on the Standard tier", correct: false },
+      { id: "b", text: "Move to the Basic tier with ZRS backups", correct: false },
+      { id: "c", text: "Move to a tier that supports zone redundancy, such as Premium or a vCore tier (General Purpose, Business Critical, or Hyperscale)", correct: true },
+      { id: "d", text: "Nothing — all Azure SQL Database tiers are zone redundant by default", correct: false },
+    ],
+    explanation:
+      "Basic and Standard (DTU) tiers do not support zone redundancy. Premium (DTU) and all three vCore tiers do, so the design answer is a tier change.",
+  },
+  {
+    id: "az305-bc-09",
+    objective: "3.0-business-continuity",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "For compliance, full backups of an Azure SQL database must be retained for 7 years. Point-in-time restore retention is currently 7 days. What should you recommend?",
+    choices: [
+      { id: "a", text: "Increase PITR retention to 35 days", correct: false },
+      { id: "b", text: "Configure a long-term retention (LTR) policy", correct: true },
+      { id: "c", text: "Export the database to a BACPAC weekly", correct: false },
+      { id: "d", text: "Enable geo-redundant backup storage", correct: false },
+    ],
+    explanation:
+      "Long-term retention (LTR) keeps weekly/monthly/yearly full backups for up to 10 years in Blob storage — the compliance mechanism. PITR maxes at 35 days, and BACPAC exports are manual and not the recommended design answer.",
+  },
+  {
+    id: "az305-data-36",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A company holds SQL Server licenses with Software Assurance and wants to reduce Azure SQL costs. For which deployment does Azure Hybrid Benefit NOT apply to new databases?",
+    choices: [
+      { id: "a", text: "Azure SQL Database General Purpose", correct: false },
+      { id: "b", text: "Azure SQL Database Business Critical", correct: false },
+      { id: "c", text: "Azure SQL Database Hyperscale", correct: true },
+      { id: "d", text: "Azure SQL Managed Instance", correct: false },
+    ],
+    explanation:
+      "As of December 2023, Hyperscale's simplified pricing has no SQL license fee, so Azure Hybrid Benefit is not available for new Hyperscale databases (existing provisioned ones could use it until December 2026). General Purpose, Business Critical, and Managed Instance all support AHB.",
+  },
+  // ── Weak-topic series: Storage accounts, ADLS & Cosmos DB ──────
+  {
+    id: "az305-bc-10",
+    objective: "3.0-business-continuity",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "You need a storage solution for blob data that must survive both an availability-zone failure and a regional outage, and the application must be able to read from the secondary region at any time. Which redundancy option should you recommend?",
+    choices: [
+      { id: "a", text: "ZRS", correct: false },
+      { id: "b", text: "GRS", correct: false },
+      { id: "c", text: "GZRS", correct: false },
+      { id: "d", text: "RA-GZRS", correct: true },
+    ],
+    explanation:
+      "Zone failure needs ZRS locally; a regional outage needs geo-redundancy; reading from the secondary anytime needs the RA- (read-access) prefix. Only RA-GZRS combines all three. GZRS protects the same way but has no secondary read access.",
+  },
+  {
+    id: "az305-data-37",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "An application requires Azure Files shares over the NFS protocol with consistently low latency. Which storage account type should you recommend?",
+    choices: [
+      { id: "a", text: "Standard general-purpose v2", correct: false },
+      { id: "b", text: "Premium block blobs", correct: false },
+      { id: "c", text: "Premium file shares", correct: true },
+      { id: "d", text: "Premium page blobs", correct: false },
+    ],
+    explanation:
+      "Premium file shares support both SMB and NFS with SSD-backed low latency. Standard GPv2 files is the SMB/standard path, and premium block/page blob accounts don't serve Azure Files.",
+  },
+  {
+    id: "az305-data-38",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Your team wants geo-redundant (GRS) storage for a high-transaction, low-latency blob workload and proposes a premium block blob account. What is wrong with this design?",
+    choices: [
+      { id: "a", text: "Premium block blob accounts don't support blobs", correct: false },
+      { id: "b", text: "Premium accounts only support LRS and ZRS — no geo-redundancy", correct: true },
+      { id: "c", text: "GRS is only available in US regions", correct: false },
+      { id: "d", text: "Nothing — the design is valid", correct: false },
+    ],
+    explanation:
+      "All three premium account types (block blobs, file shares, page blobs) support LRS and ZRS only. If geo-redundancy is mandatory, you need Standard GPv2 — or a design that copies data to a second region yourself.",
+  },
+  {
+    id: "az305-data-39",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A data science team will run Apache Spark and Hadoop jobs against petabytes of files, and security requires POSIX-style permissions at the directory and file level. What should you recommend?",
+    choices: [
+      { id: "a", text: "A standard GPv2 account with hierarchical namespace enabled (Data Lake Storage)", correct: true },
+      { id: "b", text: "A standard GPv2 account with plain blob containers and account SAS tokens", correct: false },
+      { id: "c", text: "Azure Files premium shares with NTFS ACLs", correct: false },
+      { id: "d", text: "Azure Table Storage", correct: false },
+    ],
+    explanation:
+      "Spark/Hadoop plus directory/file-level POSIX ACLs equals Data Lake Storage: GPv2 with the hierarchical namespace enabled, accessed via the ABFS driver. Plain blob containers lack POSIX ACLs, Azure Files targets SMB/NFS file shares, and Table Storage is a NoSQL key-value store.",
+  },
+  {
+    id: "az305-data-40",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "Which statement about Azure Data Lake Storage is TRUE?",
+    choices: [
+      { id: "a", text: "It is a separate Azure service with its own account type", correct: false },
+      { id: "b", text: "It is a set of capabilities on Blob Storage, enabled by the hierarchical namespace setting on a storage account", correct: true },
+      { id: "c", text: "It requires premium performance accounts", correct: false },
+      { id: "d", text: "It cannot use lifecycle management policies", correct: false },
+    ],
+    explanation:
+      "ADLS is not a separate service — it's Blob Storage with the hierarchical namespace enabled. It's priced at Blob levels, works on standard accounts, and keeps Blob features like access tiers and lifecycle management.",
+  },
+  {
+    id: "az305-data-41",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "What is the practical benefit of the hierarchical namespace when a job renames a directory containing one million files?",
+    choices: [
+      { id: "a", text: "The rename is parallelized across a Spark cluster", correct: false },
+      { id: "b", text: "The rename is a single atomic metadata operation instead of an operation on every object", correct: true },
+      { id: "c", text: "Renames are impossible without hierarchical namespace", correct: false },
+      { id: "d", text: "The files are automatically compressed during rename", correct: false },
+    ],
+    explanation:
+      "With the hierarchical namespace, directory rename/delete are single atomic metadata operations. Without it, 'directories' are just name prefixes, so a rename touches every one of the million objects — slow and expensive.",
+  },
+  {
+    id: "az305-data-42",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A team is migrating an existing MongoDB application to Azure and wants global distribution with no application code changes. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Cosmos DB for NoSQL", correct: false },
+      { id: "b", text: "Azure Cosmos DB for MongoDB", correct: true },
+      { id: "c", text: "Azure SQL Database with JSON support", correct: false },
+      { id: "d", text: "Azure Table Storage", correct: false },
+    ],
+    explanation:
+      "Cosmos DB for MongoDB speaks the BSON/wire protocol, so an existing MongoDB app migrates without code changes and gains Cosmos DB's global distribution. The NoSQL API would require rewriting data access.",
+  },
+  {
+    id: "az305-data-43",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "In Azure Cosmos DB, what does one Request Unit (RU) represent?",
+    choices: [
+      { id: "a", text: "One second of CPU time on a partition", correct: false },
+      { id: "b", text: "The throughput of one GET operation on a 1-KB document", correct: true },
+      { id: "c", text: "One MB of storage consumed per hour", correct: false },
+      { id: "d", text: "One connection to the database", correct: false },
+    ],
+    explanation:
+      "By definition, 1 RU is the throughput of a point read (GET) of a 1-KB document. Every operation (read, write, query, stored procedure) has a deterministic RU cost — that's how you budget capacity.",
+  },
+  {
+    id: "az305-data-44",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "An application needs ACID transactions across multiple documents in Cosmos DB. Which condition must be met?",
+    choices: [
+      { id: "a", text: "The documents must be in different containers", correct: false },
+      { id: "b", text: "The account must use the Cassandra API", correct: false },
+      { id: "c", text: "The documents must be within a single partition of a container", correct: true },
+      { id: "d", text: "Strong consistency must be enabled account-wide", correct: false },
+    ],
+    explanation:
+      "Cosmos DB transactions are ACID with all-or-nothing semantics but are scoped to a single logical partition within a container, expressed via SDK transactional batches or JavaScript stored procedures/triggers.",
+  },
+  {
+    id: "az305-data-45",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A Cosmos DB container is hitting throttling errors on some operations even though total provisioned RU/s looks sufficient. Based on how Cosmos DB scales, what is the most likely design flaw?",
+    choices: [
+      { id: "a", text: "Too many containers in the database", correct: false },
+      { id: "b", text: "The workload isn't distributed evenly across enough partition key values", correct: true },
+      { id: "c", text: "The account uses Entra ID authentication", correct: false },
+      { id: "d", text: "The free tier's 25 GB limit was exceeded", correct: false },
+    ],
+    explanation:
+      "A container's throughput has no upper limit provided load is distributed evenly across enough partition key values. A hot partition key throttles even when aggregate RU/s looks fine — the classic Cosmos DB design flaw.",
+  },
+  // ── Weak-topic series: Data Factory & Stream Analytics ─────────
+  {
+    id: "az305-data-46",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "In Azure Data Factory, what is the difference between a linked service and a dataset?",
+    choices: [
+      { id: "a", text: "A linked service defines the connection to a resource; a dataset points to the specific data within it", correct: true },
+      { id: "b", text: "A dataset defines the connection; a linked service points to the data", correct: false },
+      { id: "c", text: "They are synonyms", correct: false },
+      { id: "d", text: "Linked services are only for compute; datasets are only for storage", correct: false },
+    ],
+    explanation:
+      "A linked service is the connection string (how to reach the store or compute); a dataset is a named, strongly typed pointer to the data used as activity input/output (this container, this folder). Linked services cover both data stores and compute.",
+  },
+  {
+    id: "az305-data-47",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "In Azure Data Factory, which component provides the compute environment where an activity runs or is dispatched from, placed close to the target data store for performance and compliance?",
+    choices: [
+      { id: "a", text: "Pipeline", correct: false },
+      { id: "b", text: "Trigger", correct: false },
+      { id: "c", text: "Integration runtime", correct: true },
+      { id: "d", text: "Control flow", correct: false },
+    ],
+    explanation:
+      "The integration runtime is the compute bridge between activities and linked services. It's also the answer when a scenario mentions reaching on-premises data (self-hosted IR) or running SSIS packages (Azure-SSIS IR).",
+  },
+  {
+    id: "az305-data-48",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A data engineering team must transform terabytes of data with joins, aggregations, and derived columns, but the team has no Spark or coding expertise. The logic must run on a schedule as part of an ADF pipeline. What should you recommend?",
+    choices: [
+      { id: "a", text: "An ADF pipeline calling an Azure Databricks notebook", correct: false },
+      { id: "b", text: "ADF mapping data flows", correct: true },
+      { id: "c", text: "Azure Stream Analytics", correct: false },
+      { id: "d", text: "A custom activity running Python on Azure Batch", correct: false },
+    ],
+    explanation:
+      "Mapping data flows are visually designed transformations that require no coding and no Spark expertise, and they execute as pipeline activities with ADF's scheduling and monitoring. Databricks is the code-first path, and Stream Analytics is for streams, not scheduled batch ETL.",
+  },
+  {
+    id: "az305-data-49",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Where does the transformation logic of an ADF mapping data flow actually execute?",
+    choices: [
+      { id: "a", text: "On the self-hosted integration runtime's local machine", correct: false },
+      { id: "b", text: "Inside the Azure SQL Database engine", correct: false },
+      { id: "c", text: "On scaled-out Apache Spark clusters managed by Azure Data Factory", correct: true },
+      { id: "d", text: "In the browser session of the pipeline author", correct: false },
+    ],
+    explanation:
+      "ADF translates the visual logic, optimizes the path, and runs the job on Apache Spark clusters that spin up and down automatically — you never manage them.",
+  },
+  {
+    id: "az305-data-50",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "While building a mapping data flow, an engineer wants to see an interactive snapshot of the data at each transformation step. What is required?",
+    choices: [
+      { id: "a", text: "Publish the pipeline first", correct: false },
+      { id: "b", text: "Enable debug mode (Data Preview tab)", correct: true },
+      { id: "c", text: "Export the data flow script", correct: false },
+      { id: "d", text: "Attach a GPU-enabled cluster", correct: false },
+    ],
+    explanation:
+      "The Data Preview tab works only with debug mode on. By contrast, the Inspect tab shows metadata (columns, types, order) without debug mode.",
+  },
+  {
+    id: "az305-data-51",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "A pipeline must start automatically whenever a file lands in a storage container, and a different pipeline must run every night at 02:00. Which ADF components make this happen?",
+    choices: [
+      { id: "a", text: "Two datasets", correct: false },
+      { id: "b", text: "Parameters and variables", correct: false },
+      { id: "c", text: "Triggers (event-based and schedule-based)", correct: true },
+      { id: "d", text: "Two integration runtimes", correct: false },
+    ],
+    explanation:
+      "Triggers determine when pipelines execute; ADF supports event triggers (file arrival) and schedule triggers (nightly at 02:00). Parameters/variables configure runs, they don't start them.",
+  },
+  {
+    id: "az305-data-52",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company needs real-time analysis of telemetry from Azure IoT Hub. The team's skills are primarily SQL, and they want a fully managed service with no clusters to manage. Results must feed a live Power BI dashboard. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Databricks Structured Streaming", correct: false },
+      { id: "b", text: "Azure Stream Analytics", correct: true },
+      { id: "c", text: "Azure Data Factory mapping data flows", correct: false },
+      { id: "d", text: "Azure HDInsight Storm", correct: false },
+    ],
+    explanation:
+      "SQL skills, fully managed, IoT Hub input, and native Power BI output for real-time dashboards is Stream Analytics' textbook profile. Databricks needs code and cluster management, and mapping data flows are for batch ETL.",
+  },
+  {
+    id: "az305-data-53",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "Which three are valid Azure Stream Analytics inputs? (Choose three.)",
+    choices: [
+      { id: "a", text: "Azure Event Hubs", correct: true },
+      { id: "b", text: "Azure IoT Hub", correct: true },
+      { id: "c", text: "Azure Blob Storage / Data Lake Storage Gen2", correct: true },
+      { id: "d", text: "Azure Service Bus queues", correct: false },
+    ],
+    explanation:
+      "Documented Stream Analytics inputs are Event Hubs and IoT Hub for streaming, and Blob Storage/ADLS Gen2 for historical/batch and reference data. Service Bus appears as an output pattern in messaging designs, not a Stream Analytics input.",
+  },
+  {
+    id: "az305-data-54",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A Stream Analytics job must enrich a fast-moving event stream by joining it with a slow-changing product catalog stored in Azure SQL Database. Which Stream Analytics feature supports this?",
+    choices: [
+      { id: "a", text: "Reference data input", correct: true },
+      { id: "b", text: "Streaming units", correct: false },
+      { id: "c", text: "Checkpoints", correct: false },
+      { id: "d", text: "No-code editor", correct: false },
+    ],
+    explanation:
+      "Reference data inputs bring static or slow-changing data (from Blob Storage or SQL Database) into the job for join operations against the stream.",
+  },
+  {
+    id: "az305-data-55",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "Which two statements about Stream Analytics reliability and pricing are TRUE? (Choose two.)",
+    choices: [
+      { id: "a", text: "Events may be silently lost during node failures", correct: false },
+      { id: "b", text: "It offers exactly-once processing with selected outputs and at-least-once delivery, so events aren't lost", correct: true },
+      { id: "c", text: "You pay per streaming unit consumed with no upfront cluster costs", correct: true },
+      { id: "d", text: "You must pre-provision a cluster of VMs and pay for idle time", correct: false },
+    ],
+    explanation:
+      "Stream Analytics guarantees at-least-once delivery (never loses events), offers exactly-once with selected outputs, uses built-in checkpoints, and bills purely on streaming units consumed — no clusters, no upfront costs.",
+  },
+  // ── Weak-topic series: Databricks & batch processing ───────────
+  {
+    id: "az305-data-56",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "multi",
+    prompt:
+      "Which three characteristics define a batch processing workload? (Choose three.)",
+    choices: [
+      { id: "a", text: "Latency tolerance of minutes to hours between ingestion and results", correct: true },
+      { id: "b", text: "Requirement for submillisecond responses", correct: false },
+      { id: "c", text: "Discrete tasks contributing to an overall data processing solution", correct: true },
+      { id: "d", text: "The need to scale out over large data volumes", correct: true },
+    ],
+    explanation:
+      "Batch processing means discrete tasks, high latency tolerance (minutes to hours), and scale-out over large volumes. Submillisecond responses describe streaming engines like Stream Analytics.",
+  },
+  {
+    id: "az305-data-57",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A company wants an all-in-one SaaS analytics platform covering data movement, processing, ingestion, transformation, and reporting, with storage in OneLake and minimal platform management. What should you recommend?",
+    choices: [
+      { id: "a", text: "Azure Databricks", correct: false },
+      { id: "b", text: "Microsoft Fabric", correct: true },
+      { id: "c", text: "Azure Stream Analytics", correct: false },
+      { id: "d", text: "Azure Data Factory alone", correct: false },
+    ],
+    explanation:
+      "'All-in-one SaaS', 'OneLake', and 'end-to-end analytics with minimal management' are Microsoft Fabric's signature. Databricks is a managed service where you still configure clusters, not fully SaaS.",
+  },
+  {
+    id: "az305-data-58",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A data team of Python and Scala engineers needs collaborative notebooks, GPU-enabled clusters for ML, and fine-grained per-cluster scaling. What should you recommend?",
+    choices: [
+      { id: "a", text: "Microsoft Fabric", correct: false },
+      { id: "b", text: "Azure Databricks", correct: true },
+      { id: "c", text: "Azure Machine Learning Designer", correct: false },
+      { id: "d", text: "Azure Stream Analytics", correct: false },
+    ],
+    explanation:
+      "Collaborative web-based notebooks, GPU-enabled clusters, autoscaling, and per-cluster scale-out granularity are Azure Databricks' documented strengths for code-first data teams.",
+  },
+  {
+    id: "az305-data-59",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "Batch jobs run in short bursts a few times per day. You must avoid paying for compute between runs. Which Azure Databricks capabilities address this? (Choose two.)",
+    choices: [
+      { id: "a", text: "Automatic cluster termination", correct: true },
+      { id: "b", text: "Autoscaling", correct: true },
+      { id: "c", text: "In-memory caching", correct: false },
+      { id: "d", text: "Unity Catalog", correct: false },
+    ],
+    explanation:
+      "Auto-termination stops the cluster (and billing) when idle; autoscaling right-sizes it during runs. Caching is a performance feature and Unity Catalog is governance — neither addresses idle cost.",
+  },
+  {
+    id: "az305-data-60",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "How is Azure Databricks priced?",
+    choices: [
+      { id: "a", text: "Capacity units assigned to the workspace", correct: false },
+      { id: "b", text: "Databricks Units (DBUs — processing capability per hour) plus cluster hours", correct: true },
+      { id: "c", text: "Per query executed", correct: false },
+      { id: "d", text: "Flat monthly fee per user", correct: false },
+    ],
+    explanation:
+      "Databricks pricing is DBUs (a unit of processing capability per hour) plus the underlying cluster hours. Capacity units is Microsoft Fabric's model.",
+  },
+  {
+    id: "az305-data-61",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "multi",
+    prompt:
+      "In the batch-technology comparison, which capabilities does Azure Databricks have that Microsoft Fabric does NOT? (Choose two.)",
+    choices: [
+      { id: "a", text: "Autoscaling", correct: true },
+      { id: "b", text: "In-memory caching of data", correct: true },
+      { id: "c", text: "Row-level security", correct: false },
+      { id: "d", text: "Microsoft Entra ID authentication", correct: false },
+    ],
+    explanation:
+      "Per the comparison matrix, Databricks has autoscaling and in-memory caching; Fabric does not. Both have row-level security and Entra ID authentication, so those are shared, not differentiators.",
+  },
+  {
+    id: "az305-data-62",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "Databricks analysts need to run read-only queries against data in PostgreSQL, SQL Server, and Snowflake without copying the data into the lakehouse, with governance through Unity Catalog. What should you recommend?",
+    choices: [
+      { id: "a", text: "Nightly ADF copy pipelines into Delta tables", correct: false },
+      { id: "b", text: "Lakehouse Federation (query federation connectors)", correct: true },
+      { id: "c", text: "Exporting CSVs to Blob Storage", correct: false },
+      { id: "d", text: "A custom JDBC driver on every user's cluster", correct: false },
+    ],
+    explanation:
+      "Lakehouse Federation gives read-only JDBC access with Unity Catalog query pushdown to sources including PostgreSQL, MySQL, SQL Server, and Snowflake — preferred over raw JDBC for read-only federation, with no data movement.",
+  },
+  {
+    id: "az305-data-63",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "In Unity Catalog, what is a connection?",
+    choices: [
+      { id: "a", text: "A network peering between two VNets", correct: false },
+      { id: "b", text: "A securable object storing the endpoint and credentials needed to access an external system", correct: true },
+      { id: "c", text: "A Spark session configuration", correct: false },
+      { id: "d", text: "A Power BI gateway", correct: false },
+    ],
+    explanation:
+      "A Unity Catalog connection is a securable object holding the endpoint and credentials for an external system, enabling governed authentication, federation, managed ingestion, JDBC, and HTTP connectivity.",
+  },
+  {
+    id: "az305-data-64",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "What is the recommended way for Azure Databricks to govern access to cloud object storage such as ADLS and Blob Storage?",
+    choices: [
+      { id: "a", text: "Account keys embedded in notebooks", correct: false },
+      { id: "b", text: "Unity Catalog", correct: true },
+      { id: "c", text: "Public containers with anonymous access", correct: false },
+      { id: "d", text: "Per-cluster mount points with shared credentials", correct: false },
+    ],
+    explanation:
+      "Unity Catalog is the recommended governance layer for cloud object storage (ADLS, Blob, S3), both structured and unstructured. Keys-in-notebooks and shared mounts are legacy anti-patterns.",
+  },
+  {
+    id: "az305-data-65",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "Databricks needs governed access to a non-storage cloud service using long-term cloud credentials. Which Unity Catalog object is designed for this?",
+    choices: [
+      { id: "a", text: "Catalog federation", correct: false },
+      { id: "b", text: "Service credential", correct: true },
+      { id: "c", text: "Managed ingestion connector", correct: false },
+      { id: "d", text: "Delta share", correct: false },
+    ],
+    explanation:
+      "Service credentials are Unity Catalog securable objects that encapsulate long-term cloud credentials for non-storage cloud services.",
+  },
+  // ── Weak-topic series: Azure Machine Learning ──────────────────
+  {
+    id: "az305-data-66",
+    objective: "2.0-data-storage",
+    difficulty: "easy",
+    type: "single",
+    prompt:
+      "What is Azure Machine Learning, in one sentence?",
+    choices: [
+      { id: "a", text: "A pre-trained vision and speech API service", correct: false },
+      { id: "b", text: "A cloud service for accelerating and managing the ML project lifecycle: train and deploy models, and manage MLOps", correct: true },
+      { id: "c", text: "A BI dashboarding tool", correct: false },
+      { id: "d", text: "A relational database with ML functions", correct: false },
+    ],
+    explanation:
+      "Azure Machine Learning is the lifecycle platform for custom models — training, deployment, and MLOps management. It is not a pre-built AI API service, a BI tool, or a database.",
+  },
+  {
+    id: "az305-data-67",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "Business analysts with no coding experience must build and deploy a classification model. Which Azure ML capabilities fit? (Choose two.)",
+    choices: [
+      { id: "a", text: "Designer (drag-and-drop)", correct: true },
+      { id: "b", text: "Automated ML (AutoML) UI", correct: true },
+      { id: "c", text: "Python SDK v2", correct: false },
+      { id: "d", text: "REST APIs", correct: false },
+    ],
+    explanation:
+      "Designer is the no-code drag-and-drop interface to train and deploy, and the AutoML UI automates featurization and algorithm selection through an easy interface. The SDK and REST APIs are the code-first paths.",
+  },
+  {
+    id: "az305-data-68",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "An e-commerce app must get fraud predictions for each transaction within milliseconds over HTTPS, and the team wants to roll out a new model version to only 10% of traffic first. What should you recommend?",
+    choices: [
+      { id: "a", text: "A batch endpoint on a compute cluster", correct: false },
+      { id: "b", text: "A managed online (real-time) endpoint with traffic splitting across deployments", correct: true },
+      { id: "c", text: "An ADF pipeline calling the model nightly", correct: false },
+      { id: "d", text: "Stream Analytics with a JavaScript UDF", correct: false },
+    ],
+    explanation:
+      "Managed online endpoints score over HTTPS in near real time, and traffic splitting across deployments exists exactly for A/B testing and safe rollout of new versions.",
+  },
+  {
+    id: "az305-data-69",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "Ten million customer records must be scored for churn every night, in parallel, with results stored for later analysis. What should you recommend?",
+    choices: [
+      { id: "a", text: "A managed online endpoint", correct: false },
+      { id: "b", text: "A batch endpoint processing data on a compute cluster", correct: true },
+      { id: "c", text: "Prompt flow", correct: false },
+      { id: "d", text: "The model catalog", correct: false },
+    ],
+    explanation:
+      "Batch endpoints do asynchronous scoring: data reference in, parallel processing on compute clusters, results stored for analysis. Online endpoints are for per-request latency, not bulk jobs.",
+  },
+  {
+    id: "az305-data-70",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "Which capabilities support MLOps in Azure Machine Learning? (Choose three.)",
+    choices: [
+      { id: "a", text: "Git integration and MLflow", correct: true },
+      { id: "b", text: "ML pipeline scheduling and Azure Event Grid triggers", correct: true },
+      { id: "c", text: "CI/CD with GitHub Actions and Azure DevOps", correct: true },
+      { id: "d", text: "Automatic conversion of models to T-SQL", correct: false },
+    ],
+    explanation:
+      "Documented MLOps integrations include Git, MLflow, pipeline scheduling, Event Grid triggers, and CI/CD tooling (GitHub Actions/Azure DevOps). Automatic conversion of models to T-SQL does not exist.",
+  },
+  {
+    id: "az305-data-71",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A regulator asks you to prove exactly which code, data, and environment produced the model now running in production. Which Azure ML capability answers this?",
+    choices: [
+      { id: "a", text: "Serverless Spark compute", correct: false },
+      { id: "b", text: "Lineage and job artifacts (code snapshots, logs, outputs) tracked between jobs and assets", correct: true },
+      { id: "c", text: "The no-code Designer", correct: false },
+      { id: "d", text: "GPU clusters", correct: false },
+    ],
+    explanation:
+      "Azure ML tracks lineage between jobs and assets and keeps job artifacts — code snapshots, logs, outputs — so the model lifecycle is auditable down to a specific commit and environment.",
+  },
+  {
+    id: "az305-data-72",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "single",
+    prompt:
+      "A healthcare company requires that training data is never stored or processed outside the Azure region where the workspace is deployed. Is Azure ML suitable?",
+    choices: [
+      { id: "a", text: "No — Azure ML replicates data globally by design", correct: false },
+      { id: "b", text: "Yes — Azure ML doesn't store or process data outside the region where you deploy", correct: true },
+      { id: "c", text: "Only with a Databricks premium tier", correct: false },
+      { id: "d", text: "Only in sovereign clouds", correct: false },
+    ],
+    explanation:
+      "Azure ML doesn't store or process your data outside the region where you deploy the workspace. Combine with VNet, Key Vault, and RBAC for the full compliance story.",
+  },
+  {
+    id: "az305-data-73",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "A team wants to prototype, iterate, and deploy an application powered by large language models from providers like Azure OpenAI, Mistral, Meta, and Cohere. Which two Azure ML capabilities apply? (Choose two.)",
+    choices: [
+      { id: "a", text: "Model catalog", correct: true },
+      { id: "b", text: "Prompt flow", correct: true },
+      { id: "c", text: "Data labeling", correct: false },
+      { id: "d", text: "Embarrassingly parallel training", correct: false },
+    ],
+    explanation:
+      "The model catalog is the hub for hundreds of foundation models (Azure OpenAI, Mistral, Meta, Cohere, NVIDIA, Hugging Face, Microsoft), and prompt flow is the tool for prototyping, iterating, and deploying LLM-powered apps.",
+  },
+  {
+    id: "az305-data-74",
+    objective: "2.0-data-storage",
+    difficulty: "hard",
+    type: "single",
+    prompt:
+      "A retailer needs to train a separate demand-forecasting model for each of its 2,000 stores. Which documented training pattern fits?",
+    choices: [
+      { id: "a", text: "Distributed multinode training with Horovod", correct: false },
+      { id: "b", text: "Embarrassingly parallel training", correct: true },
+      { id: "c", text: "Hyperparameter tuning", correct: false },
+      { id: "d", text: "Transfer learning", correct: false },
+    ],
+    explanation:
+      "Training many independent models (one per store) is the 'embarrassingly parallel' scale-out pattern named in the docs for scenarios like demand forecasting. Horovod/distributed training splits one big training job, not thousands of small ones.",
+  },
+  {
+    id: "az305-data-75",
+    objective: "2.0-data-storage",
+    difficulty: "medium",
+    type: "multi",
+    prompt:
+      "For securing an Azure ML workspace end to end, which Azure services does it integrate with? (Choose three.)",
+    choices: [
+      { id: "a", text: "Azure Virtual Networks and network security groups", correct: true },
+      { id: "b", text: "Azure Key Vault for secrets and credentials", correct: true },
+      { id: "c", text: "Azure Container Registry behind a virtual network", correct: true },
+      { id: "d", text: "Azure DNS Zone endpoints for storage", correct: false },
+    ],
+    explanation:
+      "Azure ML's security integrations include VNets and NSGs, Key Vault for secrets, Container Registry behind a VNet, and Azure RBAC. An Azure DNS Zone endpoint is a storage-account networking concept, not an Azure ML security integration.",
+  },
 ];
